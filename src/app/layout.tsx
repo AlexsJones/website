@@ -133,18 +133,73 @@ export default function RootLayout() {
   // Only set initial output once
   useEffect(() => {
     if (history.length === 0) {
-      setHistory([PAGE_OUTPUT[initialPath.current] || PAGE_OUTPUT["/"]]);
+      setHistory([PAGE_OUTPUT[initialPath.current] || PAGE_OUTPUT["/"], FILE_CONTENT['/etc/motd']]);
     }
     // eslint-disable-next-line
   }, []);
 
-  // Print page output when route changes (but not on initial load)
+  // Print page output and motd when route changes (but not on initial load)
   useEffect(() => {
     if (history.length > 0 && PAGE_OUTPUT[pathname]) {
-      setHistory((h) => [...h, PAGE_OUTPUT[pathname]]);
+      setHistory((h) => [...h, PAGE_OUTPUT[pathname], FILE_CONTENT['/etc/motd']]);
     }
     // eslint-disable-next-line
   }, [pathname]);
+
+  useEffect(() => {
+    // Matrix rain animation setup
+    const matrixRain = document.getElementById('matrix-rain');
+    if (!matrixRain) return;
+    // Remove any existing canvas
+    const oldCanvas = document.getElementById('matrix-canvas');
+    if (oldCanvas) oldCanvas.remove();
+    const canvas = document.createElement('canvas');
+    canvas.id = 'matrix-canvas';
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '0';
+    matrixRain.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    const fontSize = 18;
+    const columns = Math.floor(width / fontSize);
+    const drops = Array(columns).fill(1);
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.font = fontSize + "px monospace";
+      ctx.fillStyle = '#39FF14';
+      for (let i = 0; i < drops.length; i++) {
+        const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    const interval = setInterval(draw, 50);
+    function handleResize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+      canvas.remove();
+    };
+  }, []);
 
   const handleCommand = (cmd: string) => {
     setShowGif(false); // Hide gif on any command
@@ -470,51 +525,6 @@ axjns-node   Ready    master   2d    v1.30.0
           @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
           #matrix-rain { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background: transparent; }
         `}</style>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              const canvas = document.createElement('canvas');
-              canvas.id = 'matrix-canvas';
-              canvas.style.position = 'absolute';
-              canvas.style.top = 0;
-              canvas.style.left = 0;
-              canvas.style.width = '100vw';
-              canvas.style.height = '100vh';
-              canvas.style.pointerEvents = 'none';
-              canvas.style.zIndex = 0;
-              document.getElementById('matrix-rain')?.appendChild(canvas);
-              const ctx = canvas.getContext('2d');
-              let width = window.innerWidth;
-              let height = window.innerHeight;
-              canvas.width = width;
-              canvas.height = height;
-              const fontSize = 18;
-              const columns = Math.floor(width / fontSize);
-              const drops = Array(columns).fill(1);
-              function draw() {
-                ctx.fillStyle = 'rgba(0,0,0,0.08)';
-                ctx.fillRect(0, 0, width, height);
-                ctx.font = fontSize + "px monospace";
-                ctx.fillStyle = '#39FF14';
-                for (let i = 0; i < drops.length; i++) {
-                  const text = String.fromCharCode(0x30A0 + Math.random() * 96);
-                  ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                  if (drops[i] * fontSize > height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                  }
-                  drops[i]++;
-                }
-              }
-              setInterval(draw, 50);
-              window.addEventListener('resize', () => {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-              });
-            })();
-          `
-        }} />
       </body>
     </html>
   );
