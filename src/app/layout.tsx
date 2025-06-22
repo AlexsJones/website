@@ -48,7 +48,7 @@ const EASTER_EGGS: Record<string, string | (() => string)> = {
 const FS: Record<string, string[]> = {
   '/': ['home', 'tmp', 'opt', 'bin', 'var', 'etc'],
   '/home': ['axjns'],
-  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md'],
+  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact'],
   '/blog': [],
   '/cv': [],
   '/about': [],
@@ -70,6 +70,7 @@ const FILE_CONTENT: Record<string, string> = {
   '/home/axjns/blog': PAGE_OUTPUT['/blog'],
   '/home/axjns/cv': PAGE_OUTPUT['/cv'],
   '/home/axjns/README.md': 'Welcome to the home directory of axjns! Try cat about, cat cv, cat blog, cat speaking.',
+  '/home/axjns/contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub for contact)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks\n`,
   '/opt/coolapp': `\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nWelcome to the legendary CoolApp!\n\nUsage: coolapp [--awesome]\n\nFeatures:\n- Does nothing, but does it in style.\n- 100% bug free (because it does nothing).\n- Easter egg: Try running with --awesome!\n\nThank you for trying CoolApp.\n`,
   '/opt/README.md': `# /opt/README.md\n\nWelcome to the /opt directory!\n\nHere you will find only the coolest, most experimental software.\n\nTry 'cat coolapp' for a surprise!\n\nP.S. This is not a real Linux system. Or is it?\n`,
   '/tmp/.X11-unix': 'Binary file (not printable)',
