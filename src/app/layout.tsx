@@ -97,6 +97,8 @@ const BINARY_COMMANDS: Record<string, string> = {
   'neofetch': typeof EASTER_EGGS.neofetch === 'function' ? EASTER_EGGS.neofetch() : EASTER_EGGS.neofetch,
   '/opt/coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp!\n\nCongratulations, you have achieved maximum coolness.\n\nTry running with --awesome for a secret.\n',
   './coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp from the current directory!\n\nAchievement unlocked: ./coolapp\n',
+  'vim': '', // placeholder, handled specially
+  'kubectl': '', // handled specially
 };
 
 function resolvePath(cwd: string, arg: string): string {
@@ -115,7 +117,14 @@ export default function RootLayout() {
   const [input, setInput] = useState("");
   const [cwd, setCwd] = useState<string>("/");
   const [showGif, setShowGif] = useState(false);
+  const [vimSession, setVimSession] = useState<null | {
+    filename: string;
+    buffer: string[];
+    mode: 'normal' | 'insert' | 'command';
+    command: string;
+  }>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const vimRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const initialPath = React.useRef(pathname);
@@ -253,6 +262,48 @@ export default function RootLayout() {
       ]);
       return;
     }
+    // Handle fake vim
+    if (base === 'vim') {
+      const filename = args[0] || '[No Name]';
+      setVimSession({
+        filename,
+        buffer: [''],
+        mode: 'normal',
+        command: '',
+      });
+      return;
+    }
+    // Handle fake kubectl
+    if (base === 'kubectl') {
+      const subcmd = args.join(' ');
+      if (/get\s+pods(\s+-A)?/.test(subcmd)) {
+        setHistory((h) => [
+          ...h,
+          `${prompt(cwd)} ${cmd}`,
+          `NAMESPACE     NAME                        READY   STATUS    RESTARTS   AGE
+kube-system   coredns-7f89b7bc75-abcde      1/1     Running   0          2d
+kube-system   kube-proxy-xyz12              1/1     Running   0          2d
+default       my-app-5d4f6b7c7d-12345        1/1     Running   1          1d
+default       db-0                          1/1     Running   0          1d
+`]);
+        return;
+      }
+      if (/get\s+nodes/.test(subcmd)) {
+        setHistory((h) => [
+          ...h,
+          `${prompt(cwd)} ${cmd}`,
+          `NAME         STATUS   ROLES    AGE   VERSION
+axjns-node   Ready    master   2d    v1.30.0
+`]);
+        return;
+      }
+      setHistory((h) => [
+        ...h,
+        `${prompt(cwd)} ${cmd}`,
+        `kubectl: unknown or unsupported command\nTry 'kubectl get pods -A' or 'kubectl get nodes'`
+      ]);
+      return;
+    }
     setHistory((h) => [
       ...h,
       `${prompt(cwd)} ${cmd}`,
@@ -271,6 +322,90 @@ export default function RootLayout() {
     }
   };
 
+  // Vim key handler
+  const handleVimKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!vimSession) return;
+    if (vimSession.mode === 'insert') {
+      if (e.key === 'Escape') {
+        setVimSession({ ...vimSession, mode: 'normal' });
+        e.preventDefault();
+        return;
+      }
+      if (e.key === 'Backspace') {
+        setVimSession((vs) => {
+          if (!vs) return vs;
+          const buf = [...vs.buffer];
+          buf[buf.length - 1] = buf[buf.length - 1].slice(0, -1);
+          return { ...vs, buffer: buf };
+        });
+        e.preventDefault();
+        return;
+      }
+      if (e.key === 'Enter') {
+        setVimSession((vs) => {
+          if (!vs) return vs;
+          return { ...vs, buffer: [...vs.buffer, ''] };
+        });
+        e.preventDefault();
+        return;
+      }
+      // Add character
+      if (e.key.length === 1) {
+        setVimSession((vs) => {
+          if (!vs) return vs;
+          const buf = [...vs.buffer];
+          buf[buf.length - 1] += e.key;
+          return { ...vs, buffer: buf };
+        });
+        e.preventDefault();
+        return;
+      }
+      return;
+    }
+    if (vimSession.mode === 'normal') {
+      if (e.key === 'i') {
+        setVimSession({ ...vimSession, mode: 'insert' });
+        e.preventDefault();
+        return;
+      }
+      if (e.key === ':') {
+        setVimSession({ ...vimSession, mode: 'command', command: '' });
+        e.preventDefault();
+        return;
+      }
+      return;
+    }
+    if (vimSession.mode === 'command') {
+      if (e.key === 'Enter') {
+        if (vimSession.command === 'q' || vimSession.command === 'wq') {
+          setVimSession(null);
+          setHistory((h) => [...h, 'Exited vim.']);
+        } else {
+          setVimSession({ ...vimSession, mode: 'normal', command: '' });
+        }
+        e.preventDefault();
+        return;
+      }
+      if (e.key === 'Backspace') {
+        setVimSession((vs) => {
+          if (!vs) return vs;
+          return { ...vs, command: vs.command.slice(0, -1) };
+        });
+        e.preventDefault();
+        return;
+      }
+      if (e.key.length === 1) {
+        setVimSession((vs) => {
+          if (!vs) return vs;
+          return { ...vs, command: vs.command + e.key };
+        });
+        e.preventDefault();
+        return;
+      }
+      return;
+    }
+  };
+
   return (
     <html lang="en">
       <body className="bg-black text-green-400 font-mono min-h-screen relative antialiased overflow-x-hidden">
@@ -278,25 +413,51 @@ export default function RootLayout() {
         <div id="matrix-rain" className="fixed inset-0 z-0 pointer-events-none" aria-hidden></div>
         <div className="flex flex-col items-center min-h-screen">
           <div className="w-full max-w-4xl mt-8 border border-green-800 bg-black/95 rounded shadow-lg relative z-10">
-            <div className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && inputRef.current.focus()}>
-              {history.map((line, i) => (
-                <div key={i} className="break-words whitespace-pre-wrap">{line}</div>
-              ))}
-              <div className="flex items-center">
-                <span className="text-green-300">{prompt(cwd)}</span>
-                {input.length === 0 ? <BlinkingCursor /> : null}
-                <input
-                  ref={inputRef}
-                  className="bg-transparent border-none outline-none text-green-400 font-mono ml-2 w-48"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  autoFocus
-                  spellCheck={false}
-                />
-                {input.length > 0 ? <BlinkingCursor /> : null}
+            {vimSession ? (
+              <div
+                ref={vimRef}
+                tabIndex={0}
+                className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh] outline-none"
+                style={{ minHeight: '60vh', background: '#111' }}
+                onKeyDown={handleVimKeyDown}
+                autoFocus
+              >
+                {vimSession.buffer.map((line, i) => (
+                  <div key={i}>{line === '' ? '~' : line}</div>
+                ))}
+                <div className="text-green-300">{vimSession.mode === 'command' ? ':' + vimSession.command : ''}</div>
+                <div className="mt-4 text-green-500">
+                  -- {vimSession.mode === 'insert' ? 'INSERT' : vimSession.mode === 'command' ? 'COMMAND' : 'NORMAL'} --
+                  <span className="ml-4">{vimSession.filename}</span>
+                </div>
+                <div className="mt-2 text-green-600 text-xs">
+                  (vim: i = insert, Esc = normal, :q or :wq = quit, type to edit)
+                </div>
+                <div className="mt-2 text-green-400 text-xs">
+                  VIM - Vi IMproved<br />Welcome to vim!<br />Editing session (not saved)
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && inputRef.current.focus()}>
+                {history.map((line, i) => (
+                  <div key={i} className="break-words whitespace-pre-wrap">{line}</div>
+                ))}
+                <div className="flex items-center">
+                  <span className="text-green-300">{prompt(cwd)}</span>
+                  {input.length === 0 ? <BlinkingCursor /> : null}
+                  <input
+                    ref={inputRef}
+                    className="bg-transparent border-none outline-none text-green-400 font-mono ml-2 w-48"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                    spellCheck={false}
+                  />
+                  {input.length > 0 ? <BlinkingCursor /> : null}
+                </div>
+              </div>
+            )}
             {showGif && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60" style={{cursor:'pointer'}} onClick={() => setShowGif(false)}>
                 <img src="/img/you-didnt-say-the-magic-word-ah-ah.gif" alt="You didn't say the magic word!" className="max-w-xs md:max-w-md lg:max-w-lg rounded shadow-2xl border-4 border-pink-600" />
