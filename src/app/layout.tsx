@@ -69,7 +69,34 @@ const FILE_CONTENT: Record<string, string> = {
   '/home/axjns/about': PAGE_OUTPUT['/about'],
   '/home/axjns/blog': PAGE_OUTPUT['/blog'],
   '/home/axjns/cv': PAGE_OUTPUT['/cv'],
-  '/home/axjns/README.md': 'Welcome to the home directory of axjns! Try cat about, cat cv, cat blog, cat speaking.'
+  '/home/axjns/README.md': 'Welcome to the home directory of axjns! Try cat about, cat cv, cat blog, cat speaking.',
+  '/opt/coolapp': `\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nWelcome to the legendary CoolApp!\n\nUsage: coolapp [--awesome]\n\nFeatures:\n- Does nothing, but does it in style.\n- 100% bug free (because it does nothing).\n- Easter egg: Try running with --awesome!\n\nThank you for trying CoolApp.\n`,
+  '/opt/README.md': `# /opt/README.md\n\nWelcome to the /opt directory!\n\nHere you will find only the coolest, most experimental software.\n\nTry 'cat coolapp' for a surprise!\n\nP.S. This is not a real Linux system. Or is it?\n`,
+  '/tmp/.X11-unix': 'Binary file (not printable)',
+  '/tmp/testfile.txt': 'This is a test file in /tmp. Feel free to delete me! Or not.',
+  '/var/log/syslog': '[  0.000000] Booting axjns.dev kernel...\n[  0.000001] All systems nominal.\n[ 42.000000] User tried to cat /var/log/syslog. Success!',
+  '/var/log/dmesg': '[    0.000000] Linux version 6.14.11-300.fc42.x86_64\n[    0.000001] axjns.dev: The Matrix has you.',
+  '/var/log/auth.log': 'Accepted password for axjns from 127.0.0.1 port 1337 ssh2\nUser axjns is always authorized.',
+  '/var/www/index.html': '<!DOCTYPE html>\n<html><head><title>axjns.dev</title></head><body><h1>Welcome to the fake web root!</h1><p>This is not a real web server.</p></body></html>',
+  '/etc/passwd': 'root:x:0:0:root:/root:/bin/bash\naxjns:x:1000:1000:Alex Jones:/home/axjns:/bin/bash',
+  '/etc/shadow': 'root:*:19700:0:99999:7:::\naxjns:*:19700:0:99999:7:::',
+  '/etc/hosts': '127.0.0.1\tlocalhost\n::1\tlocalhost',
+  '/etc/hostname': 'axjns.dev',
+  '/etc/motd': 'Welcome to axjns.dev! Hack the planet.',
+};
+
+// Add pretend binaries as commands
+const BINARY_COMMANDS: Record<string, string> = {
+  'ls': typeof EASTER_EGGS.ls === 'function' ? EASTER_EGGS.ls() : EASTER_EGGS.ls,
+  'cat': 'Usage: cat [file]\nConcatenate and print files. Try cat /etc/passwd!',
+  'bash': 'GNU bash, version 5.2.0(1)-release (x86_64-axjns)',
+  'sh': 'sh: this shell is too minimal for your needs.',
+  'echo': 'echo what?',
+  'top': typeof EASTER_EGGS.top === 'function' ? EASTER_EGGS.top() : EASTER_EGGS.top,
+  'ps': typeof EASTER_EGGS.ps === 'function' ? EASTER_EGGS.ps() : EASTER_EGGS.ps,
+  'neofetch': typeof EASTER_EGGS.neofetch === 'function' ? EASTER_EGGS.neofetch() : EASTER_EGGS.neofetch,
+  '/opt/coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp!\n\nCongratulations, you have achieved maximum coolness.\n\nTry running with --awesome for a secret.\n',
+  './coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp from the current directory!\n\nAchievement unlocked: ./coolapp\n',
 };
 
 function resolvePath(cwd: string, arg: string): string {
@@ -215,6 +242,15 @@ export default function RootLayout() {
     }
     if (lower === "clear") {
       setHistory([]);
+      return;
+    }
+    // Handle pretend binaries
+    if (BINARY_COMMANDS[base] || BINARY_COMMANDS[cmd]) {
+      setHistory((h) => [
+        ...h,
+        `${prompt(cwd)} ${cmd}`,
+        BINARY_COMMANDS[cmd] || BINARY_COMMANDS[base],
+      ]);
       return;
     }
     setHistory((h) => [
