@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import "./globals.css";
+import Image from 'next/image';
 
 function BlinkingCursor() {
   return <span className="inline-block w-2 h-5 bg-green-400 align-bottom animate-blink ml-1" style={{animation: 'blink 1s steps(2, start) infinite'}}></span>;
@@ -516,7 +517,13 @@ axjns-node   Ready    master   2d    v1.30.0
             )}
             {showGif && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60" style={{cursor:'pointer'}} onClick={() => setShowGif(false)}>
-                <img src="/img/you-didnt-say-the-magic-word-ah-ah.gif" alt="You didn't say the magic word!" className="max-w-xs md:max-w-md lg:max-w-lg rounded shadow-2xl border-4 border-pink-600" />
+                <Image
+                  src="/img/you-didnt-say-the-magic-word-ah-ah.gif"
+                  alt="You didn't say the magic word!"
+                  width={400}
+                  height={300}
+                  className="max-w-xs md:max-w-md lg:max-w-lg rounded shadow-2xl border-4 border-pink-600"
+                />
               </div>
             )}
           </div>
