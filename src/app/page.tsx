@@ -32,8 +32,8 @@ export default function Home() {
     "Type a command or use the menu above.",
   ]);
   const [input, setInput] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
-  const inputRef = useRef(null);
+  const [showCursor] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const handleCommand = (cmd: string) => {
@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <div
       className="whitespace-pre text-green-400 font-mono text-base min-h-[60vh]"
-      onClick={() => inputRef.current && (inputRef.current as any).focus()}
+      onClick={() => inputRef.current && inputRef.current.focus()}
     >
       {history.map((line, i) => (
         <div key={i}>{line}</div>

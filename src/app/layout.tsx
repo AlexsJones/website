@@ -83,13 +83,12 @@ function resolvePath(cwd: string, arg: string): string {
   return (cwd === '/' ? '' : cwd) + '/' + arg;
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout() {
   const [history, setHistory] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [cwd, setCwd] = useState<string>("/");
-  const [showCursor, setShowCursor] = useState(true);
   const [showGif, setShowGif] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const initialPath = React.useRef(pathname);
@@ -243,7 +242,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div id="matrix-rain" className="fixed inset-0 z-0 pointer-events-none" aria-hidden></div>
         <div className="flex flex-col items-center min-h-screen">
           <div className="w-full max-w-4xl mt-8 border border-green-800 bg-black/95 rounded shadow-lg relative z-10">
-            <div className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && (inputRef.current as any).focus()}>
+            <div className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && inputRef.current.focus()}>
               {history.map((line, i) => (
                 <div key={i} className="break-words whitespace-pre-wrap">{line}</div>
               ))}
