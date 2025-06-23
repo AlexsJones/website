@@ -101,6 +101,7 @@ const BINARY_COMMANDS: Record<string, string> = {
   './coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp from the current directory!\n\nAchievement unlocked: ./coolapp\n',
   'vim': '', // placeholder, handled specially
   'kubectl': '', // handled specially
+  'contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub for contact)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks\n`,
 };
 
 function resolvePath(cwd: string, arg: string): string {
