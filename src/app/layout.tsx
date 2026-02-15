@@ -1,4 +1,4 @@
-// Enhanced layout with boot sequence, theme switcher, notes, tab completion, history, and guestbook
+// Enhanced layout with fixed filesystem consistency and more features
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -56,6 +56,8 @@ const EASTER_EGGS: Record<string, string | (() => string)> = {
   du: `4.0K    ./blog\n8.0K    ./cv\n16.0K   ./about\n32.0K   ./speaking\n42G     ./README.md\n1337G   .\nWow, that's a lot of disk usage!`,
   whoami: "axjns",
   uname: "Linux axjns.dev 6.14.11-300.fc42.x86_64 #1 SMP PREEMPT_DYNAMIC",
+  hostname: "axjns.dev",
+  uptime: " 19:42:00 up 42 days, 13:37,  1 user,  load average: 0.00, 0.01, 0.05",
   ps: `  PID TTY          TIME CMD\n    1 pts/0    00:00:01 axjns.dev\n  222 pts/0    00:00:00 bash\n  333 pts/0    00:00:00 cowsay\n  444 pts/0    00:00:00 fortune`,
   pwd: "/home/axjns",
   date: () => new Date().toString(),
@@ -63,42 +65,84 @@ const EASTER_EGGS: Record<string, string | (() => string)> = {
   cowsay: ` ____________\n< axjns.dev >\n ------------\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||`,
   make: "make: *** No targets specified and no makefile found.  Stop.",
   sudo: "We trust you have received the usual lecture from the local System Administrator.",
+  finger: "Login: axjns\t\t\t\tName: Alex Jones\nDirectory: /home/axjns\t\t\tShell: /bin/bash\nLast login: " + new Date().toLocaleString() + "\nNo mail.\nNo Plan.",
+  figlet: (text?: string) => {
+    const msg = text || "axjns.dev";
+    // Simple ASCII art generator (basic version)
+    return `\n  __ ___  __(_)_ __  ___   __| | _____   __\n / _\` \\ \\/ / | '_ \\/ __| / _\` |/ _ \\ \\ / /\n| (_| |>  <| | | | \\__ \\| (_| |  __/\\ V / \n \\__,_/_/\\_\\_|_| |_|___(_)__,_|\\___| \\_/  \n`;
+  },
+  sl: `                    (  ) (@@) ( )  (@)  ()    @@    O     @     O     @      O\n               (@@@)\n           (    )\n        (@@@@)\n     (   )\n\n   ====        ________                ___________\n_D _|  |_______/        \\__I_I_____===__|_________|\n |(_)---  |   H\\________/ |   |        =|___ ___|      _________________\n /     |  |   H  |  |     |   |         ||_| |_||     _|                \\_____A\n|      |  |   H  |__--------------------| [___] |   =|                        |\n| ________|___H__/__|_____/[][]~\\_______|       |   -|                        |\n|/ |   |-----------I_____I [][] []  D   |=======|____|________________________|_\n__/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__|__________________________|_\n |/-=|___|=O=====O=====O=====O   |_____/~\\___/          |_D__D__D_|  |_D__D__D_|\n  \\_/      \\__/  \\__/  \\__/  \\__/      \\_/               \\_/   \\_/    \\_/   \\_/\n\nYou typed 'sl' instead of 'ls'! Here's a train.`,
+  ping: (host?: string) => {
+    const target = host || "google.com";
+    return `PING ${target} (142.250.185.78) 56(84) bytes of data.\n64 bytes from lhr25s34-in-f14.1e100.net (142.250.185.78): icmp_seq=1 ttl=118 time=13.7 ms\n64 bytes from lhr25s34-in-f14.1e100.net (142.250.185.78): icmp_seq=2 ttl=118 time=12.3 ms\n64 bytes from lhr25s34-in-f14.1e100.net (142.250.185.78): icmp_seq=3 ttl=118 time=13.1 ms\n\n--- ${target} ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2003ms\nrtt min/avg/max/mdev = 12.3/13.0/13.7/0.6 ms`;
+  },
+  curl: (url?: string) => {
+    return `<!DOCTYPE html>\n<html>\n<head><title>axjns.dev</title></head>\n<body>\n<h1>Welcome to the fake web response!</h1>\n<p>This is not a real curl, but it feels real.</p>\n</body>\n</html>`;
+  },
+  free: `              total        used        free      shared  buff/cache   available\nMem:       16384Mi      2048Mi     12000Mi        64Mi      1336Mi     13800Mi\nSwap:       2048Mi         0Mi      2048Mi`,
+  df: `Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       1.3T  420G  900G  32% /\ntmpfs           8.0G  1.2M  8.0G   1% /tmp\n/dev/loop0      1.4M  1.4M     0 100% /mnt/floppy`,
 };
 
-// Simulated filesystem
+// Complete filesystem structure
 const FS: Record<string, string[]> = {
-  '/': ['home', 'tmp', 'opt', 'bin', 'var', 'etc'],
+  '/': ['home', 'tmp', 'opt', 'bin', 'var', 'etc', 'proc'],
   '/home': ['axjns'],
-  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact', 'projects', '.bash_history'],
+  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact', 'projects', '.bash_history', '.ssh'],
   '/home/axjns/projects': ['k8sgpt', 'llmfit', 'secret-project'],
-  '/blog': [],
-  '/cv': [],
-  '/about': [],
-  '/speaking': [],
+  '/home/axjns/projects/k8sgpt': ['README.md', 'main.go', 'go.mod'],
+  '/home/axjns/projects/llmfit': ['README.md', 'main.rs', 'Cargo.toml'],
+  '/home/axjns/projects/secret-project': ['DO_NOT_READ.txt', 'todo.txt'],
+  '/home/axjns/.ssh': ['id_rsa', 'id_rsa.pub', 'known_hosts', 'config'],
   '/tmp': ['.X11-unix', 'testfile.txt'],
   '/opt': ['coolapp', 'README.md'],
-  '/bin': ['ls', 'cat', 'bash', 'sh', 'echo', 'top', 'ps'],
+  '/bin': ['ls', 'cat', 'bash', 'sh', 'echo', 'top', 'ps', 'curl', 'ping'],
   '/var': ['log', 'tmp', 'www'],
-  '/var/log': ['syslog', 'dmesg', 'auth.log'],
-  '/etc': ['passwd', 'hosts', 'hostname', 'motd'],
+  '/var/log': ['syslog', 'dmesg', 'auth.log', 'kern.log'],
+  '/var/tmp': [],
+  '/var/www': ['index.html'],
+  '/etc': ['passwd', 'hosts', 'hostname', 'motd', 'fstab', 'resolv.conf'],
+  '/proc': ['cpuinfo', 'meminfo', 'uptime', 'version'],
 };
 
+// Complete file content mappings
 const FILE_CONTENT: Record<string, string> = {
   '/home/axjns/speaking': PAGE_OUTPUT['/speaking'],
   '/home/axjns/about': PAGE_OUTPUT['/about'],
   '/home/axjns/blog': PAGE_OUTPUT['/blog'],
   '/home/axjns/cv': PAGE_OUTPUT['/cv'],
-  '/home/axjns/README.md': 'Welcome to the home directory of axjns! Try cat about, cat cv, cat blog, cat speaking.',
-  '/home/axjns/contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/`,
-  '/home/axjns/.bash_history': `ls -la\ncd projects\ngit status\nkubectl get pods\nsudo rm -rf / --no-preserve-root\nhistory | grep oops\nmake sandwich\nsudo make sandwich\nvim important-config.yaml\nexit`,
-  '/home/axjns/projects/k8sgpt': 'k8sgpt - AI-powered Kubernetes cluster analysis\nGitHub: https://github.com/k8sgpt-ai/k8sgpt',
-  '/home/axjns/projects/llmfit': 'llmfit - Right-size LLMs to your hardware\nGitHub: https://github.com/AlexsJones/llmfit',
-  '/home/axjns/projects/secret-project': 'DO_NOT_READ.txt:\n\nThis is the secret project.\n\nIt will change everything.\n\nJust kidding. It\'s a todo app.',
-  '/etc/motd': 'Welcome to axjns.dev! Hack the planet.',
-  '/etc/passwd': 'root:x:0:0:root:/root:/bin/bash\naxjns:x:1000:1000:Alex Jones:/home/axjns:/bin/bash',
-  '/etc/hosts': '127.0.0.1\tlocalhost\n::1\tlocalhost',
+  '/home/axjns/README.md': 'Welcome to the home directory of axjns!\n\nTry these commands:\n- cat about\n- cat cv\n- cat blog\n- cat speaking\n- cd projects\n- ls -la\n\nHave fun exploring!',
+  '/home/axjns/contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks`,
+  '/home/axjns/.bash_history': `ls -la\ncd projects\ngit status\nkubectl get pods -A\nsudo rm -rf / --no-preserve-root\nhistory | grep oops\nmake sandwich\nsudo make sandwich\nvim important-config.yaml\nping google.com\ncurl https://axjns.dev\nexit`,
+  '/home/axjns/projects/k8sgpt/README.md': '# k8sgpt\n\nAI-powered Kubernetes cluster analysis and troubleshooting.\n\n## Features\n- Automatic issue detection\n- AI-powered explanations\n- Integration with multiple LLM providers\n- Custom analyzers\n\nGitHub: https://github.com/k8sgpt-ai/k8sgpt',
+  '/home/axjns/projects/k8sgpt/main.go': '// k8sgpt main entry point\npackage main\n\nimport (\n\t"fmt"\n\t"os"\n)\n\nfunc main() {\n\tfmt.Println("k8sgpt - AI-powered K8s SRE")\n\t// ... implementation\n}',
+  '/home/axjns/projects/k8sgpt/go.mod': 'module github.com/k8sgpt-ai/k8sgpt\n\ngo 1.24\n\nrequire (\n\tk8s.io/client-go v0.31.0\n\t// ... more dependencies\n)',
+  '/home/axjns/projects/llmfit/README.md': '# llmfit\n\nA terminal tool that right-sizes LLM models to your system\'s RAM, CPU, and GPU.\n\n## Features\n- Hardware detection\n- Model compatibility database\n- Interactive TUI\n- CLI mode\n\nGitHub: https://github.com/AlexsJones/llmfit',
+  '/home/axjns/projects/llmfit/main.rs': '// llmfit - Right-size LLMs to your hardware\nuse std::io;\n\nfn main() {\n    println!("llmfit - LLM Hardware Compatibility");\n    // ... implementation\n}',
+  '/home/axjns/projects/llmfit/Cargo.toml': '[package]\nname = "llmfit"\nversion = "0.1.0"\nedition = "2021"\n\n[dependencies]\nsysinfo = "0.30"\ntermion = "3.0"',
+  '/home/axjns/projects/secret-project/DO_NOT_READ.txt': '⚠️  TOP SECRET ⚠️\n\nThis is the secret project.\n\nIt will change everything.\n\n...\n\nJust kidding. It\'s a todo app.\n\nFeatures:\n- [ ] Add tasks\n- [ ] Complete tasks\n- [ ] Delete tasks\n- [ ] Procrastinate\n\n(The last feature is done!)',
+  '/home/axjns/projects/secret-project/todo.txt': 'TODO:\n- Deploy to production on a Friday ✅\n- Write unit tests (someday)\n- Fix that one bug\n- Refactor everything\n- ???\n- Profit',
+  '/home/axjns/.ssh/id_rsa': '-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAA\n(This is a fake SSH key. Nice try though!)\n-----END OPENSSH PRIVATE KEY-----',
+  '/home/axjns/.ssh/id_rsa.pub': 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaKeYrBjAXmHzPqP6tEWdQhR7d2J3BvVqFk4LgH7Vyp axjns@axjns.dev',
+  '/home/axjns/.ssh/known_hosts': 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl\nbitbucket.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIazEu89wgQZ4bqs3d63QSMzYVa0MuJ2e2gKTKqu+UUO',
+  '/home/axjns/.ssh/config': 'Host github.com\n\tHostName github.com\n\tUser git\n\tIdentityFile ~/.ssh/id_rsa\n\nHost *\n\tServerAliveInterval 60',
+  '/tmp/testfile.txt': 'This is a test file in /tmp.\n\nYou can edit it if you want.\n\nOr not. It\'s just a fake file.',
+  '/opt/coolapp': '#!/bin/bash\n# CoolApp v1.0\n\necho "██████╗ ██████╗  ██████╗ ██╗     "\necho "██╔════╝██╔═══██╗██╔═══██╗██║     "\necho "██║     ██║   ██║██║   ██║██║     "\necho "██║     ██║   ██║██║   ██║██║     "\necho "╚██████╗╚██████╔╝╚██████╔╝███████╗"\necho " ╚═════╝ ╚═════╝  ╚═════╝ ╚══════╝"\necho ""\necho "CoolApp v1.0 - Does nothing, but looks good doing it"\necho ""\necho "Usage: coolapp [--awesome]"\necho ""\n[ "$1" = "--awesome" ] && echo "🎉 MAXIMUM COOLNESS ACHIEVED 🎉"',
+  '/opt/README.md': '# /opt Directory\n\nWelcome to /opt!\n\nThis is where optional software lives.\n\nTry:\n- cat coolapp\n- bash coolapp\n- bash coolapp --awesome',
+  '/var/log/syslog': '[  0.000000] Booting axjns.dev kernel...\n[  0.000001] All systems nominal.\n[  0.420000] Starting network services...\n[  0.690000] Mounted /home/axjns\n[ 42.000000] User tried to cat /var/log/syslog. Success!',
+  '/var/log/dmesg': '[    0.000000] Linux version 6.14.11-300.fc42.x86_64\n[    0.000001] Command line: BOOT_IMAGE=/vmlinuz root=/dev/sda1 ro\n[    0.001000] axjns.dev: The Matrix has you.\n[    1.337000] All your base are belong to us.',
+  '/var/log/auth.log': 'Feb 15 19:42:00 axjns sshd[1337]: Accepted password for axjns from 127.0.0.1 port 1337 ssh2\nFeb 15 19:42:01 axjns sudo:    axjns : TTY=pts/0 ; PWD=/home/axjns ; USER=root ; COMMAND=/usr/bin/make sandwich',
+  '/var/log/kern.log': '[  0.000000] Kernel logging (proc) started\n[  0.001000] Memory: 16384M\n[  0.420000] CPU: Intel(R) Hacker i9-1337K\n[  1.337000] Entropy: maximum',
+  '/var/www/index.html': '<!DOCTYPE html>\n<html>\n<head>\n\t<title>axjns.dev - Alex Jones</title>\n\t<meta charset="utf-8">\n</head>\n<body>\n\t<h1>Welcome to axjns.dev</h1>\n\t<p>This is the fake web root. The real site is a terminal interface!</p>\n</body>\n</html>',
+  '/etc/motd': 'Welcome to axjns.dev!\n\nHack the planet. Deploy on Fridays.\n\n"The cloud is just someone else\'s computer."',
+  '/etc/passwd': 'root:x:0:0:root:/root:/bin/bash\naxjns:x:1000:1000:Alex Jones:/home/axjns:/bin/bash\nnobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin',
+  '/etc/hosts': '127.0.0.1\tlocalhost\n127.0.1.1\taxjns.dev\n::1\t\tlocalhost ip6-localhost ip6-loopback',
   '/etc/hostname': 'axjns.dev',
-  '/var/log/syslog': '[  0.000000] Booting axjns.dev kernel...\n[  0.000001] All systems nominal.\n[ 42.000000] User tried to cat /var/log/syslog. Success!',
+  '/etc/fstab': '# /etc/fstab: static file system information\n/dev/sda1  /      ext4  defaults  0  1\ntmpfs      /tmp   tmpfs defaults  0  0',
+  '/etc/resolv.conf': 'nameserver 1.1.1.1\nnameserver 8.8.8.8\nsearch axjns.dev',
+  '/proc/cpuinfo': 'processor\t: 0\nvendor_id\t: GenuineIntel\ncpu family\t: 6\nmodel\t\t: 142\nmodel name\t: Intel(R) Hacker i9-1337K CPU @ 4.20GHz\ncore id\t\t: 0\ncpu cores\t: 8',
+  '/proc/meminfo': 'MemTotal:       16777216 kB\nMemFree:        12582912 kB\nMemAvailable:   14155776 kB\nBuffers:          524288 kB\nCached:          1048576 kB',
+  '/proc/uptime': '3704640.00 14745600.00',
+  '/proc/version': 'Linux version 6.14.11-300.fc42.x86_64 (axjns@axjns.dev) (gcc (GCC) 13.2.1) #1 SMP PREEMPT_DYNAMIC',
 };
 
 function resolvePath(cwd: string, arg: string): string {
@@ -112,6 +156,15 @@ function resolvePath(cwd: string, arg: string): string {
   return (cwd === '/' ? '' : cwd) + '/' + arg;
 }
 
+// Check if path is a file (has content) vs directory (in FS)
+function isFile(path: string): boolean {
+  return FILE_CONTENT.hasOwnProperty(path);
+}
+
+function isDirectory(path: string): boolean {
+  return FS.hasOwnProperty(path);
+}
+
 // Get autocomplete suggestions
 function getCompletions(input: string, cwd: string): string[] {
   const parts = input.split(' ');
@@ -119,7 +172,7 @@ function getCompletions(input: string, cwd: string): string[] {
   
   // Command completion
   if (parts.length === 1) {
-    const allCommands = [...Object.keys(COMMANDS), ...Object.keys(EASTER_EGGS), 'cd', 'ls', 'pwd', 'cat', 'note', 'guestbook', 'theme', 'history', 'hack', 'sudo', 'make'];
+    const allCommands = [...Object.keys(COMMANDS), ...Object.keys(EASTER_EGGS), 'cd', 'ls', 'pwd', 'cat', 'note', 'guestbook', 'theme', 'history', 'hack', 'sudo', 'make', 'sl', 'figlet', 'banner', 'ping', 'curl', 'wget', 'free', 'df', 'finger', 'uptime', 'hostname'];
     return allCommands.filter(cmd => cmd.startsWith(lastPart)).sort();
   }
   
@@ -416,6 +469,22 @@ export default function RootLayout() {
       return;
     }
 
+    // New commands with arguments
+    if (base === 'figlet' || base === 'banner') {
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS.figlet(arg)]);
+      return;
+    }
+
+    if (base === 'ping') {
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS.ping(arg)]);
+      return;
+    }
+
+    if (base === 'curl' || base === 'wget') {
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS.curl(arg)]);
+      return;
+    }
+
     // Hack easter egg
     if (base === 'hack') {
       const hackingMsg = [
@@ -444,9 +513,11 @@ export default function RootLayout() {
 
     // Filesystem commands
     if (base === 'ls') {
-      const target = resolvePath(cwd, arg);
-      if (FS[target as keyof typeof FS]) {
-        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, FS[target as keyof typeof FS].join('  ') || '']);
+      const target = resolvePath(cwd, arg || '.');
+      if (isDirectory(target)) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, FS[target].join('  ') || '']);
+      } else if (isFile(target)) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `ls: ${arg}: Not a directory`]);
       } else {
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `ls: cannot access '${arg}': No such file or directory`]);
       }
@@ -454,13 +525,23 @@ export default function RootLayout() {
     }
 
     if (base === 'cd') {
+      if (!arg) {
+        setCwd('/home/axjns');
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('axjns-cwd', '/home/axjns');
+        }
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd]);
+        return;
+      }
       const target = resolvePath(cwd, arg);
-      if (FS[target as keyof typeof FS]) {
+      if (isDirectory(target)) {
         setCwd(target);
         if (typeof window !== 'undefined') {
           localStorage.setItem('axjns-cwd', target);
         }
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd]);
+      } else if (isFile(target)) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cd: ${arg}: Not a directory`]);
       } else {
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cd: no such file or directory: ${arg}`]);
       }
@@ -473,12 +554,15 @@ export default function RootLayout() {
     }
 
     if (base === 'cat') {
-      let target = arg;
-      if (!target.startsWith('/')) {
-        target = cwd === '/' ? '/' + arg : cwd + '/' + arg;
+      if (!arg) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Usage: cat <file>']);
+        return;
       }
-      if (FILE_CONTENT[target]) {
+      const target = arg.startsWith('/') ? arg : (cwd === '/' ? '/' + arg : cwd + '/' + arg);
+      if (isFile(target)) {
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd, FILE_CONTENT[target]]);
+      } else if (isDirectory(target)) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cat: ${arg}: Is a directory`]);
       } else {
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cat: ${arg}: No such file or directory`]);
       }
@@ -486,9 +570,9 @@ export default function RootLayout() {
     }
 
     // SSH/sudo GIF trigger
-    if (base === 'ssh' || base === 'sudo' || (base === 'rm' && /-rf/.test(cmd))) {
+    if (base === 'ssh' || (base === 'sudo' && !arg) || (base === 'rm' && /-rf/.test(cmd))) {
       setShowGif(true);
-      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS['ssh'] as string]);
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, String(EASTER_EGGS['ssh'])]);
       return;
     }
 
@@ -496,6 +580,13 @@ export default function RootLayout() {
     const lower = command.toLowerCase();
     if (EASTER_EGGS[lower]) {
       const egg = EASTER_EGGS[lower];
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, typeof egg === "function" ? egg() : egg]);
+      return;
+    }
+
+    // Simple easter eggs that work as base commands
+    if (EASTER_EGGS[base]) {
+      const egg = EASTER_EGGS[base];
       setHistory(h => [...h, prompt(cwd) + ' ' + cmd, typeof egg === "function" ? egg() : egg]);
       return;
     }
@@ -515,7 +606,9 @@ export default function RootLayout() {
         "Navigation: home, about, speaking, blog, cv",
         "Files: ls, cd, pwd, cat",
         "Tools: note, guestbook, theme, history, clear",
-        "Fun: hack, make sandwich, cowsay, fortune, neofetch, top, ps",
+        "System: top, ps, free, df, uptime, whoami, uname, finger",
+        "Network: ping, curl, wget",
+        "Fun: hack, make sandwich, cowsay, fortune, sl, figlet, banner",
       ]);
       return;
     }
@@ -577,7 +670,7 @@ export default function RootLayout() {
           // Auto-complete
           const parts = input.split(' ');
           parts[parts.length - 1] = completions[0];
-          setInput(parts.join(' '));
+          setInput(parts.join(' ') + ' ');
         } else {
           // Show options and set up cycling
           setTabCompletions(completions);
