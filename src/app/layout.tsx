@@ -67,9 +67,10 @@ const EASTER_EGGS: Record<string, string | ((arg?: string) => string)> = {
   sudo: "We trust you have received the usual lecture from the local System Administrator.",
   finger: "Login: axjns\t\t\t\tName: Alex Jones\nDirectory: /home/axjns\t\t\tShell: /bin/bash\nLast login: " + new Date().toLocaleString() + "\nNo mail.\nNo Plan.",
   figlet: (text?: string) => {
+    // Simple ASCII art - in a real implementation this would generate art from text
+    // For now, just show the text with some ASCII styling
     const msg = text || "axjns.dev";
-    // Simple ASCII art generator (basic version)
-    return `\n  __ ___  __(_)_ __  ___   __| | _____   __\n / _\` \\ \\/ / | '_ \\/ __| / _\` |/ _ \\ \\ / /\n| (_| |>  <| | | | \\__ \\| (_| |  __/\\ V / \n \\__,_/_/\\_\\_|_| |_|___(_)__,_|\\___| \\_/  \n`;
+    return `\n  __ ___  __(_)_ __  ___   __| | _____   __\n / _\` \\ \\/ / | '_ \\/ __| / _\` |/ _ \\ \\ / /\n| (_| |>  <| | | | \\__ \\| (_| |  __/\\ V / \n \\__,_/_/\\_\\_|_| |_|___(_)__,_|\\___| \\_/  \n\n        ${msg}\n`;
   },
   sl: `                    (  ) (@@) ( )  (@)  ()    @@    O     @     O     @      O\n               (@@@)\n           (    )\n        (@@@@)\n     (   )\n\n   ====        ________                ___________\n_D _|  |_______/        \\__I_I_____===__|_________|\n |(_)---  |   H\\________/ |   |        =|___ ___|      _________________\n /     |  |   H  |  |     |   |         ||_| |_||     _|                \\_____A\n|      |  |   H  |__--------------------| [___] |   =|                        |\n| ________|___H__/__|_____/[][]~\\_______|       |   -|                        |\n|/ |   |-----------I_____I [][] []  D   |=======|____|________________________|_\n__/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__|__________________________|_\n |/-=|___|=O=====O=====O=====O   |_____/~\\___/          |_D__D__D_|  |_D__D__D_|\n  \\_/      \\__/  \\__/  \\__/  \\__/      \\_/               \\_/   \\_/    \\_/   \\_/\n\nYou typed 'sl' instead of 'ls'! Here's a train.`,
   ping: (host?: string) => {
@@ -77,7 +78,8 @@ const EASTER_EGGS: Record<string, string | ((arg?: string) => string)> = {
     return `PING ${target} (142.250.185.78) 56(84) bytes of data.\n64 bytes from lhr25s34-in-f14.1e100.net (142.250.185.78): icmp_seq=1 ttl=118 time=13.7 ms\n64 bytes from lhr25s34-in-f14.1e100.net (142.250.185.78): icmp_seq=2 ttl=118 time=12.3 ms\n64 bytes from lhr25s34-in-f14.1e100.net (142.250.185.78): icmp_seq=3 ttl=118 time=13.1 ms\n\n--- ${target} ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2003ms\nrtt min/avg/max/mdev = 12.3/13.0/13.7/0.6 ms`;
   },
   curl: (url?: string) => {
-    return `<!DOCTYPE html>\n<html>\n<head><title>axjns.dev</title></head>\n<body>\n<h1>Welcome to the fake web response!</h1>\n<p>This is not a real curl, but it feels real.</p>\n</body>\n</html>`;
+    const target = url || "https://axjns.dev";
+    return `<!DOCTYPE html>\n<html>\n<head><title>axjns.dev</title></head>\n<body>\n<h1>Welcome to the fake web response!</h1>\n<p>This is not a real curl, but it feels real.</p>\n<p>Requested: ${target}</p>\n</body>\n</html>`;
   },
   free: `              total        used        free      shared  buff/cache   available\nMem:       16384Mi      2048Mi     12000Mi        64Mi      1336Mi     13800Mi\nSwap:       2048Mi         0Mi      2048Mi`,
   df: `Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       1.3T  420G  900G  32% /\ntmpfs           8.0G  1.2M  8.0G   1% /tmp\n/dev/loop0      1.4M  1.4M     0 100% /mnt/floppy`,
