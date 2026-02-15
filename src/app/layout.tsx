@@ -83,6 +83,708 @@ const EASTER_EGGS: Record<string, string | ((arg?: string) => string)> = {
   },
   free: `              total        used        free      shared  buff/cache   available\nMem:       16384Mi      2048Mi     12000Mi        64Mi      1336Mi     13800Mi\nSwap:       2048Mi         0Mi      2048Mi`,
   df: `Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       1.3T  420G  900G  32% /\ntmpfs           8.0G  1.2M  8.0G   1% /tmp\n/dev/loop0      1.4M  1.4M     0 100% /mnt/floppy`,
+  wget: (url?: string) => {
+    const target = url || "https://axjns.dev";
+    return `--2026-02-15 21:00:00--  ${target}\nResolving axjns.dev (axjns.dev)... 127.0.0.1\nConnecting to axjns.dev (axjns.dev)|127.0.0.1|:443... connected.\nHTTP request sent, awaiting response... 200 OK\nLength: 1337 (1.3K) [text/html]\nSaving to: 'index.html'\n\nindex.html     100%[========>]   1.31K  --.-KB/s    in 0s\n\n2026-02-15 21:00:00 (42.0 MB/s) - 'index.html' saved [1337/1337]`;
+  },
+  // Editor jokes
+  vim: `Starting vim... 
+Type :q! to exit. 
+Just kidding, you can't. You're trapped forever.
+
+Actually, you're not in vim. This is just a fake terminal.
+Phew, that was close!`,
+  emacs: `GNU Emacs 29.4 (build 1, x86_64-pc-linux-gnu)
+
+Emacs: A great operating system, lacking only a decent editor.
+
+Press C-x C-c to exit. But you're not actually in Emacs, so...
+
+"The reasonable man adapts himself to the world: the unreasonable one persists
+in trying to adapt the world to himself." - George Bernard Shaw
+
+(Also applies to Emacs users)`,
+  nano: `GNU nano 8.0                   fake-file.txt
+
+nano: For people who can't handle vim or emacs.
+Also the only sensible choice.
+
+^X Exit  ^O Write Out  ^R Read File  ^Y Prev Page  ^K Cut Text  ^C Cur Pos
+^W Where Is  ^V Next Page  ^U Paste Text  ^T To Spell  ^_ Go To Line
+
+Just kidding, you're not actually in nano.
+Type 'help' for available commands.`,
+  vi: `Starting vi...
+
+For vi help, type  :help<Enter>  or  <F1>
+For on-line help, type  :help<Enter> or visit https://www.vim.org
+
+                       (you're not actually in vi)
+
+Type  :q!<Enter>  to abandon all hope of ever exiting.`,
+  // System info
+  neofetch: `                   -\`                 axjns@axjns.dev
+                  .o+\`                 ----------------
+                 \`ooo/                 OS: AxjnsOS™ x86_64
+                \`+oooo:                Host: The Cloud
+               \`+oooooo:               Kernel: 6.14.11-300.fc42.x86_64
+               -+oooooo+:              Uptime: 42 days, 13 hours, 37 mins
+             \`/:-:++oooo+:             Packages: 1337 (npm), 42 (cargo)
+            \`/++++/+++++++:            Shell: bash 5.2.21
+           \`/++++++++++++++:           Resolution: 3840x2160
+          \`/+++ooooooooooooo/\`         DE: Terminal 
+         ./ooosssso++osssssso+\`        WM: tmux
+        .oossssso-\`\`\`\`/ossssss+\`       Theme: Matrix [GTK3]
+       -osssssso.      :ssssssso.      Icons: Nerd Fonts
+      :osssssss/        osssso+++.     Terminal: fake-terminal.tsx
+     /ossssssss/        +ssssooo/-     CPU: Intel Hacker i9-1337K (8) @ 4.2GHz
+   \`/ossssso+/:-        -:/+osssso+-   GPU: Nvidia RTX 9090 Ti SUPER ULTRA
+  \`+sso+:-\`                 \`.-/+oso:  Memory: 2048MiB / 16384MiB`,
+  screenfetch: `                          ./+o+-       axjns@axjns.dev
+                  yyyyy- -yyyyyy+      OS: AxjnsOS (Based on Hacker)
+               ://+//////-yo+/+oo/     Kernel: x86_64 Linux 6.14.11
+           .++ .:/++++++/-.+sss/\`      Uptime: 42d 13h 37m
+         .:++o:  /++++++++/:--:/-      Packages: 1337
+        o:+o+:++.\`...\`\`\`.-/oo+++++/    Shell: bash
+       .:+o:+o/.          \`+sssoo+/   Resolution: 3840x2160
+  .++/+:+oo+o:\`             /sssooo.   DE: Terminal.tsx
+ /+++//+:\`oo+o               /::--:.   WM: Screen
+ \\+/+o+++\`o++o               ++////.   GTK Theme: Matrix [GTK3]
+  .++.o+++oo+:\`             /dddhhh.   Icon Theme: Nerd Fonts
+       .+.o+oo:.          \`oddhhhh+    Font: JetBrains Mono
+        \\+.++o+o\`\`-\`\`\`\`.:ohdhhhhh+     CPU: Intel i9-1337K @ 8x 4.2GHz
+         \`:o+++ \`ohhhhhhhhyo++os:      GPU: Nvidia RTX 9090 Ti SUPER
+           .o:\`.syhhhhhhh/.oo++o\`      RAM: 2048MB / 16384MB`,
+  w: `USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+axjns    pts/0    127.0.0.1        19:42    0.00s  0.01s  0.00s w
+root     tty1     -                00:00   42days  0.00s  0.00s /bin/login`,
+  who: `axjns    pts/0        2026-02-15 19:42 (127.0.0.1)
+root     tty1         2026-01-04 00:00`,
+  last: `axjns    pts/0        127.0.0.1        Sat Feb 15 19:42   still logged in
+axjns    pts/0        127.0.0.1        Fri Feb 14 10:30 - 18:45  (08:15)
+root     tty1                          Sat Jan  4 00:00   still logged in
+
+wtmp begins Sat Jan  4 00:00:00 2026`,
+  htop: `  1  [||||||||||||||||||||||||||||||||100.0%]   Tasks: 137, 420 thr; 1 running
+  2  [||||||||||                           42.0%]   Load average: 0.00 0.01 0.05
+  3  [||||||||                             13.7%]   Uptime: 42 days, 13:37:00
+  4  [||                                    4.2%]
+  5  [|                                     1.3%]   Mem[||||||||||||||    14.2G/16.0G]
+  6  [                                      0.0%]   Swp[                  0K/2.00G]
+  7  [                                      0.0%]
+  8  [                                      0.0%]
+  PID USER      PRI  NI  VIRT   RES   SHR S CPU% MEM%   TIME+  Command
+    1 axjns      20   0 10.0M  3.0M  2.0M R  0.7  0.1  0:00.01 axjns.dev
+   42 axjns      20   0 42.4M  1.3M  1.3M S  0.0  0.0  0:00.00 cowsay
+  420 axjns      20   0  1.3G  420M  69M S  0.0  2.5  4:20.00 firefox
+ 1337 axjns      20   0  2.4G  1.3G 800M S  0.0  8.0 13:37.00 chrome
+ 9001 axjns      20   0  100M   42M  10M S  0.0  0.3  0:42.00 ollama
+
+F1Help F2Setup F3Search F4Filter F5Tree F6SortBy F7Nice F8Nice+ F9Kill F10Quit`,
+  // Dangerous commands
+  'rm -rf /': `⚠️  DANGER DETECTED ⚠️
+
+You just tried to run:  rm -rf /
+
+This would delete your entire system.
+
+Fortunately, this is just a fake terminal in a web browser.
+Nothing was harmed in the making of this joke.
+
+Pro tip: Never run this command for real. Ever.
+
+(Also, use 'trash' instead of 'rm' for safety.)`,
+  ':(){ :|:& };:': `⚠️  FORK BOMB DETECTED ⚠️
+
+This is a fork bomb. It would:
+1. Define a function called ":"
+2. That calls itself twice
+3. In the background
+4. Infinitely
+
+Result: System crash due to process exhaustion.
+
+Fortunately, this is a fake terminal.
+Your browser tabs are safe... for now.`,
+  'dd if=/dev/random of=/dev/sda': `⚠️  DISK DESTROYER DETECTED ⚠️
+
+Command: dd if=/dev/random of=/dev/sda
+
+This would overwrite your entire hard drive with random data.
+Everything would be gone. Forever. No recovery.
+
+Good thing this is just a web page!
+
+Remember kids: With great power comes great responsibility.
+(And dd has A LOT of power)`,
+  // Package managers
+  apt: `Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+
+apt 2.7.14 (amd64)
+
+Usage: apt [options] command
+
+apt is the command-line package manager for Debian/Ubuntu.
+
+Most used commands:
+  list - list packages
+  search - search in package descriptions
+  show - show package details
+  install - install packages
+  remove - remove packages
+  update - update list of available packages
+  upgrade - upgrade the system by installing/upgrading packages
+  full-upgrade - upgrade the system by removing/installing/upgrading packages
+
+Try: apt moo`,
+  'apt moo': `                 (__) 
+                 (oo) 
+           /------\\/ 
+          / |    ||   
+         *  /\\---/\\ 
+            ~~   ~~   
+..."Have you mooed today?"...`,
+  yum: `Loaded plugins: fastestmirror, security
+
+yum: To boldly install packages where no package manager has installed before.
+
+Usage: yum [options] COMMAND
+
+       install, update, remove, list packages, etc.
+
+Have you tried 'dnf' instead? (You know, the NEXT generation package manager?)`,
+  dnf: `DNF: The package manager so nice, they built it twice!
+
+(Replacing yum since 2015... some people still use yum anyway)
+
+Fedora/RHEL package manager. Like apt, but red instead of debian-shaped.
+
+Usage: dnf [options] COMMAND
+
+Most common: dnf install firefox (to read the documentation you should have read)`,
+  brew: `Homebrew: The missing package manager for macOS (or Linux)!
+
+🍺  brew: Because compiling from source is so 2005
+
+Usage: brew [options] command
+
+Common commands:
+  install    Install formula
+  uninstall  Uninstall formula  
+  update     Fetch newest version of Homebrew
+  upgrade    Upgrade outdated formulae
+  search     Search for formulae
+  info       Display information about a formula
+  doctor     Check system for potential problems
+
+Pro tip: Run 'brew doctor' and feel judged by your computer.
+It always finds something wrong. Always.`,
+  npm: `npm: Node Package Manager (or: Node's Probably Mad)
+
+Current workspace has 1,337 packages with 42,000 dependencies.
+(Mostly left-pad and is-odd)
+
+Usage: npm <command>
+
+Commands:
+  install      Install a package
+  uninstall    Remove a package
+  update       Update packages
+  run          Run a script
+  test         Run tests (lol, tests)
+  publish      Publish a package
+
+Warning: npm install may cause:
+- 300MB node_modules folder
+- Existential crisis
+- Security vulnerabilities  
+- Success (rare)`,
+  'npm install': `npm WARN deprecated everyone@1.0.0: Every package you've ever used
+npm WARN deprecated left-pad@0.0.1: Please use left-pad2 instead
+npm WARN deprecated is-odd@1.0.0: This package is no longer maintained
+
+added 42000 packages, and audited 42001 packages in 5m
+
+420 packages are looking for funding
+  run \`npm fund\` for details
+
+69 vulnerabilities (31 low, 20 moderate, 18 high, critical: over 9000)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (breaking your app), run:
+  npm audit fix --force
+
+Good luck with that! 🦊`,
+  // Development tools
+  git: `usage: git [--version] [--help] [-C <path>] [--exec-path[=<path>]]
+           [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects]
+           [--bare] [--git-dir=<path>] [--work-tree=<path>]
+           [--namespace=<name>] [--super-prefix=<path>]
+           [--config-env=<name>=<envvar>] <command> [<args>]
+
+Working tree clean, nothing to commit... wait, you're on a website.
+There is no git repo here.
+
+Try: git status, git push, git blame`,
+  'git status': `On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+
+(This is a lie. There are always uncommitted changes.
+ You just haven't found them yet.)`,
+  'git push': `Enumerating objects: 42, done.
+Counting objects: 100% (42/42), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (13/13), done.
+Writing objects: 100% (37/37), 1.21 MiB | 420.00 KiB/s, done.
+Total 37 (delta 7), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (7/7), done.
+To github.com:axjns/fake-repo.git
+   abc1234..def5678  main -> main
+
+Push successful! Your code is now someone else's problem. 🚀`,
+  'git commit': `Please tell me who you are.
+
+Run
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+Actually, there's no repo here. This is just a website.
+But you get the idea!`,
+  'git blame': `^abc1234 (Alex Jones 2024-01-15 13:37:00 +0000  1) // TODO: Fix this later
+^abc1234 (Alex Jones 2024-01-15 13:37:01 +0000  2) // HACK: Don't judge me
+def5678  (Alex Jones 2024-02-15 19:42:00 +0000  3) // I have no idea why this works
+1337c0de (Alex Jones 2024-02-15 19:43:00 +0000  4) console.log("It just works™");
+
+git blame: Making developers feel bad about their code since 2005.`,
+  docker: `Docker: Because "works on my machine" is not good enough anymore.
+
+Usage:  docker [OPTIONS] COMMAND
+
+Commands:
+  run         Run a command in a new container
+  ps          List containers
+  images      List images
+  pull        Pull an image from a registry
+  build       Build an image from a Dockerfile
+  stop        Stop running containers
+  rm          Remove containers
+  rmi         Remove images
+
+Try: docker ps, docker run, docker compose`,
+  'docker ps': `CONTAINER ID   IMAGE               COMMAND                  CREATED        STATUS        PORTS      NAMES
+1337beef       nginx:latest        "/docker-entrypoint.…"   2 days ago     Up 2 days     80/tcp     webserver
+420cafe        postgres:14         "docker-entrypoint.s…"   2 days ago     Up 2 days     5432/tcp   database
+deadc0de       redis:alpine        "docker-entrypoint.s…"   2 days ago     Up 2 days     6379/tcp   cache
+baadf00d       node:18             "docker-entrypoint.s…"   42 hours ago   Up 42 hours   3000/tcp   api
+
+All containers running smoothly. (Unlike your production environment)`,
+  'docker run': `Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+2db29710123e: Pull complete
+Digest: sha256:1234567890abcdef
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+Just kidding, this is a fake terminal. No containers were harmed.`,
+  kubectl: `kubectl: Kubernetes control tool (k8s for short, because typing is hard)
+
+Usage:
+  kubectl [flags] [options]
+
+Available Commands:
+  get         Display resources
+  describe    Show details of a resource
+  create      Create a resource
+  delete      Delete resources
+  apply       Apply a configuration
+  logs        Print container logs
+  exec        Execute command in a container
+
+Try: kubectl get pods, kubectl get nodes`,
+  'kubectl get pods': `NAME                          READY   STATUS    RESTARTS   AGE
+k8sgpt-operator-578f9d-x7k2p  1/1     Running   0          42d
+frontend-deployment-abc123    1/1     Running   0          13d
+backend-deployment-def456     1/1     Running   0          13d
+database-statefulset-0        1/1     Running   0          69d
+cache-deployment-789xyz       1/1     Running   42         7d
+
+All pods running. No crashloops. This is fine. 🔥☕`,
+  'kubectl get nodes': `NAME            STATUS   ROLES           AGE   VERSION
+control-plane   Ready    control-plane   42d   v1.30.0
+worker-1        Ready    <none>          42d   v1.30.0
+worker-2        Ready    <none>          42d   v1.30.0
+worker-3        Ready    <none>          13d   v1.30.0
+
+3 nodes, 0 problems. (For now.)`,
+  python: `Python 3.12.0 (main, Feb 15 2026, 19:42:00)
+[GCC 13.2.1 20230801] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+...
+>>> exit()
+
+(Not actually a Python REPL, but you get the idea)`,
+  python3: `Python 3.12.0 (main, Feb 15 2026, 19:42:00)
+[GCC 13.2.1 20230801] on linux
+Type "help", "copyright" or "license" for more information.
+>>> print("Hello, World!")
+Hello, World!
+>>> import antigravity
+# Browser opens xkcd.com/353/
+>>> exit()`,
+  node: `Welcome to Node.js v20.11.0.
+Type ".help" for more information.
+> console.log("Hello, World!")
+Hello, World!
+undefined
+> 0.1 + 0.2
+0.30000000000000004
+> 0.1 + 0.2 === 0.3
+false
+> // JavaScript is a gift that keeps on giving
+undefined
+> .exit
+
+(Not a real Node REPL, but the bugs are accurate)`,
+  go: `go: The Go programming language toolchain
+
+Usage:
+  go <command> [arguments]
+
+Commands:
+  run         compile and run Go program
+  build       compile packages and dependencies
+  test        test packages
+  fmt         gofmt (reformat) package sources
+  mod         module maintenance
+  get         add dependencies to current module
+
+Go: Because sometimes you need a garbage collector AND performance.`,
+  'go run': `# command-line-arguments
+./main.go:1:1: expected 'package', found 'EOF'
+
+(You need to write some Go code first!)`,
+  java: `Error: Could not find or load main class Main
+Caused by: java.lang.ClassNotFoundException: Main
+
+Java: Where every exception has a stack trace longer than your codebase.`,
+  // Fun commands
+  lolcat: `🌈  Sorry, this terminal doesn't support ANSI color codes.  🌈
+🌈  But imagine this text in beautiful rainbow colors!      🌈
+🌈  Red, orange, yellow, green, blue, indigo, violet...     🌈
+🌈  Over and over again, like a majestic rainbow cat.       🌈
+
+    /\\_/\\  
+   ( o.o ) 
+    > ^ <
+   /|   |\\
+  (_|   |_)
+
+lolcat: Making everything fabulous since 2011`,
+  cowthink: ` _______________________________
+( I wonder if humans know       )
+( I'm just ASCII art...         )
+ -------------------------------
+        o   ^__^
+         o  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`,
+  yes: `y
+y
+y
+y
+y
+y
+y
+y
+... (output continues forever)
+...
+...
+y
+y
+y
+
+(yes: print 'y' forever. Stopped for your sanity.)`,
+  tree: `/home/axjns
+├── about
+├── blog
+├── cv
+├── speaking
+├── README.md
+├── contact
+├── .bash_history
+├── .ssh/
+│   ├── id_rsa
+│   ├── id_rsa.pub
+│   ├── known_hosts
+│   └── config
+└── projects/
+    ├── k8sgpt/
+    │   ├── README.md
+    │   ├── main.go
+    │   └── go.mod
+    ├── llmfit/
+    │   ├── README.md
+    │   ├── main.rs
+    │   └── Cargo.toml
+    └── secret-project/
+        ├── DO_NOT_READ.txt
+        └── todo.txt
+
+4 directories, 19 files`,
+  man: (cmd?: string) => {
+    const command = cmd || "intro";
+    return `MAN(1)                    Manual pager utils                    MAN(1)
+
+NAME
+       man - an interface to the system reference manuals
+
+SYNOPSIS
+       man [man options] [[section] page ...] ...
+
+DESCRIPTION
+       man is the system's manual pager.
+
+       You're reading the fake man page for: ${command}
+
+       To exit man, press q (but you're not actually in man).
+
+       Fun fact: RTFM stands for "Read The Friendly Manual" 😊
+
+MAN(1)                        February 2026                       MAN(1)`;
+  },
+  kill: (pid?: string) => {
+    const process = pid || "42";
+    return `kill: sending signal to process ${process}
+Process ${process} terminated.
+
+kill: The most metal Unix command.
+
+(No actual processes were harmed. This is a fake terminal.)`;
+  },
+  alias: `alias l='ls -lah'
+alias la='ls -lAh'
+alias ll='ls -lh'
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias rm='rm -i'  # Safety first!
+alias cp='cp -i'
+alias mv='mv -i'
+alias please='sudo'
+alias fucking='sudo'
+alias wtf='git status'
+alias yolo='git push --force'
+alias oops='git reset --hard HEAD'
+
+(These aliases don't actually work here. But they're fun!)`,
+  export: `export PATH=/usr/local/bin:/usr/bin:/bin
+export EDITOR=vim
+export SHELL=/bin/bash
+export USER=axjns
+export HOME=/home/axjns
+export TERMINAL_EMULATOR=fake-browser-terminal.tsx
+
+Environment variables: Because global variables weren't bad enough.`,
+  source: `bash: source: filename argument required
+source: file
+
+Usage: source filename [arguments]
+
+source: Running a script in the current shell, because sometimes
+        forking a new process is just too much work.
+
+(Also: the '.' command does the same thing. TMYK 🌈⭐)`,
+  chmod: (mode?: string) => {
+    return `chmod: changing file permissions to ${mode || '755'}
+
+Permissions changed! Now the file is executable.
+(Just kidding, there is no file. This is a fake terminal.)
+
+chmod cheat sheet:
+  4 = read    (r--)
+  2 = write   (-w-)
+  1 = execute (--x)
+
+  chmod 755 = rwxr-xr-x  (most common)
+  chmod 777 = rwxrwxrwx  (most dangerous)
+  chmod 000 = ---------  (most useless)`;
+  },
+  chown: (args?: string) => {
+    return `chown: changing ownership of file to ${args || 'axjns:axjns'}
+
+Ownership changed! You now own the file.
+(Which is weird, because there is no file.)
+
+chown: When you need to tell Linux who the boss is.
+
+Pro tip: Use sudo for extra power. Or explosions. Both are likely.`;
+  },
+  // Network tools
+  ssh: (host?: string) => {
+    const target = host || "github.com";
+    return `ssh: connect to host ${target} port 22: Connection refused
+
+Reasons why SSH doesn't work:
+1. Host is down
+2. Wrong port
+3. Firewall blocking connection
+4. You forgot to start sshd
+5. This is a fake terminal in a web browser
+
+(It's #5)`;
+  },
+  telnet: `telnet: command not found
+
+Good! Telnet is insecure and deprecated.
+
+Use SSH instead. It's like telnet, but:
+- Encrypted
+- Secure
+- Won't get you fired
+
+The 1990s called. They want their protocol back.`,
+  nc: `nc (netcat) - the TCP/IP swiss army knife
+
+Usage: nc [options] [hostname] [port]
+
+Netcat: Like a cat, but for networks.
+Can do anything. Probably shouldn't do most things.
+
+Common uses:
+- Port scanning
+- File transfers
+- Chat server (yes, really)
+- Backdoors (don't)
+- Debugging (yes!)`,
+  netcat: `See: nc
+
+(netcat and nc are the same thing)`,
+  nmap: `Nmap: The Network Mapper
+
+Scanning 65535 ports... this might take a while.
+
+Starting Nmap 7.94 ( https://nmap.org )
+Nmap scan report for axjns.dev (127.0.0.1)
+Host is up (0.00042s latency).
+Not shown: 65533 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+443/tcp  open  https
+
+Nmap done: 1 IP address scanned in 0.01 seconds
+
+(Disclaimer: No actual network scanning occurred)`,
+  wireshark: `Wireshark: The world's foremost network protocol analyzer
+
+Cannot run GUI application in terminal mode.
+
+Wireshark: For when you need to see EVERY. SINGLE. PACKET.
+
+Fun fact: 99% of network traffic is cat videos and memes.
+The other 1% is people trying to fix their network.`,
+  // Compression
+  tar: `tar: GNU tar
+
+Usage: tar [OPTION...] [FILE]...
+
+tar xvf file.tar.gz  # Extract (most common)
+tar czf file.tar.gz  # Create compressed archive
+tar tzf file.tar.gz  # List contents
+
+tar: Tape Archive (from when tapes were a thing)
+
+Helpful mnemonics:
+- eXtract Ze Files  (xzf)
+- Create Ze Files   (czf)
+- Totally Zealous Formatting (tzf)
+
+(These aren't official. But they should be.)`,
+  gzip: `gzip: compression utility
+
+Usage: gzip [OPTIONS] [FILE ...]
+
+gzip file.txt → file.txt.gz
+
+gzip: Making files smaller since 1992.
+
+Fun fact: .tar.gz is also called a "tarball"
+because UNIX people hate normal names for things.`,
+  zip: `zip: package and compress files
+
+Usage: zip [options] zipfile files ...
+
+zip archive.zip file1.txt file2.txt
+
+Fun fact: ZIP format was created in 1989 and is still going strong.
+
+Unlike WinRAR. (Which you definitely paid for. Right? Right??)`,
+  // System commands
+  reboot: `Broadcast message from axjns@axjns.dev (pts/0) (Sun Feb 15 21:00:00 2026):
+
+The system is going down for reboot NOW!
+
+Just kidding! This is a web page.
+Refreshing the browser will have the same effect though! 🦊`,
+  shutdown: `Shutdown scheduled for Sun Feb 15 21:01:00 2026, use 'shutdown -c' to cancel.
+
+(Just kidding. This is a fake terminal. Nothing will shut down.)
+
+Remember: Never shutdown a production server.
+Especially on Friday. Especially at 5pm.`,
+  init: `init: The mother of all processes (PID 1)
+
+Not that you can run it. You're not root.
+And this is a fake terminal.
+
+init: Starting the system since 1983.
+
+(Now mostly replaced by systemd. RIP init, you had a good run.)`,
+  systemctl: `systemctl: Control the systemd system and service manager
+
+Usage: systemctl [OPTIONS...] COMMAND ...
+
+systemctl status nginx   # Check service status
+systemctl start nginx    # Start service
+systemctl stop nginx     # Stop service
+systemctl restart nginx  # Restart service
+
+systemd: The init system everyone loves to hate.
+(But secretly can't live without)`,
+  banner: (text?: string) => {
+    const msg = text || "AXJNS";
+    // Simple banner - in real implementation would do proper ASCII art
+    return `
+#     #  #     #  #     #   #####
+ #   #    #   #    #   #   #     #
+  # #      # #      # #      #
+   #        #        #         #####
+  # #      # #      # #             #
+ #   #    #   #    #   #    #     #
+#     #  #     #  #     #    #####
+
+         ${msg.toUpperCase()}
+`;
+  },
+  echo: (args?: string) => args || "",
 };
 
 // Complete filesystem structure
@@ -174,7 +876,7 @@ function getCompletions(input: string, cwd: string): string[] {
   
   // Command completion
   if (parts.length === 1) {
-    const allCommands = [...Object.keys(COMMANDS), ...Object.keys(EASTER_EGGS), 'cd', 'ls', 'pwd', 'cat', 'note', 'guestbook', 'theme', 'history', 'hack', 'sudo', 'make', 'sl', 'figlet', 'banner', 'ping', 'curl', 'wget', 'free', 'df', 'finger', 'uptime', 'hostname'];
+    const allCommands = [...Object.keys(COMMANDS), ...Object.keys(EASTER_EGGS), 'cd', 'ls', 'pwd', 'cat', 'note', 'guestbook', 'theme', 'history', 'hack', 'clear', 'help'];
     return allCommands.filter(cmd => cmd.startsWith(lastPart)).sort();
   }
   
