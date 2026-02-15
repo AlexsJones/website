@@ -471,17 +471,23 @@ export default function RootLayout() {
 
     // New commands with arguments
     if (base === 'figlet' || base === 'banner') {
-      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS.figlet(arg)]);
+      const figletFn = EASTER_EGGS.figlet;
+      const output = typeof figletFn === 'function' ? figletFn(arg) : figletFn;
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, output]);
       return;
     }
 
     if (base === 'ping') {
-      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS.ping(arg)]);
+      const pingFn = EASTER_EGGS.ping;
+      const output = typeof pingFn === 'function' ? pingFn(arg) : pingFn;
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, output]);
       return;
     }
 
     if (base === 'curl' || base === 'wget') {
-      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS.curl(arg)]);
+      const curlFn = EASTER_EGGS.curl;
+      const output = typeof curlFn === 'function' ? curlFn(arg) : curlFn;
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, output]);
       return;
     }
 
