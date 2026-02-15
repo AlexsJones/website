@@ -1,11 +1,35 @@
+// Enhanced layout with boot sequence, theme switcher, notes, tab completion, history, and guestbook
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import "./globals.css";
 import Image from 'next/image';
 
-function BlinkingCursor() {
-  return <span className="inline-block w-2 h-5 bg-green-400 align-bottom animate-blink ml-1" style={{animation: 'blink 1s steps(2, start) infinite'}}></span>;
+// Theme definitions
+const THEMES = {
+  matrix: { bg: 'bg-black', text: 'text-green-400', prompt: 'text-green-300', cursor: 'bg-green-400', name: 'Matrix' },
+  amber: { bg: 'bg-black', text: 'text-amber-500', prompt: 'text-amber-400', cursor: 'bg-amber-500', name: 'Amber' },
+  blue: { bg: 'bg-blue-950', text: 'text-blue-300', prompt: 'text-blue-200', cursor: 'bg-blue-300', name: 'IBM Blue' },
+  hacker: { bg: 'bg-black', text: 'text-lime-400', prompt: 'text-lime-300', cursor: 'bg-lime-400', name: 'Hacker' },
+  cyberpunk: { bg: 'bg-purple-950', text: 'text-pink-400', prompt: 'text-cyan-400', cursor: 'bg-pink-400', name: 'Cyberpunk' },
+};
+
+interface Note {
+  id: number;
+  text: string;
+  timestamp: string;
+}
+
+interface GuestbookEntry {
+  id: number;
+  name: string;
+  message: string;
+  timestamp: string;
+}
+
+function BlinkingCursor({ theme }: { theme: string }) {
+  const themeConfig = THEMES[theme as keyof typeof THEMES] || THEMES.matrix;
+  return <span className={`inline-block w-2 h-5 ${themeConfig.cursor} align-bottom animate-blink ml-1`} style={{animation: 'blink 1s steps(2, start) infinite'}}></span>;
 }
 
 const COMMANDS = {
@@ -30,78 +54,51 @@ const EASTER_EGGS: Record<string, string | (() => string)> = {
   ls: "about  blog  cv  speaking  README.md",
   top: `top - 00:00:01 up 1 day,  1 user,  load average: 0.00, 0.01, 0.05\nTasks: 1 total, 1 running, 0 sleeping, 0 stopped, 0 zombie\n%Cpu(s): 0.7 us, 0.3 sy, 0.0 ni, 99.0 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st\nMiB Mem :  16384.0 total,  12000.0 free,   2048.0 used,   1336.0 buff/cache\nPID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n  1 axjns     20   0   10000   3000   2000 R   0.7   0.1   0:00.01 axjns.dev\n 42 axjns     20   0   42424   1337   1337 S   0.0   0.0   0:00.00 cowsay\n 99 axjns     20   0   99999   4040   4040 S   0.0   0.0   0:00.00 fortune`,
   du: `4.0K    ./blog\n8.0K    ./cv\n16.0K   ./about\n32.0K   ./speaking\n42G     ./README.md\n1337G   .\nWow, that's a lot of disk usage!`,
-  iotop: `Total DISK READ: 0.00 B/s | Total DISK WRITE: 0.00 B/s\nPID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND\n1    be    axjns    0.00 B/s   0.00 B/s    0.00 %     0.00 % axjns.dev\n42   be    axjns    0.00 B/s   0.00 B/s    0.00 %     0.00 % cowsay\n99   be    axjns    0.00 B/s   0.00 B/s    0.00 %     0.00 % fortune\n(Your disk is chilling.)`,
-  lsblk: `NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\nsda           8:0    0 1337G  0 disk \n└─sda1        8:1    0 1337G  0 part /\nsuperfloppy   1:0    1  1.4M  0 disk /mnt/floppy\nusb0         11:0    1  16G   0 disk /mnt/usb\n(So many blocks, so little time.)`,
-  ssh: `usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address]\n           [-c cipher_spec] [-D [bind_address:]port] [-E log_file]\n           [-e escape_char] [-F configfile] [-I pkcs11] [-i identity_file]\n           [-J destination] [-L address] [-l login_name] [-m mac_spec]\n           [-O ctl_cmd] [-o option] [-P tag] [-p port] [-R address]\n           [-S ctl_path] [-W host:port] [-w local_tun[:remote_tun]]\n           destination [command [argument ...]]\n       ssh [-Q query_option]`,
   whoami: "axjns",
   uname: "Linux axjns.dev 6.14.11-300.fc42.x86_64 #1 SMP PREEMPT_DYNAMIC",
   ps: `  PID TTY          TIME CMD\n    1 pts/0    00:00:01 axjns.dev\n  222 pts/0    00:00:00 bash\n  333 pts/0    00:00:00 cowsay\n  444 pts/0    00:00:00 fortune`,
-  cat: "meow. (You don't have permission to read this file)",
-  echo: "echo what?",
   pwd: "/home/axjns",
-  date: new Date().toString(),
-  cal: `     June 2024\nSu Mo Tu We Th Fr Sa\n                   1\n 2  3  4  5  6  7  8\n 9 10 11 12 13 14 15\n16 17 18 19 20 21 22\n23 24 25 26 27 28 29\n30`,
+  date: () => new Date().toString(),
   fortune: "You will deploy to production on a Friday.",
-  cowsay: ` ____________\n< axjns.dev >\n ------------\n        \   ^__^\n         \  (oo)\\_______\n            (__)\\       )\/\\\n                ||----w |\n                ||     ||`,
-  neofetch: `            .-/+oossssoo+/-.\n        ':+ssssssssssssssssss+:'.\n      -+ssssssssssssssssssyyssss+-\n    .ossssssssssssssssssdMMMNysssso.\n   /ssssssssssshdmmNNmmyNMMMMhssssss/\n  +ssssssssshmydMMMMMMMNddddyssssssss+\n /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/\n.ssssssssdMMMNhsssssssssshNMMMdssssssss.\n+sssshhhyNMMNyssssssssssssyNMMMysssssss+\nossyNMMMNyMMhsssssssssssssshmmmhssssssso\nossyNMMMNyMMhsssssssssssssshmmmhssssssso\n+sssshhhyNMMNyssssssssssssyNMMMysssssss+\n.ssssssssdMMMNhsssssssssshNMMMdssssssss.\n /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/\n  +ssssssssshmydMMMMMMMNddddyssssssss+\n   /ssssssssssshdmmNNmmyNMMMMhssssss/\n    .ossssssssssssssssssdMMMNysssso.\n      -+ssssssssssssssssssyyssss+-\n        ':+ssssssssssssssssss+:'.\n            .-/+oossssoo+/-.\n\naxjns@dev\nOS: Linux\nHost: axjns.dev\nKernel: 6.14.11-300.fc42.x86_64\nUptime: 1 day\nShell: bash\nResolution: 1920x1080\nDE: CLI\nCPU: Intel(R) Hacker i9\nMemory: 16GB\n`};
+  cowsay: ` ____________\n< axjns.dev >\n ------------\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||`,
+  make: "make: *** No targets specified and no makefile found.  Stop.",
+  sudo: "We trust you have received the usual lecture from the local System Administrator.",
+};
 
 // Simulated filesystem
 const FS: Record<string, string[]> = {
   '/': ['home', 'tmp', 'opt', 'bin', 'var', 'etc'],
   '/home': ['axjns'],
-  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact'],
+  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact', 'projects', '.bash_history'],
+  '/home/axjns/projects': ['k8sgpt', 'llmfit', 'secret-project'],
   '/blog': [],
   '/cv': [],
   '/about': [],
   '/speaking': [],
   '/tmp': ['.X11-unix', 'testfile.txt'],
   '/opt': ['coolapp', 'README.md'],
-  '/bin': ['ls', 'cat', 'bash', 'sh', 'echo', 'top', 'ps', 'neofetch'],
+  '/bin': ['ls', 'cat', 'bash', 'sh', 'echo', 'top', 'ps'],
   '/var': ['log', 'tmp', 'www'],
   '/var/log': ['syslog', 'dmesg', 'auth.log'],
-  '/var/tmp': [],
-  '/var/www': ['index.html'],
-  '/etc': ['passwd', 'shadow', 'hosts', 'hostname', 'motd'],
+  '/etc': ['passwd', 'hosts', 'hostname', 'motd'],
 };
 
-// Map file content for /home/axjns
 const FILE_CONTENT: Record<string, string> = {
   '/home/axjns/speaking': PAGE_OUTPUT['/speaking'],
   '/home/axjns/about': PAGE_OUTPUT['/about'],
   '/home/axjns/blog': PAGE_OUTPUT['/blog'],
   '/home/axjns/cv': PAGE_OUTPUT['/cv'],
   '/home/axjns/README.md': 'Welcome to the home directory of axjns! Try cat about, cat cv, cat blog, cat speaking.',
-  '/home/axjns/contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub for contact)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks\n`,
-  '/opt/coolapp': `\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nWelcome to the legendary CoolApp!\n\nUsage: coolapp [--awesome]\n\nFeatures:\n- Does nothing, but does it in style.\n- 100% bug free (because it does nothing).\n- Easter egg: Try running with --awesome!\n\nThank you for trying CoolApp.\n`,
-  '/opt/README.md': `# /opt/README.md\n\nWelcome to the /opt directory!\n\nHere you will find only the coolest, most experimental software.\n\nTry 'cat coolapp' for a surprise!\n\nP.S. This is not a real Linux system. Or is it?\n`,
-  '/tmp/.X11-unix': 'Binary file (not printable)',
-  '/tmp/testfile.txt': 'This is a test file in /tmp. Feel free to delete me! Or not.',
-  '/var/log/syslog': '[  0.000000] Booting axjns.dev kernel...\n[  0.000001] All systems nominal.\n[ 42.000000] User tried to cat /var/log/syslog. Success!',
-  '/var/log/dmesg': '[    0.000000] Linux version 6.14.11-300.fc42.x86_64\n[    0.000001] axjns.dev: The Matrix has you.',
-  '/var/log/auth.log': 'Accepted password for axjns from 127.0.0.1 port 1337 ssh2\nUser axjns is always authorized.',
-  '/var/www/index.html': '<!DOCTYPE html>\n<html><head><title>axjns.dev</title></head><body><h1>Welcome to the fake web root!</h1><p>This is not a real web server.</p></body></html>',
+  '/home/axjns/contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/`,
+  '/home/axjns/.bash_history': `ls -la\ncd projects\ngit status\nkubectl get pods\nsudo rm -rf / --no-preserve-root\nhistory | grep oops\nmake sandwich\nsudo make sandwich\nvim important-config.yaml\nexit`,
+  '/home/axjns/projects/k8sgpt': 'k8sgpt - AI-powered Kubernetes cluster analysis\nGitHub: https://github.com/k8sgpt-ai/k8sgpt',
+  '/home/axjns/projects/llmfit': 'llmfit - Right-size LLMs to your hardware\nGitHub: https://github.com/AlexsJones/llmfit',
+  '/home/axjns/projects/secret-project': 'DO_NOT_READ.txt:\n\nThis is the secret project.\n\nIt will change everything.\n\nJust kidding. It\'s a todo app.',
+  '/etc/motd': 'Welcome to axjns.dev! Hack the planet.',
   '/etc/passwd': 'root:x:0:0:root:/root:/bin/bash\naxjns:x:1000:1000:Alex Jones:/home/axjns:/bin/bash',
-  '/etc/shadow': 'root:*:19700:0:99999:7:::\naxjns:*:19700:0:99999:7:::',
   '/etc/hosts': '127.0.0.1\tlocalhost\n::1\tlocalhost',
   '/etc/hostname': 'axjns.dev',
-  '/etc/motd': 'Welcome to axjns.dev! Hack the planet.',
-};
-
-// Add pretend binaries as commands
-const BINARY_COMMANDS: Record<string, string> = {
-  'ls': typeof EASTER_EGGS.ls === 'function' ? EASTER_EGGS.ls() : EASTER_EGGS.ls,
-  'cat': 'Usage: cat [file]\nConcatenate and print files. Try cat /etc/passwd!',
-  'bash': 'GNU bash, version 5.2.0(1)-release (x86_64-axjns)',
-  'sh': 'sh: this shell is too minimal for your needs.',
-  'echo': 'echo what?',
-  'top': typeof EASTER_EGGS.top === 'function' ? EASTER_EGGS.top() : EASTER_EGGS.top,
-  'ps': typeof EASTER_EGGS.ps === 'function' ? EASTER_EGGS.ps() : EASTER_EGGS.ps,
-  'neofetch': typeof EASTER_EGGS.neofetch === 'function' ? EASTER_EGGS.neofetch() : EASTER_EGGS.neofetch,
-  '/opt/coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp!\n\nCongratulations, you have achieved maximum coolness.\n\nTry running with --awesome for a secret.\n',
-  './coolapp': '\x1b[32mCoolApp v1.0\x1b[0m\n----------------\nYou ran CoolApp from the current directory!\n\nAchievement unlocked: ./coolapp\n',
-  'vim': '', // placeholder, handled specially
-  'kubectl': '', // handled specially
-  'contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub for contact)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks\n`,
+  '/var/log/syslog': '[  0.000000] Booting axjns.dev kernel...\n[  0.000001] All systems nominal.\n[ 42.000000] User tried to cat /var/log/syslog. Success!',
 };
 
 function resolvePath(cwd: string, arg: string): string {
@@ -115,55 +112,133 @@ function resolvePath(cwd: string, arg: string): string {
   return (cwd === '/' ? '' : cwd) + '/' + arg;
 }
 
+// Get autocomplete suggestions
+function getCompletions(input: string, cwd: string): string[] {
+  const parts = input.split(' ');
+  const lastPart = parts[parts.length - 1];
+  
+  // Command completion
+  if (parts.length === 1) {
+    const allCommands = [...Object.keys(COMMANDS), ...Object.keys(EASTER_EGGS), 'cd', 'ls', 'pwd', 'cat', 'note', 'guestbook', 'theme', 'history', 'hack', 'sudo', 'make'];
+    return allCommands.filter(cmd => cmd.startsWith(lastPart)).sort();
+  }
+  
+  // File/directory completion
+  const cmd = parts[0];
+  if (cmd === 'cd' || cmd === 'cat' || cmd === 'ls') {
+    const target = lastPart.startsWith('/') ? lastPart : cwd === '/' ? '/' + lastPart : cwd + '/' + lastPart;
+    const dir = target.includes('/') ? target.substring(0, target.lastIndexOf('/')) || '/' : cwd;
+    const prefix = target.includes('/') ? target.substring(target.lastIndexOf('/') + 1) : lastPart;
+    
+    if (FS[dir]) {
+      return FS[dir].filter(item => item.startsWith(prefix)).map(item => {
+        const fullPath = dir === '/' ? '/' + item : dir + '/' + item;
+        return lastPart.startsWith('/') ? fullPath : item;
+      });
+    }
+  }
+  
+  return [];
+}
+
 export default function RootLayout() {
+  const [bootComplete, setBootComplete] = useState(false);
+  const [bootMessages, setBootMessages] = useState<string[]>([]);
   const [history, setHistory] = useState<string[]>([]);
   const [input, setInput] = useState("");
-  const [cwd, setCwd] = useState<string>("/");
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [cwd, setCwd] = useState<string>("/home/axjns");
   const [showGif, setShowGif] = useState(false);
-  const [vimSession, setVimSession] = useState<null | {
-    filename: string;
-    buffer: string[];
-    mode: 'normal' | 'insert' | 'command';
-    command: string;
-  }>(null);
+  const [theme, setTheme] = useState<string>('matrix');
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [guestbook, setGuestbook] = useState<GuestbookEntry[]>([]);
+  const [tabCompletions, setTabCompletions] = useState<string[]>([]);
+  const [tabIndex, setTabIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const vimRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const initialPath = React.useRef(pathname);
 
-  // Only set initial output once
+  const themeConfig = THEMES[theme as keyof typeof THEMES] || THEMES.matrix;
+
+  // Load persisted data
   useEffect(() => {
-    if (history.length === 0) {
-      setHistory([PAGE_OUTPUT[initialPath.current] || PAGE_OUTPUT["/"], FILE_CONTENT['/etc/motd']]);
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('axjns-theme');
+      if (savedTheme) setTheme(savedTheme);
+      
+      const savedNotes = localStorage.getItem('axjns-notes');
+      if (savedNotes) setNotes(JSON.parse(savedNotes));
+      
+      const savedGuestbook = localStorage.getItem('axjns-guestbook');
+      if (savedGuestbook) setGuestbook(JSON.parse(savedGuestbook));
+      
+      const savedHistory = localStorage.getItem('axjns-history');
+      if (savedHistory) setCommandHistory(JSON.parse(savedHistory));
+      
+      const savedCwd = localStorage.getItem('axjns-cwd');
+      if (savedCwd) setCwd(savedCwd);
     }
-    // eslint-disable-next-line
   }, []);
 
-  // Print page output and motd when route changes (but not on initial load)
+  // Save theme
   useEffect(() => {
-    if (history.length > 0 && PAGE_OUTPUT[pathname]) {
-      setHistory((h) => [...h, PAGE_OUTPUT[pathname], FILE_CONTENT['/etc/motd']]);
+    if (typeof window !== 'undefined' && bootComplete) {
+      localStorage.setItem('axjns-theme', theme);
     }
-    // eslint-disable-next-line
-  }, [pathname]);
+  }, [theme, bootComplete]);
 
+  // Boot sequence
   useEffect(() => {
-    // Matrix rain animation setup
+    const bootSeq = [
+      'BIOS v69.420 (C) 2024 axjns Corp.',
+      '',
+      'Booting axjns.dev...',
+      '[ OK ] Started Matrix Rain Service',
+      '[ OK ] Started Cowsay Daemon',
+      '[ OK ] Mounted /home/axjns',
+      '[ OK ] Started Note Manager',
+      '[ OK ] Started Guestbook Service',
+      '[ OK ] Reached target Multi-User System',
+      '',
+      'axjns.dev login: axjns',
+      'Password: ',
+      'Last login: ' + new Date().toLocaleString(),
+      '',
+      FILE_CONTENT['/etc/motd'],
+      '',
+      PAGE_OUTPUT[initialPath.current] || PAGE_OUTPUT["/"],
+    ];
+    
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < bootSeq.length) {
+        setBootMessages(prev => [...prev, bootSeq[i]]);
+        i++;
+      } else {
+        clearInterval(interval);
+        setTimeout(() => setBootComplete(true), 500);
+      }
+    }, 150);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Matrix rain (only for matrix and hacker themes)
+  useEffect(() => {
+    if (!bootComplete) return;
+    if (theme !== 'matrix' && theme !== 'hacker') return;
+    
     const matrixRain = document.getElementById('matrix-rain');
     if (!matrixRain) return;
-    // Remove any existing canvas
+    
     const oldCanvas = document.getElementById('matrix-canvas');
     if (oldCanvas) oldCanvas.remove();
+    
     const canvas = document.createElement('canvas');
     canvas.id = 'matrix-canvas';
-    canvas.style.position = 'absolute';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100vw';
-    canvas.style.height = '100vh';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '0';
+    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0';
     matrixRain.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
@@ -178,14 +253,14 @@ export default function RootLayout() {
     const drops = Array(columns).fill(1);
 
     function draw() {
-      const context = ctx as CanvasRenderingContext2D;
-      context.fillStyle = 'rgba(0,0,0,0.08)';
-      context.fillRect(0, 0, width, height);
-      context.font = fontSize + "px monospace";
-      context.fillStyle = '#39FF14';
+      if (!ctx) return;
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.font = fontSize + "px monospace";
+      ctx.fillStyle = theme === 'hacker' ? '#CCFF00' : '#39FF14';
       for (let i = 0; i < drops.length; i++) {
         const text = String.fromCharCode(0x30A0 + Math.random() * 96);
-        context.fillText(text, i * fontSize, drops[i] * fontSize);
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
         if (drops[i] * fontSize > height && Math.random() > 0.975) {
           drops[i] = 0;
         }
@@ -193,6 +268,7 @@ export default function RootLayout() {
       }
     }
     const interval = setInterval(draw, 50);
+    
     function handleResize() {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -200,177 +276,256 @@ export default function RootLayout() {
       canvas.height = height;
     }
     window.addEventListener('resize', handleResize);
+    
     return () => {
       clearInterval(interval);
       window.removeEventListener('resize', handleResize);
       canvas.remove();
     };
-  }, []);
+  }, [theme, bootComplete]);
 
   const handleCommand = (cmd: string) => {
-    setShowGif(false); // Hide gif on any command
+    setShowGif(false);
+    setTabCompletions([]);
+    setTabIndex(0);
+    
     const command = cmd.trim();
+    if (!command) return;
+    
+    // Save to command history
+    const newHistory = [...commandHistory, command];
+    setCommandHistory(newHistory);
+    setHistoryIndex(-1);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('axjns-history', JSON.stringify(newHistory));
+    }
+    
     const [base, ...args] = command.split(/\s+/);
     const arg = args.join(' ');
+
+    // Theme command
+    if (base === 'theme') {
+      if (!arg) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Available themes: matrix, amber, blue, hacker, cyberpunk', 'Current: ' + theme]);
+        return;
+      }
+      if (THEMES[arg as keyof typeof THEMES]) {
+        setTheme(arg);
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `Theme changed to: ${THEMES[arg as keyof typeof THEMES].name}`]);
+        return;
+      }
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Unknown theme. Try: theme']);
+      return;
+    }
+
+    // Note system
+    if (base === 'note') {
+      const subcmd = args[0];
+      if (subcmd === 'add') {
+        const text = args.slice(1).join(' ');
+        if (!text) {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Usage: note add "your note text"']);
+          return;
+        }
+        const note: Note = { id: Date.now(), text, timestamp: new Date().toLocaleString() };
+        const newNotes = [...notes, note];
+        setNotes(newNotes);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('axjns-notes', JSON.stringify(newNotes));
+        }
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `Note added (id: ${note.id})`]);
+        return;
+      }
+      if (subcmd === 'list' || !subcmd) {
+        if (notes.length === 0) {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'No notes yet. Use: note add "text"']);
+        } else {
+          const noteList = notes.map(n => `[${n.id}] ${n.timestamp}\n${n.text}`).join('\n\n');
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, noteList]);
+        }
+        return;
+      }
+      if (subcmd === 'rm') {
+        const id = parseInt(args[1]);
+        if (!id) {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Usage: note rm <id>']);
+          return;
+        }
+        const newNotes = notes.filter(n => n.id !== id);
+        setNotes(newNotes);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('axjns-notes', JSON.stringify(newNotes));
+        }
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `Note ${id} deleted`]);
+        return;
+      }
+      const id = parseInt(subcmd);
+      if (id) {
+        const note = notes.find(n => n.id === id);
+        if (note) {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `[${note.id}] ${note.timestamp}\n${note.text}`]);
+        } else {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `Note ${id} not found`]);
+        }
+        return;
+      }
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Usage: note [add|list|rm] or note <id>']);
+      return;
+    }
+
+    // Guestbook
+    if (base === 'guestbook') {
+      const subcmd = args[0];
+      if (subcmd === 'sign') {
+        const name = args[1];
+        const message = args.slice(2).join(' ');
+        if (!name || !message) {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Usage: guestbook sign <your-name> <message>']);
+          return;
+        }
+        const entry: GuestbookEntry = { id: Date.now(), name, message, timestamp: new Date().toLocaleString() };
+        const newGuestbook = [...guestbook, entry];
+        setGuestbook(newGuestbook);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('axjns-guestbook', JSON.stringify(newGuestbook));
+        }
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `Thank you for signing, ${name}!`]);
+        return;
+      }
+      if (subcmd === 'read' || !subcmd) {
+        if (guestbook.length === 0) {
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Guestbook is empty. Be the first!\nUsage: guestbook sign <name> <message>']);
+        } else {
+          const entries = guestbook.map(e => `[${e.timestamp}] ${e.name}:\n${e.message}`).join('\n\n');
+          setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `=== Guestbook (${guestbook.length} entries) ===\n\n${entries}`]);
+        }
+        return;
+      }
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Usage: guestbook [sign|read]']);
+      return;
+    }
+
+    // History command
+    if (base === 'history') {
+      if (commandHistory.length === 0) {
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'No history yet']);
+      } else {
+        const histList = commandHistory.map((c, i) => `${i + 1}  ${c}`).join('\n');
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, histList]);
+      }
+      return;
+    }
+
+    // Hack easter egg
+    if (base === 'hack') {
+      const hackingMsg = [
+        'Initializing hack...',
+        'Connecting to mainframe...',
+        'Bypassing firewall...',
+        'Downloading database...',
+        'Cracking encryption...',
+        'Access granted!',
+        '',
+        'Just kidding. This is a website.',
+      ].join('\n');
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, hackingMsg]);
+      return;
+    }
+
+    // Make sandwich easter eggs
+    if (command === 'make sandwich') {
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'What? Make it yourself.']);
+      return;
+    }
+    if (command === 'sudo make sandwich') {
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, 'Okay.']);
+      return;
+    }
+
     // Filesystem commands
     if (base === 'ls') {
       const target = resolvePath(cwd, arg);
       if (FS[target as keyof typeof FS]) {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          FS[target as keyof typeof FS].join('  ') || '',
-        ]);
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, FS[target as keyof typeof FS].join('  ') || '']);
       } else {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          `ls: cannot access '${arg}': No such file or directory`,
-        ]);
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `ls: cannot access '${arg}': No such file or directory`]);
       }
       return;
     }
+
     if (base === 'cd') {
       const target = resolvePath(cwd, arg);
       if (FS[target as keyof typeof FS]) {
         setCwd(target);
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-        ]);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('axjns-cwd', target);
+        }
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd]);
       } else {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          `cd: no such file or directory: ${arg}`,
-        ]);
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cd: no such file or directory: ${arg}`]);
       }
       return;
     }
+
     if (base === 'pwd') {
-      setHistory((h) => [
-        ...h,
-        `${prompt(cwd)} ${cmd}`,
-        cwd,
-      ]);
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, cwd]);
       return;
     }
+
     if (base === 'cat') {
       let target = arg;
       if (!target.startsWith('/')) {
         target = cwd === '/' ? '/' + arg : cwd + '/' + arg;
       }
       if (FILE_CONTENT[target]) {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          FILE_CONTENT[target],
-        ]);
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, FILE_CONTENT[target]]);
       } else {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          `cat: ${arg}: No such file or directory`,
-        ]);
+        setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cat: ${arg}: No such file or directory`]);
       }
       return;
     }
-    // Easter eggs and normal commands
-    const lower = command.toLowerCase();
-    if (
-      base === 'ssh' || lower === 'ssh' ||
-      base === 'sudo' || lower === 'sudo' ||
-      (base === 'rm' && /-rf/.test(cmd))
-    ) {
+
+    // SSH/sudo GIF trigger
+    if (base === 'ssh' || base === 'sudo' || (base === 'rm' && /-rf/.test(cmd))) {
       setShowGif(true);
-      setHistory((h) => [
-        ...h,
-        `${prompt(cwd)} ${cmd}`,
-        String(EASTER_EGGS['ssh']),
-      ]);
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, EASTER_EGGS['ssh'] as string]);
       return;
     }
+
+    // Easter eggs
+    const lower = command.toLowerCase();
     if (EASTER_EGGS[lower]) {
-      setHistory((h) => [
-        ...h,
-        `${prompt(cwd)} ${cmd}`,
-        typeof EASTER_EGGS[lower] === "function" ? EASTER_EGGS[lower]() : EASTER_EGGS[lower],
-      ]);
+      const egg = EASTER_EGGS[lower];
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd, typeof egg === "function" ? egg() : egg]);
       return;
     }
+
+    // Navigation commands
     if (COMMANDS[lower as keyof typeof COMMANDS] && typeof COMMANDS[lower as keyof typeof COMMANDS] === "string") {
       router.push(COMMANDS[lower as keyof typeof COMMANDS]!);
-      setHistory((h) => [...h, `${prompt(cwd)} ${cmd}`]);
+      setHistory(h => [...h, prompt(cwd) + ' ' + cmd]);
       return;
     }
+
     if (lower === "help") {
-      setHistory((h) => [
+      setHistory(h => [
         ...h,
-        `${prompt(cwd)} ${cmd}`,
-        "Available commands: home, about, speaking, blog, cv, help, clear, ls, cd, pwd, ...",
+        prompt(cwd) + ' ' + cmd,
+        "Available commands:",
+        "Navigation: home, about, speaking, blog, cv",
+        "Files: ls, cd, pwd, cat",
+        "Tools: note, guestbook, theme, history, clear",
+        "Fun: hack, make sandwich, cowsay, fortune, neofetch, top, ps",
       ]);
       return;
     }
+
     if (lower === "clear") {
       setHistory([]);
       return;
     }
-    // Handle pretend binaries
-    if (BINARY_COMMANDS[base] || BINARY_COMMANDS[cmd]) {
-      setHistory((h) => [
-        ...h,
-        `${prompt(cwd)} ${cmd}`,
-        BINARY_COMMANDS[cmd] || BINARY_COMMANDS[base],
-      ]);
-      return;
-    }
-    // Handle fake vim
-    if (base === 'vim') {
-      const filename = args[0] || '[No Name]';
-      setVimSession({
-        filename,
-        buffer: [''],
-        mode: 'normal',
-        command: '',
-      });
-      return;
-    }
-    // Handle fake kubectl
-    if (base === 'kubectl') {
-      const subcmd = args.join(' ');
-      if (/get\s+pods(\s+-A)?/.test(subcmd)) {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          `NAMESPACE     NAME                        READY   STATUS    RESTARTS   AGE
-kube-system   coredns-7f89b7bc75-abcde      1/1     Running   0          2d
-kube-system   kube-proxy-xyz12              1/1     Running   0          2d
-default       my-app-5d4f6b7c7d-12345        1/1     Running   1          1d
-default       db-0                          1/1     Running   0          1d
-`]);
-        return;
-      }
-      if (/get\s+nodes/.test(subcmd)) {
-        setHistory((h) => [
-          ...h,
-          `${prompt(cwd)} ${cmd}`,
-          `NAME         STATUS   ROLES    AGE   VERSION
-axjns-node   Ready    master   2d    v1.30.0
-`]);
-        return;
-      }
-      setHistory((h) => [
-        ...h,
-        `${prompt(cwd)} ${cmd}`,
-        `kubectl: unknown or unsupported command\nTry 'kubectl get pods -A' or 'kubectl get nodes'`
-      ]);
-      return;
-    }
-    setHistory((h) => [
-      ...h,
-      `${prompt(cwd)} ${cmd}`,
-      `command not found: ${cmd}`,
-    ]);
+
+    setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `command not found: ${cmd}`]);
   };
 
   function prompt(dir: string) {
@@ -381,145 +536,114 @@ axjns-node   Ready    master   2d    v1.30.0
     if (e.key === "Enter") {
       handleCommand(input);
       setInput("");
+      setTabCompletions([]);
+      setTabIndex(0);
+      return;
+    }
+
+    // Command history navigation
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (commandHistory.length === 0) return;
+      const newIndex = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
+      setHistoryIndex(newIndex);
+      setInput(commandHistory[newIndex]);
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex === -1) return;
+      const newIndex = historyIndex + 1;
+      if (newIndex >= commandHistory.length) {
+        setHistoryIndex(-1);
+        setInput("");
+      } else {
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[newIndex]);
+      }
+      return;
+    }
+
+    // Tab completion
+    if (e.key === "Tab") {
+      e.preventDefault();
+      
+      if (tabCompletions.length === 0) {
+        const completions = getCompletions(input, cwd);
+        if (completions.length === 0) return;
+        
+        if (completions.length === 1) {
+          // Auto-complete
+          const parts = input.split(' ');
+          parts[parts.length - 1] = completions[0];
+          setInput(parts.join(' '));
+        } else {
+          // Show options and set up cycling
+          setTabCompletions(completions);
+          setTabIndex(0);
+          setHistory(h => [...h, prompt(cwd) + ' ' + input, completions.join('  ')]);
+        }
+      } else {
+        // Cycle through completions
+        const newIndex = (tabIndex + 1) % tabCompletions.length;
+        setTabIndex(newIndex);
+        const parts = input.split(' ');
+        parts[parts.length - 1] = tabCompletions[newIndex];
+        setInput(parts.join(' '));
+      }
+      return;
+    }
+
+    // Clear tab completions on any other key
+    if (tabCompletions.length > 0) {
+      setTabCompletions([]);
+      setTabIndex(0);
     }
   };
 
-  // Vim key handler
-  const handleVimKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!vimSession) return;
-    if (vimSession.mode === 'insert') {
-      if (e.key === 'Escape') {
-        setVimSession({ ...vimSession, mode: 'normal' });
-        e.preventDefault();
-        return;
-      }
-      if (e.key === 'Backspace') {
-        setVimSession((vs) => {
-          if (!vs) return vs;
-          const buf = [...vs.buffer];
-          buf[buf.length - 1] = buf[buf.length - 1].slice(0, -1);
-          return { ...vs, buffer: buf };
-        });
-        e.preventDefault();
-        return;
-      }
-      if (e.key === 'Enter') {
-        setVimSession((vs) => {
-          if (!vs) return vs;
-          return { ...vs, buffer: [...vs.buffer, ''] };
-        });
-        e.preventDefault();
-        return;
-      }
-      // Add character
-      if (e.key.length === 1) {
-        setVimSession((vs) => {
-          if (!vs) return vs;
-          const buf = [...vs.buffer];
-          buf[buf.length - 1] += e.key;
-          return { ...vs, buffer: buf };
-        });
-        e.preventDefault();
-        return;
-      }
-      return;
-    }
-    if (vimSession.mode === 'normal') {
-      if (e.key === 'i') {
-        setVimSession({ ...vimSession, mode: 'insert' });
-        e.preventDefault();
-        return;
-      }
-      if (e.key === ':') {
-        setVimSession({ ...vimSession, mode: 'command', command: '' });
-        e.preventDefault();
-        return;
-      }
-      return;
-    }
-    if (vimSession.mode === 'command') {
-      if (e.key === 'Enter') {
-        if (vimSession.command === 'q' || vimSession.command === 'wq') {
-          setVimSession(null);
-          setHistory((h) => [...h, 'Exited vim.']);
-        } else {
-          setVimSession({ ...vimSession, mode: 'normal', command: '' });
-        }
-        e.preventDefault();
-        return;
-      }
-      if (e.key === 'Backspace') {
-        setVimSession((vs) => {
-          if (!vs) return vs;
-          return { ...vs, command: vs.command.slice(0, -1) };
-        });
-        e.preventDefault();
-        return;
-      }
-      if (e.key.length === 1) {
-        setVimSession((vs) => {
-          if (!vs) return vs;
-          return { ...vs, command: vs.command + e.key };
-        });
-        e.preventDefault();
-        return;
-      }
-      return;
-    }
-  };
+  if (!bootComplete) {
+    return (
+      <html lang="en">
+        <body className={`${themeConfig.bg} ${themeConfig.text} font-mono min-h-screen`}>
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="w-full max-w-4xl p-6">
+              {bootMessages.map((msg, i) => (
+                <div key={i} className="whitespace-pre-wrap">{msg}</div>
+              ))}
+              <BlinkingCursor theme={theme} />
+            </div>
+          </div>
+          <style>{`@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="en">
-      <body className="bg-black text-green-400 font-mono min-h-screen relative antialiased overflow-x-hidden">
-        {/* Matrix rain animation backdrop */}
+      <body className={`${themeConfig.bg} ${themeConfig.text} font-mono min-h-screen relative antialiased overflow-x-hidden`}>
         <div id="matrix-rain" className="fixed inset-0 z-0 pointer-events-none" aria-hidden></div>
         <div className="flex flex-col items-center min-h-screen">
-          <div className="w-full max-w-4xl mt-8 border border-green-800 bg-black/95 rounded shadow-lg relative z-10">
-            {vimSession ? (
-              <div
-                ref={vimRef}
-                tabIndex={0}
-                className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh] outline-none"
-                style={{ minHeight: '60vh', background: '#111' }}
-                onKeyDown={handleVimKeyDown}
-                autoFocus
-              >
-                {vimSession.buffer.map((line, i) => (
-                  <div key={i}>{line === '' ? '~' : line}</div>
-                ))}
-                <div className="text-green-300">{vimSession.mode === 'command' ? ':' + vimSession.command : ''}</div>
-                <div className="mt-4 text-green-500">
-                  -- {vimSession.mode === 'insert' ? 'INSERT' : vimSession.mode === 'command' ? 'COMMAND' : 'NORMAL'} --
-                  <span className="ml-4">{vimSession.filename}</span>
-                </div>
-                <div className="mt-2 text-green-600 text-xs">
-                  (vim: i = insert, Esc = normal, :q or :wq = quit, type to edit)
-                </div>
-                <div className="mt-2 text-green-400 text-xs">
-                  VIM - Vi IMproved<br />Welcome to vim!<br />Editing session (not saved)
-                </div>
+          <div className={`w-full max-w-4xl mt-8 border ${themeConfig.text} border-opacity-30 ${themeConfig.bg} bg-opacity-95 rounded shadow-lg relative z-10`}>
+            <div className="p-6 whitespace-pre-wrap break-words font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && inputRef.current.focus()}>
+              {history.map((line, i) => (
+                <div key={i} className="break-words whitespace-pre-wrap">{line}</div>
+              ))}
+              <div className="flex items-center">
+                <span className={themeConfig.prompt}>{prompt(cwd)}</span>
+                <input
+                  ref={inputRef}
+                  className={`bg-transparent border-none outline-none ${themeConfig.text} font-mono ml-2 flex-1`}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                  spellCheck={false}
+                />
+                <BlinkingCursor theme={theme} />
               </div>
-            ) : (
-              <div className="p-6 whitespace-pre-wrap break-words text-green-400 font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && inputRef.current.focus()}>
-                {history.map((line, i) => (
-                  <div key={i} className="break-words whitespace-pre-wrap">{line}</div>
-                ))}
-                <div className="flex items-center">
-                  <span className="text-green-300">{prompt(cwd)}</span>
-                  {input.length === 0 ? <BlinkingCursor /> : null}
-                  <input
-                    ref={inputRef}
-                    className="bg-transparent border-none outline-none text-green-400 font-mono ml-2 w-48"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                    spellCheck={false}
-                  />
-                  {input.length > 0 ? <BlinkingCursor /> : null}
-                </div>
-              </div>
-            )}
+            </div>
             {showGif && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60" style={{cursor:'pointer'}} onClick={() => setShowGif(false)}>
                 <Image
@@ -533,10 +657,7 @@ axjns-node   Ready    master   2d    v1.30.0
             )}
           </div>
         </div>
-        <style>{`
-          @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-          #matrix-rain { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background: transparent; }
-        `}</style>
+        <style>{`@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`}</style>
       </body>
     </html>
   );
