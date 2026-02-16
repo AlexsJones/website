@@ -1538,18 +1538,18 @@ export default function RootLayout() {
                   {showTerminalMenu && (
                     <div className={`absolute top-full left-0 mt-1 ${themeConfig.bg} border ${themeConfig.text} border-opacity-50 rounded shadow-lg z-20 min-w-[200px]`}>
                       <div className="px-4 py-2 text-xs opacity-60 border-b border-opacity-20">Theme</div>
-                      {Object.entries(THEMES).map(([key, theme]) => (
+                      {Object.entries(THEMES).map(([key, themeOption]) => (
                         <button
                           key={key}
                           onClick={() => {
                             setTheme(key);
                             setShowTerminalMenu(false);
                           }}
-                          className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-20 hover:${theme.cursor} transition-colors ${
-                            key === themeConfig ? 'font-bold' : ''
+                          className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-20 hover:${themeOption.cursor} transition-colors ${
+                            key === theme ? 'font-bold' : ''
                           }`}
                         >
-                          {key === themeConfig ? '✓ ' : '  '}{theme.name}
+                          {key === theme ? '✓ ' : '  '}{themeOption.name}
                         </button>
                       ))}
                       <div className="border-t border-opacity-20 my-1"></div>
