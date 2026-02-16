@@ -27,6 +27,14 @@ interface GuestbookEntry {
   timestamp: string;
 }
 
+interface TerminalTab {
+  id: number;
+  title: string;
+  history: string[];
+  cwd: string;
+  input: string;
+}
+
 function BlinkingCursor({ theme }: { theme: string }) {
   const themeConfig = THEMES[theme as keyof typeof THEMES] || THEMES.matrix;
   return <span className={`inline-block w-2 h-5 ${themeConfig.cursor} align-bottom animate-blink ml-1`} style={{animation: 'blink 1s steps(2, start) infinite'}}></span>;
@@ -537,19 +545,20 @@ y
 │   ├── known_hosts
 │   └── config
 └── projects/
-    ├── k8sgpt/
-    │   ├── README.md
-    │   ├── main.go
-    │   └── go.mod
-    ├── llmfit/
-    │   ├── README.md
-    │   ├── main.rs
-    │   └── Cargo.toml
+    ├── llmfit/          [Rust] ★72 - Right-size LLMs to your hardware
+    ├── website/         [TypeScript] - Personal terminal website
+    ├── hearthglow/      [Rust] - Rust project
+    ├── kube-microcosm/  [Makefile] ★59 - K8s cluster for startups
+    ├── kflow/           [Rust] ★57 - Like top for K8s networking
+    ├── joblin/          [Rust] ★4 - Rust based job manager
+    ├── lsrmod/          [Rust] ★1 - lsmod in Rust
+    ├── py2rs/           [TypeScript] ★5 - Python to Rust converter
+    ├── k8sgpt/          [Go] - AI-powered K8s troubleshooting
     └── secret-project/
         ├── DO_NOT_READ.txt
         └── todo.txt
 
-4 directories, 19 files`,
+14 directories, 30+ files`,
   man: (cmd?: string) => {
     const command = cmd || "intro";
     return `MAN(1)                    Manual pager utils                    MAN(1)
@@ -792,9 +801,16 @@ const FS: Record<string, string[]> = {
   '/': ['home', 'tmp', 'opt', 'bin', 'var', 'etc', 'proc'],
   '/home': ['axjns'],
   '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact', 'projects', '.bash_history', '.ssh'],
-  '/home/axjns/projects': ['k8sgpt', 'llmfit', 'secret-project'],
-  '/home/axjns/projects/k8sgpt': ['README.md', 'main.go', 'go.mod'],
+  '/home/axjns/projects': ['llmfit', 'website', 'hearthglow', 'kube-microcosm', 'kflow', 'joblin', 'lsrmod', 'py2rs', 'k8sgpt', 'secret-project'],
   '/home/axjns/projects/llmfit': ['README.md', 'main.rs', 'Cargo.toml'],
+  '/home/axjns/projects/website': ['README.md', 'package.json'],
+  '/home/axjns/projects/hearthglow': ['README.md', 'main.rs', 'Cargo.toml'],
+  '/home/axjns/projects/kube-microcosm': ['README.md', 'Makefile'],
+  '/home/axjns/projects/kflow': ['README.md', 'main.rs', 'Cargo.toml'],
+  '/home/axjns/projects/joblin': ['README.md', 'main.rs', 'Cargo.toml'],
+  '/home/axjns/projects/lsrmod': ['README.md', 'main.rs', 'Cargo.toml'],
+  '/home/axjns/projects/py2rs': ['README.md', 'package.json'],
+  '/home/axjns/projects/k8sgpt': ['README.md', 'main.go', 'go.mod'],
   '/home/axjns/projects/secret-project': ['DO_NOT_READ.txt', 'todo.txt'],
   '/home/axjns/.ssh': ['id_rsa', 'id_rsa.pub', 'known_hosts', 'config'],
   '/tmp': ['.X11-unix', 'testfile.txt'],
@@ -817,12 +833,30 @@ const FILE_CONTENT: Record<string, string> = {
   '/home/axjns/README.md': 'Welcome to the home directory of axjns!\n\nTry these commands:\n- cat about\n- cat cv\n- cat blog\n- cat speaking\n- cd projects\n- ls -la\n\nHave fun exploring!',
   '/home/axjns/contact': `Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks`,
   '/home/axjns/.bash_history': `ls -la\ncd projects\ngit status\nkubectl get pods -A\nsudo rm -rf / --no-preserve-root\nhistory | grep oops\nmake sandwich\nsudo make sandwich\nvim important-config.yaml\nping google.com\ncurl https://axjns.dev\nexit`,
-  '/home/axjns/projects/k8sgpt/README.md': '# k8sgpt\n\nAI-powered Kubernetes cluster analysis and troubleshooting.\n\n## Features\n- Automatic issue detection\n- AI-powered explanations\n- Integration with multiple LLM providers\n- Custom analyzers\n\nGitHub: https://github.com/k8sgpt-ai/k8sgpt',
-  '/home/axjns/projects/k8sgpt/main.go': '// k8sgpt main entry point\npackage main\n\nimport (\n\t"fmt"\n\t"os"\n)\n\nfunc main() {\n\tfmt.Println("k8sgpt - AI-powered K8s SRE")\n\t// ... implementation\n}',
-  '/home/axjns/projects/k8sgpt/go.mod': 'module github.com/k8sgpt-ai/k8sgpt\n\ngo 1.24\n\nrequire (\n\tk8s.io/client-go v0.31.0\n\t// ... more dependencies\n)',
-  '/home/axjns/projects/llmfit/README.md': '# llmfit\n\nA terminal tool that right-sizes LLM models to your system\'s RAM, CPU, and GPU.\n\n## Features\n- Hardware detection\n- Model compatibility database\n- Interactive TUI\n- CLI mode\n\nGitHub: https://github.com/AlexsJones/llmfit',
+  '/home/axjns/projects/llmfit/README.md': '# llmfit\n\nA way to justify buying a more powerful laptop (and see what LLMs will run).\nRight-sizes LLM models to your system\'s RAM, CPU, and GPU.\n\nLanguage: Rust | Stars: 72\n\nGitHub: https://github.com/AlexsJones/llmfit',
   '/home/axjns/projects/llmfit/main.rs': '// llmfit - Right-size LLMs to your hardware\nuse std::io;\n\nfn main() {\n    println!("llmfit - LLM Hardware Compatibility");\n    // ... implementation\n}',
   '/home/axjns/projects/llmfit/Cargo.toml': '[package]\nname = "llmfit"\nversion = "0.1.0"\nedition = "2021"\n\n[dependencies]\nsysinfo = "0.30"\ntermion = "3.0"',
+  '/home/axjns/projects/website/README.md': '# website\n\nPersonal terminal-style website for axjns.dev.\nBuilt with Next.js and TypeScript.\n\nLanguage: TypeScript\n\nGitHub: https://github.com/AlexsJones/website',
+  '/home/axjns/projects/website/package.json': '{\n  "name": "axjns-website",\n  "version": "1.0.0",\n  "scripts": { "dev": "next dev" }\n}',
+  '/home/axjns/projects/hearthglow/README.md': '# hearthglow\n\nA Rust project.\n\nLanguage: Rust\n\nGitHub: https://github.com/AlexsJones/hearthglow',
+  '/home/axjns/projects/hearthglow/main.rs': 'fn main() {\n    println!("hearthglow");\n}',
+  '/home/axjns/projects/hearthglow/Cargo.toml': '[package]\nname = "hearthglow"\nversion = "0.1.0"\nedition = "2021"',
+  '/home/axjns/projects/kube-microcosm/README.md': '# kube-microcosm\n\nAn example of a Kubernetes cluster appropriate for a startup company.\nIncludes cert-manager, Falco, GitOps, Linkerd2, and Slack integration.\n\nLanguage: Makefile | Stars: 59 | Archived\n\nGitHub: https://github.com/AlexsJones/kube-microcosm',
+  '/home/axjns/projects/kube-microcosm/Makefile': '.PHONY: all\nall:\n\t@echo "kube-microcosm - K8s starter cluster"',
+  '/home/axjns/projects/kflow/README.md': '# kflow\n\nLike top for Kubernetes networking.\nMonitor and visualize network traffic in your K8s cluster.\n\nLanguage: Rust | Stars: 57\n\nGitHub: https://github.com/AlexsJones/kflow',
+  '/home/axjns/projects/kflow/main.rs': 'fn main() {\n    println!("kflow - K8s network monitoring");\n}',
+  '/home/axjns/projects/kflow/Cargo.toml': '[package]\nname = "kflow"\nversion = "0.1.0"\nedition = "2021"',
+  '/home/axjns/projects/joblin/README.md': '# joblin\n\nRust based Job manager, for fun and education.\n\nLanguage: Rust | Stars: 4\n\nGitHub: https://github.com/AlexsJones/joblin',
+  '/home/axjns/projects/joblin/main.rs': 'fn main() {\n    println!("joblin - Job Manager");\n}',
+  '/home/axjns/projects/joblin/Cargo.toml': '[package]\nname = "joblin"\nversion = "0.1.0"\nedition = "2021"',
+  '/home/axjns/projects/lsrmod/README.md': '# lsrmod\n\nlsmod in Rust. Lists loaded kernel modules.\n\nLanguage: Rust | Stars: 1\n\nGitHub: https://github.com/AlexsJones/lsrmod',
+  '/home/axjns/projects/lsrmod/main.rs': 'fn main() {\n    println!("lsrmod - lsmod in Rust");\n}',
+  '/home/axjns/projects/lsrmod/Cargo.toml': '[package]\nname = "lsrmod"\nversion = "0.1.0"\nedition = "2021"',
+  '/home/axjns/projects/py2rs/README.md': '# py2rs\n\nPython to Rust transpiler/converter tool.\n\nLanguage: TypeScript | Stars: 5\n\nGitHub: https://github.com/AlexsJones/py2rs',
+  '/home/axjns/projects/py2rs/package.json': '{\n  "name": "py2rs",\n  "version": "1.0.0"\n}',
+  '/home/axjns/projects/k8sgpt/README.md': '# k8sgpt\n\nAI-powered Kubernetes cluster analysis and troubleshooting.\nAutomatic issue detection with AI-powered explanations.\n\nLanguage: Go\n\nGitHub: https://github.com/k8sgpt-ai/k8sgpt',
+  '/home/axjns/projects/k8sgpt/main.go': '// k8sgpt main entry point\npackage main\n\nimport (\n\t"fmt"\n\t"os"\n)\n\nfunc main() {\n\tfmt.Println("k8sgpt - AI-powered K8s SRE")\n\t// ... implementation\n}',
+  '/home/axjns/projects/k8sgpt/go.mod': 'module github.com/k8sgpt-ai/k8sgpt\n\ngo 1.24\n\nrequire (\n\tk8s.io/client-go v0.31.0\n\t// ... more dependencies\n)',
   '/home/axjns/projects/secret-project/DO_NOT_READ.txt': '⚠️  TOP SECRET ⚠️\n\nThis is the secret project.\n\nIt will change everything.\n\n...\n\nJust kidding. It\'s a todo app.\n\nFeatures:\n- [ ] Add tasks\n- [ ] Complete tasks\n- [ ] Delete tasks\n- [ ] Procrastinate\n\n(The last feature is done!)',
   '/home/axjns/projects/secret-project/todo.txt': 'TODO:\n- Deploy to production on a Friday ✅\n- Write unit tests (someday)\n- Fix that one bug\n- Refactor everything\n- ???\n- Profit',
   '/home/axjns/.ssh/id_rsa': '-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAA\n(This is a fake SSH key. Nice try though!)\n-----END OPENSSH PRIVATE KEY-----',
@@ -901,21 +935,52 @@ function getCompletions(input: string, cwd: string): string[] {
 export default function RootLayout() {
   const [bootComplete, setBootComplete] = useState(false);
   const [bootMessages, setBootMessages] = useState<string[]>([]);
-  const [history, setHistory] = useState<string[]>([]);
-  const [input, setInput] = useState("");
+  const [tabs, setTabs] = useState<TerminalTab[]>([{
+    id: 1,
+    title: 'Terminal 1',
+    history: [],
+    cwd: '/home/axjns',
+    input: ''
+  }]);
+  const [activeTabId, setActiveTabId] = useState(1);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [cwd, setCwd] = useState<string>("/home/axjns");
   const [showGif, setShowGif] = useState(false);
-  const [theme, setTheme] = useState<string>('matrix');
+  const [theme, setTheme] = useState<string>('amber');
   const [notes, setNotes] = useState<Note[]>([]);
   const [guestbook, setGuestbook] = useState<GuestbookEntry[]>([]);
   const [tabCompletions, setTabCompletions] = useState<string[]>([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [showThemePicker, setShowThemePicker] = useState(false);
+  const [showTerminalMenu, setShowTerminalMenu] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const initialPath = React.useRef(pathname);
+  
+  const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
+  const history = activeTab.history;
+  const input = activeTab.input;
+  const cwd = activeTab.cwd;
+  
+  const setHistory = (updater: string[] | ((prev: string[]) => string[])) => {
+    setTabs(tabs => tabs.map(tab => 
+      tab.id === activeTabId ? { ...tab, history: typeof updater === 'function' ? updater(tab.history) : updater } : tab
+    ));
+  };
+  
+  const setInput = (value: string) => {
+    setTabs(tabs => tabs.map(tab => 
+      tab.id === activeTabId ? { ...tab, input: value } : tab
+    ));
+  };
+  
+  const setCwd = (newCwd: string) => {
+    setTabs(tabs => tabs.map(tab => 
+      tab.id === activeTabId ? { ...tab, cwd: newCwd } : tab
+    ));
+  };
 
   const themeConfig = THEMES[theme as keyof typeof THEMES] || THEMES.matrix;
 
@@ -934,10 +999,21 @@ export default function RootLayout() {
       const savedHistory = localStorage.getItem('axjns-history');
       if (savedHistory) setCommandHistory(JSON.parse(savedHistory));
       
-      const savedCwd = localStorage.getItem('axjns-cwd');
-      if (savedCwd) setCwd(savedCwd);
+      const savedTabs = localStorage.getItem('axjns-tabs');
+      if (savedTabs) {
+        const parsed = JSON.parse(savedTabs);
+        setTabs(parsed.tabs);
+        setActiveTabId(parsed.activeTabId);
+      }
     }
   }, []);
+
+  // Save tabs
+  useEffect(() => {
+    if (typeof window !== 'undefined' && bootComplete) {
+      localStorage.setItem('axjns-tabs', JSON.stringify({ tabs, activeTabId }));
+    }
+  }, [tabs, activeTabId, bootComplete]);
 
   // Save theme
   useEffect(() => {
@@ -1040,6 +1116,28 @@ export default function RootLayout() {
       canvas.remove();
     };
   }, [theme, bootComplete]);
+
+  const addTab = () => {
+    const newId = Math.max(...tabs.map(t => t.id)) + 1;
+    const newTab: TerminalTab = {
+      id: newId,
+      title: `Terminal ${newId}`,
+      history: [PAGE_OUTPUT[initialPath.current] || PAGE_OUTPUT["/"]],
+      cwd: '/home/axjns',
+      input: ''
+    };
+    setTabs([...tabs, newTab]);
+    setActiveTabId(newId);
+  };
+
+  const closeTab = (id: number) => {
+    if (tabs.length === 1) return; // Don't close the last tab
+    const newTabs = tabs.filter(t => t.id !== id);
+    setTabs(newTabs);
+    if (activeTabId === id) {
+      setActiveTabId(newTabs[0].id);
+    }
+  };
 
   const handleCommand = (cmd: string) => {
     setShowGif(false);
@@ -1237,18 +1335,12 @@ export default function RootLayout() {
     if (base === 'cd') {
       if (!arg) {
         setCwd('/home/axjns');
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('axjns-cwd', '/home/axjns');
-        }
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd]);
         return;
       }
       const target = resolvePath(cwd, arg);
       if (isDirectory(target)) {
         setCwd(target);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('axjns-cwd', target);
-        }
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd]);
       } else if (isFile(target)) {
         setHistory(h => [...h, prompt(cwd) + ' ' + cmd, `cd: ${arg}: Not a directory`]);
@@ -1429,6 +1521,95 @@ export default function RootLayout() {
         <div id="matrix-rain" className="fixed inset-0 z-0 pointer-events-none" aria-hidden></div>
         <div className="flex flex-col items-center min-h-screen">
           <div className={`w-full max-w-4xl mt-8 border ${themeConfig.text} border-opacity-30 ${themeConfig.bg} bg-opacity-95 rounded shadow-lg relative z-10`}>
+            {/* Menu Bar */}
+            <div className={`flex items-center justify-between px-4 py-2 border-b ${themeConfig.text} border-opacity-30`}>
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-bold">axjns.dev</span>
+                <button className={`px-2 py-1 text-sm hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}>File</button>
+                <button className={`px-2 py-1 text-sm hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}>Edit</button>
+                <button className={`px-2 py-1 text-sm hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}>Selection</button>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowTerminalMenu(!showTerminalMenu)}
+                    className={`px-2 py-1 text-sm hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}
+                  >
+                    Terminal
+                  </button>
+                  {showTerminalMenu && (
+                    <div className={`absolute top-full left-0 mt-1 ${themeConfig.bg} border ${themeConfig.text} border-opacity-50 rounded shadow-lg z-20 min-w-[200px]`}>
+                      <div className="px-4 py-2 text-xs opacity-60 border-b border-opacity-20">Theme</div>
+                      {Object.entries(THEMES).map(([key, theme]) => (
+                        <button
+                          key={key}
+                          onClick={() => {
+                            setTheme(key);
+                            setShowTerminalMenu(false);
+                          }}
+                          className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-20 hover:${theme.cursor} transition-colors ${
+                            key === themeConfig ? 'font-bold' : ''
+                          }`}
+                        >
+                          {key === themeConfig ? '✓ ' : '  '}{theme.name}
+                        </button>
+                      ))}
+                      <div className="border-t border-opacity-20 my-1"></div>
+                      <button
+                        onClick={() => {
+                          addTab();
+                          setShowTerminalMenu(false);
+                        }}
+                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}
+                      >
+                        New Terminal
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <button 
+                  onClick={() => setShowHelpModal(true)}
+                  className={`px-2 py-1 text-sm hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}
+                >
+                  Help
+                </button>
+              </div>
+              <button
+                onClick={addTab}
+                className={`px-3 py-1 text-sm border ${themeConfig.text} border-opacity-50 rounded hover:bg-opacity-20 hover:${themeConfig.cursor} transition-colors`}
+                title="New Terminal Tab"
+              >
+                + New Tab
+              </button>
+            </div>
+            
+            {/* Tab Bar */}
+            <div className={`flex items-center gap-1 px-2 py-1 border-b ${themeConfig.text} border-opacity-20 overflow-x-auto`}>
+              {tabs.map((tab) => (
+                <div
+                  key={tab.id}
+                  className={`flex items-center gap-2 px-3 py-1 text-sm rounded-t cursor-pointer transition-colors ${
+                    tab.id === activeTabId
+                      ? `${themeConfig.cursor} bg-opacity-20 border-b-2 border-${themeConfig.cursor}`
+                      : 'opacity-60 hover:opacity-100'
+                  }`}
+                  onClick={() => setActiveTabId(tab.id)}
+                >
+                  <span>{tab.title}</span>
+                  {tabs.length > 1 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        closeTab(tab.id);
+                      }}
+                      className="hover:text-red-400 transition-colors"
+                      title="Close tab"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            
             <div className="p-6 whitespace-pre-wrap break-words font-mono text-base min-h-[60vh]" onClick={() => inputRef.current && inputRef.current.focus()}>
               {history.map((line, i) => (
                 <div key={i} className="break-words whitespace-pre-wrap">{line}</div>
@@ -1456,6 +1637,49 @@ export default function RootLayout() {
                   height={300}
                   className="max-w-xs md:max-w-md lg:max-w-lg rounded shadow-2xl border-4 border-pink-600"
                 />
+              </div>
+            )}
+            {showHelpModal && (
+              <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/70" onClick={() => setShowHelpModal(false)}>
+                <div 
+                  className={`${themeConfig.bg} ${themeConfig.text} border ${themeConfig.text} border-opacity-50 rounded-lg shadow-2xl max-w-md w-full mx-4 p-6`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold">About axjns.dev</h2>
+                    <button 
+                      onClick={() => setShowHelpModal(false)}
+                      className={`text-2xl hover:${themeConfig.cursor} transition-colors leading-none`}
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    <p>This is the personal website of <span className="font-bold">Alex Jones</span>.</p>
+                    <p>To find out more about me:</p>
+                    <div className="space-y-2">
+                      <a 
+                        href="https://www.linkedin.com/in/jonesax/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={`block ${themeConfig.prompt} hover:underline`}
+                      >
+                        → LinkedIn: www.linkedin.com/in/jonesax/
+                      </a>
+                      <a 
+                        href="https://www.github.com/AlexsJones" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={`block ${themeConfig.prompt} hover:underline`}
+                      >
+                        → GitHub: www.github.com/AlexsJones
+                      </a>
+                    </div>
+                    <div className={`mt-6 pt-4 border-t ${themeConfig.text} border-opacity-30 text-sm opacity-70`}>
+                      <p>Type <span className={`${themeConfig.prompt} font-bold`}>help</span> in the terminal for available commands.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
