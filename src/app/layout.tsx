@@ -951,7 +951,6 @@ export default function RootLayout() {
   const [guestbook, setGuestbook] = useState<GuestbookEntry[]>([]);
   const [tabCompletions, setTabCompletions] = useState<string[]>([]);
   const [tabIndex, setTabIndex] = useState(0);
-  const [showThemePicker, setShowThemePicker] = useState(false);
   const [showTerminalMenu, setShowTerminalMenu] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
