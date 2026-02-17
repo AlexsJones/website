@@ -6,6 +6,7 @@ import "./globals.css";
 import { THEMES, ThemeKey } from "../themes";
 import { PAGE_OUTPUT, FILE_CONTENT, FS, resolvePath, isFile, isDirectory } from "../filesystem";
 import { COMMANDS, EASTER_EGGS, getCompletions } from "../commands";
+import { GAME_LIST, Game } from "../games";
 
 interface Note {
   id: number;
@@ -54,6 +55,7 @@ export default function RootLayout() {
   const [tabIndex, setTabIndex] = useState(0);
   const [showTerminalMenu, setShowTerminalMenu] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [activeGame, setActiveGame] = useState<Game | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -271,6 +273,54 @@ export default function RootLayout() {
 
     const [base, ...args] = command.split(/\s+/);
     const arg = args.join(" ");
+
+    // Active game mode - route input to game
+    if (activeGame) {
+      if (command === 'q' || command === 'quit') {
+        setActiveGame(null);
+        setHistory((h) => [...h, prompt(cwd) + " " + cmd, "Game exited."]);
+        return;
+      }
+      const result = activeGame.handleInput(command);
+      setHistory((h) => [...h, prompt(cwd) + " " + cmd, ...result.output]);
+      if (result.done) {
+        setActiveGame(null);
+        setHistory((h) => [...h, "", "Type 'games' to play again."]);
+      }
+      return;
+    }
+
+    // Games command
+    if (base === "games") {
+      const list = GAME_LIST.map(g => `  ${g.id.padEnd(14)} ${g.description}`);
+      setHistory((h) => [
+        ...h,
+        prompt(cwd) + " " + cmd,
+        "Available games:",
+        ...list,
+        "",
+        "Usage: play <game>",
+      ]);
+      return;
+    }
+
+    if (base === "play") {
+      if (!arg) {
+        setHistory((h) => [...h, prompt(cwd) + " " + cmd, "Usage: play <game>. Type 'games' to see available games."]);
+        return;
+      }
+      const entry = GAME_LIST.find(g => g.id === arg.toLowerCase());
+      if (!entry) {
+        setHistory((h) => [...h, prompt(cwd) + " " + cmd, `Unknown game: ${arg}. Type 'games' to see available games.`]);
+        return;
+      }
+      entry.factory().then(game => {
+        const initOutput = game.init();
+        setActiveGame(game);
+        setHistory((h) => [...h, prompt(cwd) + " " + cmd, ...initOutput]);
+      });
+      return;
+    }
 
     // Theme command
     if (base === "theme") {
@@ -528,6 +578,7 @@ export default function RootLayout() {
         "  Dev tools:   git [status|blame|push|commit], docker [ps|run], kubectl [get pods|nodes]",
         "  Tools:       note [add|list|rm], guestbook [sign|read], theme, history, man, echo, date",
         "  Fun:         cowsay, fortune, sl, figlet, banner",
+        "  Games:       games, play <game>",
         "  clear        Clear the terminal",
       ]);
       return;
