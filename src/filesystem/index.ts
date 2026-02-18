@@ -79,7 +79,7 @@ export const FILE_CONTENT: Record<string, string> = {
   '/var/log/auth.log': 'Feb 15 19:42:00 axjns sshd[1337]: Accepted password for axjns from 127.0.0.1 port 1337 ssh2',
   '/var/log/kern.log': '[  0.000000] Kernel logging started\n[  0.001000] Memory: 16384M\n[  0.420000] CPU: Intel(R) Core i9-1337K',
   '/var/www/index.html': '<!DOCTYPE html>\n<html>\n<head><title>axjns.dev</title></head>\n<body>\n<h1>Welcome to axjns.dev</h1>\n<p>The real site is a terminal interface!</p>\n</body>\n</html>',
-  '/etc/motd': 'Welcome to axjns.dev!\n\nHack the planet. Deploy on Fridays.\n\n"The cloud is just someone else\'s computer."',
+  '/etc/motd': 'Welcome to axjns.dev!\n\nHack the planet. Deploy on Fridays.\n\n"The cloud is just someone else\'s computer."\n\n  hint: the man pages know things. try man init.',
   '/etc/passwd': 'root:x:0:0:root:/root:/bin/bash\naxjns:x:1000:1000:Alex Jones:/home/axjns:/bin/bash\nnobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin',
   '/etc/hosts': '127.0.0.1\tlocalhost\n127.0.1.1\taxjns.dev\n::1\t\tlocalhost ip6-localhost ip6-loopback',
   '/etc/hostname': 'axjns.dev',

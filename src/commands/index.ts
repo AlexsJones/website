@@ -189,7 +189,19 @@ worker-2        Ready    <none>          42d   v1.30.0`,
     return `kill: sending signal to process ${pid || "42"}\nProcess ${pid || "42"} terminated.`;
   },
   man: (cmd?: string) => {
+    // Lazy import to avoid circular deps
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { STORY_PAGES, STORY_HINT } = require('../story/manpages');
     const command = cmd || "intro";
+
+    if (command === "-k" || command === "story" || command === "-k story") {
+      return STORY_HINT;
+    }
+
+    if (STORY_PAGES[command]) {
+      return STORY_PAGES[command];
+    }
+
     return `MAN(1)                    Manual pager utils                    MAN(1)
 
 NAME
