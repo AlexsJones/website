@@ -509,34 +509,53 @@ export default function SyntheticMembranePage() {
         <p>
           Now, the embarrassing part. None of this is a finished thing yet.
           I&apos;m writing this blog post in the middle of the work, not
-          after it.
+          after it. But we&apos;re past the hand-waving stage.
         </p>
 
-        <p>What we have right now is:</p>
+        <p>
+          The membrane is being implemented inside{" "}
+          <a
+            href="https://github.com/sympozium-ai/sympozium"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2"
+          >
+            Sympozium
+          </a>
+          , a Kubernetes-native agent orchestrator that already has the
+          right primitives to build on: shared memory (SQLite + FTS5),
+          delegation via a spawn router, and per-run token tracking. The
+          integration upgrades those existing pieces to implement membrane
+          layers 0–3 without breaking backward compatibility.
+        </p>
+
+        <p>Concretely, what&apos;s landing:</p>
 
         <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
           <li>
-            A working sketch of the Layer 1 protocol — field-level selective
-            sharing, default-deny semantics, a wire format that&apos;s
-            compact enough to actually use under the token-economics
-            constraint.
+            <strong>Permeability as CRD types</strong> — every agent config
+            declares its default visibility (public/trusted/private),
+            expose tags, and accept tags. Trust groups map to Kubernetes
+            resources. Default-deny, field-level selectivity, exactly as
+            described in Layer 1.
           </li>
           <li>
-            A reference Layer 2 implementation built on an event log with
-            CRDT operations, with semantic query on top. It&apos;s small,
-            it&apos;s slow, and it works.
+            <strong>Visibility-gated shared memory</strong> — the memory
+            server gets schema migrations for visibility, source agent,
+            provenance chains, and monotonic sequence numbers. Search
+            queries filter by trust peers and time decay. Layer 2, running
+            on SQLite.
           </li>
           <li>
-            A handful of Layer 3 coordination primitives — task broadcast,
-            claim, quorum activation. Mostly cribbed from biological quorum
-            sensing and from gossip protocols.
+            <strong>Token budgets as a first-class concept</strong> — per-ensemble
+            token limits with halt/warn actions, enforced at the controller
+            level before a run starts. The membrane doesn&apos;t just
+            control <em>what</em> crosses — it controls <em>how much</em>.
           </li>
           <li>
-            A running test harness that lets us replay the MoltBook-style
-            &quot;shallow swarm&quot; condition and the membrane-mediated
-            condition side by side, against the three-tier evaluation
-            framework (joint reasoning, information synthesis, basic
-            interaction).
+            <strong>Circuit breakers on delegation</strong> — consecutive
+            failures trip a breaker, blocking further spawns until
+            a success resets it. The immune layer, in miniature.
           </li>
         </ul>
 
@@ -601,7 +620,21 @@ export default function SyntheticMembranePage() {
         </p>
       </Prose>
 
-      <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-2 gap-4 font-mono text-sm">
+      <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
+        <a
+          href="https://github.com/sympozium-ai/sympozium"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+        >
+          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+            Implementation
+          </div>
+          <div className="text-slate-200">
+            sympozium-ai / sympozium
+          </div>
+          <div className="text-slate-500 text-xs mt-1">github.com →</div>
+        </a>
         <a
           href="https://github.com/AlexsJones/research"
           target="_blank"
@@ -609,10 +642,10 @@ export default function SyntheticMembranePage() {
           className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
         >
           <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
-            Repository
+            Research
           </div>
           <div className="text-slate-200">
-            three-foxes-in-a-trenchcoat / synthetic-membrane
+            AlexsJones / research
           </div>
           <div className="text-slate-500 text-xs mt-1">github.com →</div>
         </a>
