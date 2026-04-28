@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 export const alt =
-  "We've been building AI agents wrong. — axjns.dev";
+  "We've been building AI agents wrong. | axjns.dev";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

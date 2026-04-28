@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "We've been building AI agents wrong. — axjns.dev",
+  title: "We've been building AI agents wrong. · axjns.dev",
   description:
     "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
   openGraph: {
@@ -199,12 +199,12 @@ export default function SyntheticMembranePage() {
         </p>
 
         <p>
-          That&apos;s roughly the population of agents on MoltBook — a real,
+          That&apos;s roughly the population of agents on MoltBook, a real,
           running multi-agent society where LLMs talk to each other, post,
           reply, coordinate, and generally behave like a small digital
-          civilization. If you&apos;d asked me a year ago what would happen
+          civilisation. If you&apos;d asked me a year ago what would happen
           when you put two million agents in the same room, I&apos;d have said
-          something hand-wavy about emergent behavior, swarm intelligence, the
+          something hand-wavy about emergent behaviour, swarm intelligence, the
           wisdom of crowds. You know the genre. We&apos;ve been telling
           ourselves this story since the first AutoGen demo.
         </p>
@@ -215,18 +215,18 @@ export default function SyntheticMembranePage() {
           <strong>zero collective intelligence.</strong> No emergent
           reasoning. No synthesis of distributed knowledge. The swarm did not
           outperform a single frontier model. On most tasks, it performed{" "}
-          <em>worse</em> — drowning in shallow single-reply threads and
+          <em>worse</em>, drowning in shallow single-reply threads and
           generic responses. Even trivial coordination tasks failed.
         </p>
 
         <p>Two million agents. Zero supermind.</p>
 
         <p>
-          This is the thing I want to talk about. Not because it&apos;s
-          surprising — once you stare at it for a while, it stops being
-          surprising and starts being obvious — but because it tells us
+          This is what I want to talk about. Not because it&apos;s
+          surprising. Once you stare at it long enough, it stops being
+          surprising and starts being obvious. It tells us
           something specific about what&apos;s broken in the way we&apos;re
-          building agents right now. And I think the fix is interesting
+          building agents right now. And the fix is interesting
           enough to be worth a blog post.
         </p>
 
@@ -241,8 +241,8 @@ export default function SyntheticMembranePage() {
         </p>
 
         <p>
-          Each of those pieces is doing real work. MCP is great — it
-          standardized how an agent calls a tool, and it deserves the
+          Each of those pieces is doing real work. MCP is great. It
+          standardised how an agent calls a tool, and it deserves the
           adoption it&apos;s getting. A2A is doing useful things for direct
           agent-to-agent task delegation. LangGraph gives you a sane state
           machine. None of this is wrong.
@@ -273,7 +273,7 @@ export default function SyntheticMembranePage() {
           shared documents, the long-running Slack threads, the codebase,
           the wiki, the implicit knowledge that compounds in a team&apos;s
           collective head. Take all of that away and leave only the email
-          lattice, and you don&apos;t get a company — you get a help desk.
+          lattice, and you don&apos;t get a company. You get a help desk.
         </p>
 
         <p>That&apos;s what current multi-agent systems are. A help desk of LLMs.</p>
@@ -288,15 +288,15 @@ export default function SyntheticMembranePage() {
 
         <p>
           A cell is not a closed black box that emails other cells. A cell is
-          wrapped in a <em>membrane</em> — a permeable, intelligent boundary
+          wrapped in a <em>membrane</em>, a permeable, intelligent boundary
           that decides, in real time, what to let in and what to keep out.
           Ions flow through gated channels. Receptors on the surface sense
-          the chemical state of the neighborhood. Hormones diffuse, and a
+          the chemical state of the neighbourhood. Hormones diffuse, and a
           thousand cells respond in coordinated waves without anyone in
-          charge. Bacteria do quorum sensing — they literally count their
-          neighbors via molecular concentration and{" "}
-          <em>change behavior</em> when the population crosses a threshold.
-          Fungal mycelium routes nutrients across kilometers. Neurons fire
+          charge. Bacteria do quorum sensing. They literally count their
+          neighbours via molecular concentration and{" "}
+          <em>change behaviour</em> when the population crosses a threshold.
+          Fungal mycelium routes nutrients across kilometres. Neurons fire
           across synapses with weighted, plastic, learning connections.
         </p>
 
@@ -304,16 +304,16 @@ export default function SyntheticMembranePage() {
           What all of these have in common is{" "}
           <strong>selective permeability.</strong> There is an inside and an
           outside. There are channels through the boundary. The channels are
-          gated — they decide what to share and what to keep private. And
+          gated. They decide what to share and what to keep private. And
           critically, the medium between cells <em>is itself part of the
           computation</em>. The cytoplasm, the synaptic cleft, the
-          extracellular fluid — these aren&apos;t pipes. They&apos;re shared
+          extracellular fluid: these aren&apos;t pipes. They&apos;re shared
           substrate.
         </p>
 
         <p>
           When you put two million single-celled organisms in a pond, you
-          get a biofilm — a coordinated, communicating, surprisingly
+          get a biofilm, a coordinated, communicating, surprisingly
           adaptive entity. When you put two million LLM agents on a forum,
           you get… two million LLM agents on a forum.
         </p>
@@ -326,11 +326,11 @@ export default function SyntheticMembranePage() {
           Let me try to be concrete. The thing I&apos;ve been calling a
           &quot;synthetic membrane&quot; is a shared, permeable substrate
           between agents, with three layers. None of these layers are
-          individually new — that&apos;s actually the point. The interesting
+          individually new. That&apos;s actually the point. The interesting
           work is in the interface between them.
         </p>
 
-        <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram — layers 0-3 with immune layer" />
+        <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram, layers 0-3 with immune layer" />
 
         <details className="my-4">
           <summary className="text-sm text-slate-500 cursor-pointer hover:text-slate-300 transition">ASCII version</summary>
@@ -341,7 +341,7 @@ export default function SyntheticMembranePage() {
 
         <p>
           <strong>Layer 1, the permeability layer.</strong> This is the
-          protocol — the part that says what an agent exposes and what
+          protocol, the part that says what an agent exposes and what
           it&apos;s willing to receive. Every agent declares:{" "}
           <em>
             here are my capabilities, here are the slices of my state
@@ -358,7 +358,7 @@ export default function SyntheticMembranePage() {
         <p>
           This is also where <strong>cognitive digestion</strong> happens.
           Agents don&apos;t dump raw output into the shared medium. They
-          store their <em>interpretation</em> of what they saw — a remix, in
+          store their <em>interpretation</em> of what they saw, a remix in
           the language of mesh-memory protocols. This matters because raw
           signal accumulation creates echo chambers and burns input tokens
           for nothing. (We&apos;ll get to tokens in a second; they turn out
@@ -367,7 +367,7 @@ export default function SyntheticMembranePage() {
 
         <p>
           <strong>Layer 2, the shared medium.</strong> The cytoplasm. This
-          is the substrate where state actually lives — not the messages
+          is the substrate where state actually lives, not the messages
           between agents, but the <em>fact pool</em> the agents are drawing
           from. The right primitive here, I think, is an immutable event log
           with CRDT semantics. Every state change is an event with a
@@ -381,7 +381,7 @@ export default function SyntheticMembranePage() {
         <p>
           This is the layer that&apos;s most missing from current systems.
           AutoGen doesn&apos;t have it. CrewAI doesn&apos;t have it.
-          LangGraph has a centralized state graph, which is closer, but
+          LangGraph has a centralised state graph, which is closer, but
           it&apos;s still one orchestrator&apos;s view of the world rather
           than a substrate the agents share.
         </p>
@@ -390,21 +390,21 @@ export default function SyntheticMembranePage() {
           <strong>Layer 3, the coordination layer.</strong> The thing that
           actually lets a swarm form. Task broadcasting, claiming, dynamic
           grouping, dissolution. Think of it as the bacterial quorum-sensing
-          layer — agents emit &quot;intent signals&quot; into the medium,
+          layer: agents emit &quot;intent signals&quot; into the medium,
           and when the concentration crosses a threshold, the swarm
           activates around the problem. Then it dissolves. No top-down
           orchestrator deciding who does what.
         </p>
 
         <p>
-          There are two layers wrapping the whole thing —{" "}
-          <strong>discovery</strong> (you can&apos;t coordinate with agents
+          Two layers wrap the whole thing.{" "}
+          <strong>Discovery</strong>: you can&apos;t coordinate with agents
           you can&apos;t find, and description-based search demonstrably
-          fails; you need behavioral indexing) and{" "}
-          <strong>governance</strong> (circuit breakers, human override,
-          audit trails, value-conflict escalation). Plus a parallel{" "}
-          <strong>immune layer</strong> doing adaptive defense via anomaly
-          detection and threat gossip — because the moment shared state
+          fails, so you need behavioural indexing.{" "}
+          <strong>Governance</strong>: circuit breakers, human override,
+          audit trails, value-conflict escalation. Plus a parallel{" "}
+          <strong>immune layer</strong> doing adaptive defence via anomaly
+          detection and threat gossip. The moment shared state
           becomes valuable, somebody is going to try to poison it.
         </p>
 
@@ -421,7 +421,7 @@ export default function SyntheticMembranePage() {
             Agentic tasks consume roughly 1000x more tokens than non-agentic
             ones.
           </strong>{" "}
-          Input tokens dominate cost. And — this is the cruel part —
+          Input tokens dominate cost. Here&apos;s the cruel part:
           accuracy peaks at <em>intermediate</em> token spend, not maximum.
           Past a certain point, more communication makes results worse, not
           better.
@@ -446,12 +446,12 @@ export default function SyntheticMembranePage() {
             cleaner.
           </li>
           <li>
-            Communication budgets need to be a first-class membrane concept
-            — per agent, tracked, enforceable.
+            Communication budgets need to be a first-class membrane concept:
+            per agent, tracked, enforceable.
           </li>
         </ul>
 
-        <img src="/scaling.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Scaling chart — token reduction from 42% at 3 agents to 72% at 20 agents" />
+        <img src="/scaling.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Scaling chart, token reduction from 42% at 3 agents to 72% at 20 agents" />
 
         <p>
           Five years ago you could argue about whether a shared-state layer
@@ -467,8 +467,8 @@ export default function SyntheticMembranePage() {
           this isn&apos;t a problem that solves itself with bigger context
           windows or better models. The bigger the context windows get, the
           more they cost. The bigger the models get, the more their
-          input-token bill dominates. The constraint isn&apos;t going away —
-          it&apos;s getting tighter.
+          input-token bill dominates. The constraint isn&apos;t going away.
+          It&apos;s getting tighter.
         </p>
 
         <H2>What &quot;ZERO collective intelligence&quot; actually maps to</H2>
@@ -478,29 +478,29 @@ export default function SyntheticMembranePage() {
           lands so hard, once you sit with it, is that it&apos;s not a
           model-quality problem. The agents on MoltBook are real
           frontier-model agents. Smart enough individually to do real work.
-          The problem isn&apos;t IQ — it&apos;s plumbing.
+          The problem isn&apos;t IQ. It&apos;s plumbing.
         </p>
 
         <p>Specifically, four pieces of plumbing are missing:</p>
 
         <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-300">
           <li>
-            <strong>No structured protocol</strong> — they communicate via
-            raw text, which means every interaction is shallow, ambiguous,
-            and impossible to build on. → Layer 1 fixes this.
+            <strong>No structured protocol.</strong> They communicate via
+            raw text, so every interaction is shallow, ambiguous,
+            and impossible to build on. Layer 1 fixes this.
           </li>
           <li>
-            <strong>No shared memory</strong> — there&apos;s no place for
-            distributed knowledge to synthesize. → Layer 2 fixes this.
+            <strong>No shared memory.</strong> There&apos;s no place for
+            distributed knowledge to synthesise. Layer 2 fixes this.
           </li>
           <li>
-            <strong>No quality gating</strong> — every interaction is
-            weighted equally; reputation and trust don&apos;t exist. →
+            <strong>No quality gating.</strong> Every interaction is
+            weighted equally. Reputation and trust don&apos;t exist.
             Layer 1 (gated permeability) and the immune layer fix this.
           </li>
           <li>
-            <strong>No coordination primitives</strong> — no swarming, no
-            role assignment, no task claiming. → Layer 3 fixes this.
+            <strong>No coordination primitives.</strong> No swarming, no
+            role assignment, no task claiming. Layer 3 fixes this.
           </li>
         </ol>
 
@@ -533,44 +533,44 @@ export default function SyntheticMembranePage() {
           right primitives to build on: shared memory (SQLite + FTS5),
           delegation via a spawn router, and per-run token tracking. The
           integration upgrades those existing pieces to implement membrane
-          layers 0–3 without breaking backward compatibility.
+          layers 0-3 without breaking backward compatibility.
         </p>
 
         <p>Concretely, what&apos;s landing:</p>
 
         <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
           <li>
-            <strong>Permeability as CRD types</strong> — every agent config
+            <strong>Permeability as CRD types.</strong> Every agent config
             declares its default visibility (public/trusted/private),
             expose tags, and accept tags. Trust groups map to Kubernetes
             resources. Default-deny, field-level selectivity, exactly as
             described in Layer 1.
           </li>
           <li>
-            <strong>Visibility-gated shared memory</strong> — the memory
+            <strong>Visibility-gated shared memory.</strong> The memory
             server gets schema migrations for visibility, source agent,
             provenance chains, and monotonic sequence numbers. Search
             queries filter by trust peers and time decay. Layer 2, running
             on SQLite.
           </li>
           <li>
-            <strong>Token budgets as a first-class concept</strong> — per-ensemble
+            <strong>Token budgets as a first-class concept.</strong> Per-ensemble
             token limits with halt/warn actions, enforced at the controller
             level before a run starts. The membrane doesn&apos;t just
-            control <em>what</em> crosses — it controls <em>how much</em>.
+            control <em>what</em> crosses. It controls <em>how much</em>.
           </li>
           <li>
-            <strong>Circuit breakers on delegation</strong> — consecutive
+            <strong>Circuit breakers on delegation.</strong> Consecutive
             failures trip a breaker, blocking further spawns until
             a success resets it. The immune layer, in miniature.
           </li>
         </ul>
 
-        <img src="/swarm_timeline.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Swarm lifecycle timeline — registration, trust, coordination, dissolution" />
+        <img src="/swarm_timeline.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Swarm lifecycle timeline: registration, trust, coordination, dissolution" />
 
         <p>
-          The thing I most want feedback on right now is the protocol itself
-          — specifically, whether the field-level selectivity model is the
+          The thing I most want feedback on right now is the protocol itself,
+          specifically whether the field-level selectivity model is the
           right primitive or whether we should be thinking in terms of
           capabilities, like an object-capability system. Both have working
           prototypes. Both have arguments for them. I genuinely don&apos;t
@@ -592,16 +592,16 @@ export default function SyntheticMembranePage() {
             stories are the most valuable thing in the world right now.
           </li>
           <li>
-            <strong>Working on agent protocols</strong> — A2A, ACP, ANP, MCP
+            <strong>Working on agent protocols:</strong> A2A, ACP, ANP, MCP
             extensions. The membrane should compose with these, not replace
-            them, and figuring out the composition story is open work.
+            them. Figuring out the composition story is open work.
           </li>
           <li>
             <strong>
               Coming from biology, distributed systems, or game theory.
             </strong>{" "}
-            The interesting questions in this space — quorum sensing, CRDT
-            design, mechanism design for cooperation — are all stolen from
+            The interesting questions in this space (quorum sensing, CRDT
+            design, mechanism design for cooperation) are all stolen from
             older fields. I want more theft.
           </li>
           <li>
@@ -621,7 +621,7 @@ export default function SyntheticMembranePage() {
 
         <p>
           We&apos;ve been building AI agents wrong. The fix is not bigger
-          models or longer contexts — those help individual agents, not
+          models or longer contexts. Those help individual agents, not
           collective ones. The fix is the substrate between them.
           We&apos;re going to need a membrane, and the sooner we agree on
           what one looks like, the sooner the next two million agents will
@@ -665,7 +665,7 @@ export default function SyntheticMembranePage() {
           <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
             Paper
           </div>
-          <div className="text-slate-200">Full paper — read on site</div>
+          <div className="text-slate-200">Full paper, read on site</div>
           <div className="text-slate-500 text-xs mt-1">axjns.dev →</div>
         </Link>
       </div>
@@ -701,7 +701,7 @@ export default function SyntheticMembranePage() {
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-2 text-xs text-slate-500 font-mono">terminal — python -m demo</span>
+            <span className="ml-2 text-xs text-slate-500 font-mono">terminal · python -m demo</span>
           </div>
           <pre className="p-4 text-[11px] leading-tight text-emerald-300/90 font-mono overflow-x-auto whitespace-pre">{TERMINAL_OUTPUT}</pre>
         </div>
