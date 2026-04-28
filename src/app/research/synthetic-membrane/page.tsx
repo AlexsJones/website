@@ -658,18 +658,16 @@ export default function SyntheticMembranePage() {
           </div>
           <div className="text-slate-500 text-xs mt-1">github.com →</div>
         </a>
-        <a
-          href="https://github.com/AlexsJones/research/blob/main/paper/paper.md"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/research/synthetic-membrane/paper"
           className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
         >
           <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
             Paper
           </div>
-          <div className="text-slate-200">PAPER.md — full write-up</div>
-          <div className="text-slate-500 text-xs mt-1">github.com →</div>
-        </a>
+          <div className="text-slate-200">Full paper — read on site</div>
+          <div className="text-slate-500 text-xs mt-1">axjns.dev →</div>
+        </Link>
       </div>
 
       {/* === ADDITIONAL DIAGRAMS === */}
