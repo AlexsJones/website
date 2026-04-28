@@ -113,12 +113,25 @@ export default function GeocitiesMode({ onExit }: { onExit: () => void }) {
                   Navigation
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  {["🏠 Home", "👤 About Me", "📝 Blog", "🎤 Speaking", "📄 My CV", "🔬 Research", "📖 Guestbook"].map((item) => (
-                    <a key={item} href="#" onClick={(e) => e.preventDefault()} style={{ color: "#00ff00", textDecoration: "none", fontSize: "14px" }}
+                  {[
+                    { label: "🏠 Home", action: () => onExit() },
+                    { label: "👤 About Me", href: "/about" },
+                    { label: "📝 Blog", href: "/blog" },
+                    { label: "🎤 Speaking", href: "/speaking" },
+                    { label: "📄 My CV", href: "/cv" },
+                    { label: "🔬 Research", href: "/research" },
+                    { label: "📖 Guestbook", action: () => onExit() },
+                  ].map((item) => (
+                    <a key={item.label}
+                      href={item.href || "#"}
+                      onClick={(e) => {
+                        if (item.action) { e.preventDefault(); item.action(); }
+                      }}
+                      style={{ color: "#00ff00", textDecoration: "none", fontSize: "14px" }}
                       onMouseOver={(e) => { (e.target as HTMLElement).style.color = "#ff00ff"; }}
                       onMouseOut={(e) => { (e.target as HTMLElement).style.color = "#00ff00"; }}
                     >
-                      ▸ {item}
+                      ▸ {item.label}
                     </a>
                   ))}
                 </div>
