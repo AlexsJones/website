@@ -6,6 +6,7 @@ import { THEMES, ThemeKey } from "../themes";
 import { PAGE_OUTPUT, FILE_CONTENT, FS, resolvePath, isFile, isDirectory } from "../filesystem";
 import { COMMANDS, EASTER_EGGS, getCompletions } from "../commands";
 import { GAME_LIST, Game } from "../games";
+import GeocitiesMode from "./GeocitiesMode";
 
 interface Note {
   id: number;
@@ -67,6 +68,7 @@ function TerminalShell() {
   const [showTerminalMenu, setShowTerminalMenu] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [activeGame, setActiveGame] = useState<Game | null>(null);
+  const [geocitiesMode, setGeocitiesMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -692,6 +694,11 @@ function TerminalShell() {
     }
   };
 
+  // Geocities mode
+  if (geocitiesMode) {
+    return <GeocitiesMode onExit={() => setGeocitiesMode(false)} />;
+  }
+
   // Boot screen
   if (!bootComplete) {
     return (
@@ -773,13 +780,30 @@ function TerminalShell() {
                 Help
               </button>
             </div>
-            <button
-              onClick={addTab}
-              className={`px-3 py-1 text-sm border ${themeConfig.text} border-opacity-50 rounded hover:opacity-70 transition-opacity`}
-              title="New Terminal Tab"
-            >
-              + New Tab
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setGeocitiesMode(true)}
+                className="px-3 py-1 text-sm rounded hover:opacity-70 transition-opacity"
+                style={{
+                  background: "linear-gradient(180deg, #c0c0c0, #808080)",
+                  border: "2px outset #ffffff",
+                  color: "#000",
+                  fontFamily: "'Comic Sans MS', cursive",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                }}
+                title="Enter GeoCities Mode"
+              >
+                🌐 90s Mode
+              </button>
+              <button
+                onClick={addTab}
+                className={`px-3 py-1 text-sm border ${themeConfig.text} border-opacity-50 rounded hover:opacity-70 transition-opacity`}
+                title="New Terminal Tab"
+              >
+                + New Tab
+              </button>
+            </div>
           </div>
 
           {/* Tab Bar */}

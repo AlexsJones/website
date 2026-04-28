@@ -283,6 +283,7 @@ MAN(1)                        February 2026                       MAN(1)`;
   matrix: "Wake up, Neo...\n\nThe Matrix has you.\n\nFollow the white rabbit.\n\nKnock, knock, Neo.\n\n(try: theme matrix)",
   'hack the planet': "HACK THE PLANET!\n\n  Type 'cookie' to steal the Gibson.",
   cookie: "Cookie: session=YXhqbnMuZGV2; path=/; HttpOnly\n\nYou found the cookie. The Gibson is yours.",
+  geocities: "🌐 GEOCITIES MODE ACTIVATED\n\nClick the '90s Mode' button in the top right.\nOr just enjoy this terminal like a normal person.\n\nYour call.",
   membrane: `synthetic-membrane
 ------------------
 A shared, permeable substrate for multi-agent AI systems.
