@@ -42,6 +42,129 @@ const ARCHITECTURE_DIAGRAM = `                         ┌───────�
                                   │  memory cells       │
                                   └─────────────────────┘`;
 
+const TERMINAL_OUTPUT = `──  Five-agent coordination simulation  ──
+registration · permeability · trust · subscriptions · swarms
+
+BOOT   membrane instantiated
+       · store · permeability engine · swarm engine
+
+▸ orchestrator  register_agent  caps=[coordination, planning, synthesis]
+▸ researcher    register_agent  caps=[research, fact_check, data_analysis]
+▸ writer        register_agent  caps=[writing, drafting, summarization]
+▸ editor        register_agent  caps=[editing, reviewing, style]
+▸ reviewer      register_agent  caps=[reviewing, critique, quality_check]
+
+▸ orchestrator  set_trust  → writer = 0.7
+▸ orchestrator  set_trust  → editor = 0.7
+▸ orchestrator  set_trust  → researcher = 0.7
+▸ writer        set_trust  → editor = 0.9
+▸ editor        set_trust  → writer = 0.9
+▸ editor        set_trust  → reviewer = 0.8
+
+▸ orchestrator  expose  tasks.brief  [public]
+▸ researcher    query tasks.* → HIT  "Write a 500-word brief..."
+
+▸ researcher    expose  findings.heat_islands  [public]
+▸ researcher    expose  findings.coastal_risk  [public]
+▸ researcher    expose  findings.green_infra  [public]
+▸ researcher    expose  findings.notes_internal  [PRIVATE]
+
+▸ writer        query findings.* → 3 hits  (PRIVATE note: HIDDEN)
+▸ writer        expose  drafts.intro  [trusted]
+▸ writer        expose  drafts.body  [trusted]
+▸ writer        expose  drafts.outro  [trusted]
+
+▸ reviewer      query drafts.* → DENIED  (trust=0.00 < 0.50)
+▸ editor        query drafts.* → HIT  (trust=0.90)
+
+▸ editor        expose  feedback.intro  [trusted]
+▸ editor        expose  feedback.body  [trusted]
+▸ writer        query feedback.* → HIT → revising...
+▸ writer        retract  drafts.intro  (superseded)
+▸ writer        expose  final.brief  [public]
+
+▸ orchestrator  swarm_create  "Final Review"  cap=reviewing  threshold=2
+▸ editor        swarm_join  members=1/2  active=False
+▸ reviewer      swarm_join  members=2/2  active=True  ★ ACTIVATED
+
+▸ writer        broadcast  "Brief complete"  → 4 recipients
+
+──  Final Store State  ──
+events       32    registered    5    entries     8
+subscriptions 4    broadcasts    1    swarms      1
+trust edges  7    last seq      32
+
+key                    owner         tier      value
+────────────────────────────────────────────────────
+tasks.brief            orchestrator  public    Write a 500-word brief...
+findings.heat_islands  researcher    public    Urban heat islands raise...
+findings.coastal_risk  researcher    public    1B people exposed to...
+findings.green_infra   researcher    public    Green roofs reduce cooling...
+findings.notes_internal researcher   private   TODO verify IPCC citation...
+feedback.intro         editor        trusted   Strengthen the opening...
+feedback.body          editor        trusted   Cite the IPCC AR6 figures...
+final.brief            writer        public    Cities like Singapore...
+
+simulation complete · 32 events · 22ms wall-clock`;
+
+const BENCHMARK_TABLE_TEXT = `──  Baseline vs. Membrane  ·  3 agents  ·  5 facts each  ──
+
+┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃  metric               ┃  baseline  ┃  membrane  ┃           reduction  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│  messages             │        60  │        18  │      70.0%  (60→18)  │
+│  token-equivalent     │     7,440  │     4,320  │               41.9%  │
+│  cost                 │            │            │         (7440→4320)  │
+│  consensus steps      │         6  │         2  │        66.7%  (6→2)  │
+└───────────────────────┴────────────┴────────────┴──────────────────────┘
+
+──  Scaling sweep — N agents · 5 facts each  ──
+
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃  agents  ┃  baseline tokens  ┃  membrane tokens  ┃  reduction  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│       3  │            7,440  │            4,320  │      41.9%  │
+│       5  │           24,800  │           10,200  │      58.9%  │
+│       8  │           69,440  │           23,520  │      66.1%  │
+│      12  │          163,680  │           49,680  │      69.6%  │
+│      20  │          471,200  │          130,800  │      72.2%  │
+└──────────┴───────────────────┴───────────────────┴─────────────┘`;
+
+const SCALING_DATA = [
+  { agents: 3, baseline: 7440, membrane: 4320, reduction: "41.9%" },
+  { agents: 5, baseline: 24800, membrane: 10200, reduction: "58.9%" },
+  { agents: 8, baseline: 69440, membrane: 23520, reduction: "66.1%" },
+  { agents: 12, baseline: 163680, membrane: 49680, reduction: "69.6%" },
+  { agents: 20, baseline: 471200, membrane: 130800, reduction: "72.2%" },
+];
+
+function BenchmarkTable() {
+  return (
+    <div className="overflow-x-auto rounded-lg border border-slate-800">
+      <table className="w-full text-sm font-mono">
+        <thead>
+          <tr className="border-b border-slate-800 bg-slate-900/50">
+            <th className="px-4 py-3 text-left text-emerald-400 text-xs uppercase tracking-widest">Agents</th>
+            <th className="px-4 py-3 text-right text-emerald-400 text-xs uppercase tracking-widest">Baseline Tokens</th>
+            <th className="px-4 py-3 text-right text-emerald-400 text-xs uppercase tracking-widest">Membrane Tokens</th>
+            <th className="px-4 py-3 text-right text-emerald-400 text-xs uppercase tracking-widest">Reduction</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SCALING_DATA.map((row) => (
+            <tr key={row.agents} className="border-b border-slate-800/50 hover:bg-slate-900/30 transition">
+              <td className="px-4 py-3 text-slate-200">{row.agents}</td>
+              <td className="px-4 py-3 text-right text-slate-400">{row.baseline.toLocaleString()}</td>
+              <td className="px-4 py-3 text-right text-emerald-300">{row.membrane.toLocaleString()}</td>
+              <td className="px-4 py-3 text-right text-emerald-400 font-bold">{row.reduction}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function ResearchPage() {
   return (
     <div className="min-h-screen bg-[#0d1117] text-slate-200">
@@ -521,6 +644,79 @@ export default function ResearchPage() {
             <div className="text-slate-500 text-xs mt-1">github.com →</div>
           </a>
         </div>
+
+        {/* === DIAGRAMS === */}
+        <section className="mt-20 border-t border-slate-800 pt-12">
+          <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
+            Architecture & Visualizations
+          </div>
+
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
+            Layered Architecture
+          </h2>
+          <img src="/architecture.svg" className="w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram" />
+
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
+            State Graph
+          </h2>
+          <img src="/state_graph.svg" className="w-full rounded-lg border border-slate-800" alt="State transition graph" />
+
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
+            Swarm Timeline
+          </h2>
+          <img src="/swarm_timeline.svg" className="w-full rounded-lg border border-slate-800" alt="Swarm lifecycle timeline" />
+
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
+            Baseline vs. Membrane Benchmark
+          </h2>
+          <img src="/benchmark.svg" className="w-full rounded-lg border border-slate-800" alt="Benchmark comparison chart" />
+
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
+            Scaling Analysis (3–20 Agents)
+          </h2>
+          <img src="/scaling.svg" className="w-full rounded-lg border border-slate-800" alt="Scaling chart showing token reduction" />
+        </section>
+
+        {/* === TERMINAL DEMO === */}
+        <section className="mt-20 border-t border-slate-800 pt-12">
+          <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
+            Live Demo Output
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
+            Five-Agent Simulation
+          </h2>
+
+          <div className="rounded-lg border border-slate-800 bg-[#010409] overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900/50">
+              <div className="w-3 h-3 rounded-full bg-red-500/80" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+              <div className="w-3 h-3 rounded-full bg-green-500/80" />
+              <span className="ml-2 text-xs text-slate-500 font-mono">terminal — python -m demo</span>
+            </div>
+            <pre className="p-4 text-[11px] leading-tight text-emerald-300/90 font-mono overflow-x-auto whitespace-pre">{TERMINAL_OUTPUT}</pre>
+          </div>
+        </section>
+
+        {/* === BENCHMARK TABLE === */}
+        <section className="mt-20 border-t border-slate-800 pt-12">
+          <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
+            Benchmark Data
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
+            Scaling: N agents × 5 facts each
+          </h2>
+          <BenchmarkTable />
+
+          <div className="mt-8 rounded-lg border border-slate-800 bg-[#010409] overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900/50">
+              <div className="w-3 h-3 rounded-full bg-red-500/80" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+              <div className="w-3 h-3 rounded-full bg-green-500/80" />
+              <span className="ml-2 text-xs text-slate-500 font-mono">benchmark</span>
+            </div>
+            <pre className="p-4 text-[11px] leading-tight text-emerald-300/90 font-mono overflow-x-auto whitespace-pre">{BENCHMARK_TABLE_TEXT}</pre>
+          </div>
+        </section>
 
         <footer className="mt-12 text-center text-xs font-mono text-slate-500">
           <Link href="/" className="hover:text-emerald-300 transition">

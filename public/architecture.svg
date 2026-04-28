@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Synthetic Membrane — six-layer architecture" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+  <title>Synthetic Membrane — six-layer architecture</title>
+  <rect width="1200" height="720" fill="#0d1117"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5"       markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#58a6ff"/>
+    </marker>
+    <marker id="arrow-muted" viewBox="0 0 10 10" refX="10" refY="5"       markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6e7681"/>
+    </marker>
+  </defs>
+  <text x="32" y="44" fill="#e6edf3" font-size="22" font-weight="700">Synthetic Membrane — architecture</text>
+  <text x="32" y="68" fill="#6e7681" font-size="13">six layers between two agents · default-deny · event-sourced · quorum-coordinated</text>
+  <rect x="230" y="110" width="740" height="76"     rx="8" fill="#161b22" stroke="#f85149" stroke-width="1.4"/>
+  <rect x="242" y="122" width="44" height="52"     rx="6" fill="#0d1117" stroke="#f85149"/>
+  <text x="264" y="153.0" fill="#f85149"     font-size="14" font-weight="700" text-anchor="middle">∞</text>
+  <text x="306" y="140" fill="#e6edf3"     font-size="15" font-weight="700">Immune</text>
+  <text x="306" y="164" fill="#6e7681"     font-size="11">anomaly detection · threat gossip · adaptive defense</text>
+  <rect x="230" y="192" width="740" height="76"     rx="8" fill="#161b22" stroke="#3fb950" stroke-width="1.4"/>
+  <rect x="242" y="204" width="44" height="52"     rx="6" fill="#0d1117" stroke="#3fb950"/>
+  <text x="264" y="235.0" fill="#3fb950"     font-size="14" font-weight="700" text-anchor="middle">3</text>
+  <text x="306" y="222" fill="#e6edf3"     font-size="15" font-weight="700">Coordination</text>
+  <text x="306" y="246" fill="#6e7681"     font-size="11">quorum sensing · task claiming · swarm formation</text>
+  <rect x="230" y="274" width="740" height="76"     rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="1.4"/>
+  <rect x="242" y="286" width="44" height="52"     rx="6" fill="#0d1117" stroke="#58a6ff"/>
+  <text x="264" y="317.0" fill="#58a6ff"     font-size="14" font-weight="700" text-anchor="middle">2</text>
+  <text x="306" y="304" fill="#e6edf3"     font-size="15" font-weight="700">Shared Medium</text>
+  <text x="306" y="328" fill="#6e7681"     font-size="11">event log · CRDTs · semantic query · provenance</text>
+  <rect x="230" y="356" width="740" height="76"     rx="8" fill="#161b22" stroke="#d29922" stroke-width="1.4"/>
+  <rect x="242" y="368" width="44" height="52"     rx="6" fill="#0d1117" stroke="#d29922"/>
+  <text x="264" y="399.0" fill="#d29922"     font-size="14" font-weight="700" text-anchor="middle">1</text>
+  <text x="306" y="386" fill="#e6edf3"     font-size="15" font-weight="700">Permeability</text>
+  <text x="306" y="410" fill="#6e7681"     font-size="11">field-level selectivity · default-deny · cost-aware</text>
+  <rect x="230" y="438" width="740" height="76"     rx="8" fill="#161b22" stroke="#a371f7" stroke-width="1.4"/>
+  <rect x="242" y="450" width="44" height="52"     rx="6" fill="#0d1117" stroke="#a371f7"/>
+  <text x="264" y="481.0" fill="#a371f7"     font-size="14" font-weight="700" text-anchor="middle">0</text>
+  <text x="306" y="468" fill="#e6edf3"     font-size="15" font-weight="700">Discovery</text>
+  <text x="306" y="492" fill="#6e7681"     font-size="11">behavioural indexing · identity · reputation</text>
+  <rect x="230" y="520" width="740" height="76"     rx="8" fill="#161b22" stroke="#6e7681" stroke-width="1.4"/>
+  <rect x="242" y="532" width="44" height="52"     rx="6" fill="#0d1117" stroke="#6e7681"/>
+  <text x="264" y="563.0" fill="#6e7681"     font-size="14" font-weight="700" text-anchor="middle">-1</text>
+  <text x="306" y="550" fill="#e6edf3"     font-size="15" font-weight="700">Governance</text>
+  <text x="306" y="574" fill="#6e7681"     font-size="11">circuit breakers · human override · value conflicts</text>
+  <g>
+    <rect x="40" y="193" width="130" height="320"       rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.2"/>
+    <text x="105.0" y="217" fill="#58a6ff"       font-size="13" font-weight="700" text-anchor="middle">agent · A</text>
+    <rect x="54" y="237" width="102" height="78"       rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="105.0" y="263" fill="#e6edf3"       font-size="11" text-anchor="middle">local</text>
+    <text x="105.0" y="281" fill="#e6edf3"       font-size="11" text-anchor="middle">context</text>
+    <text x="105.0" y="299" fill="#6e7681"       font-size="9" text-anchor="middle">model state</text>
+    <rect x="54" y="327" width="102" height="48"       rx="6" fill="#0d1117" stroke="#d29922"/>
+    <text x="105.0" y="346" fill="#d29922"       font-size="11" text-anchor="middle" font-weight="700">gate</text>
+    <text x="105.0" y="362" fill="#6e7681"       font-size="9" text-anchor="middle">tier · trust · cost</text>
+    <rect x="54" y="387" width="102" height="48"       rx="6" fill="#0d1117" stroke="#58a6ff"/>
+    <text x="105.0" y="406" fill="#58a6ff"       font-size="11" text-anchor="middle" font-weight="700">channels</text>
+    <text x="105.0" y="422" fill="#6e7681"       font-size="9" text-anchor="middle">expose · query</text>
+    <rect x="54" y="447" width="102" height="48"       rx="6" fill="#0d1117" stroke="#3fb950"/>
+    <text x="105.0" y="466" fill="#3fb950"       font-size="11" text-anchor="middle" font-weight="700">remix</text>
+    <text x="105.0" y="482" fill="#6e7681"       font-size="9" text-anchor="middle">cognitive digest</text>
+  </g>
+  <g>
+    <rect x="1030" y="193" width="130" height="320"       rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.2"/>
+    <text x="1095.0" y="217" fill="#58a6ff"       font-size="13" font-weight="700" text-anchor="middle">agent · B</text>
+    <rect x="1044" y="237" width="102" height="78"       rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="1095.0" y="263" fill="#e6edf3"       font-size="11" text-anchor="middle">local</text>
+    <text x="1095.0" y="281" fill="#e6edf3"       font-size="11" text-anchor="middle">context</text>
+    <text x="1095.0" y="299" fill="#6e7681"       font-size="9" text-anchor="middle">model state</text>
+    <rect x="1044" y="327" width="102" height="48"       rx="6" fill="#0d1117" stroke="#d29922"/>
+    <text x="1095.0" y="346" fill="#d29922"       font-size="11" text-anchor="middle" font-weight="700">gate</text>
+    <text x="1095.0" y="362" fill="#6e7681"       font-size="9" text-anchor="middle">tier · trust · cost</text>
+    <rect x="1044" y="387" width="102" height="48"       rx="6" fill="#0d1117" stroke="#58a6ff"/>
+    <text x="1095.0" y="406" fill="#58a6ff"       font-size="11" text-anchor="middle" font-weight="700">channels</text>
+    <text x="1095.0" y="422" fill="#6e7681"       font-size="9" text-anchor="middle">expose · query</text>
+    <rect x="1044" y="447" width="102" height="48"       rx="6" fill="#0d1117" stroke="#3fb950"/>
+    <text x="1095.0" y="466" fill="#3fb950"       font-size="11" text-anchor="middle" font-weight="700">remix</text>
+    <text x="1095.0" y="482" fill="#6e7681"       font-size="9" text-anchor="middle">cognitive digest</text>
+  </g>
+  <line x1="174" y1="148.0" x2="1026" y2="148.0"     stroke="#f85149" stroke-width="1.2" stroke-opacity="0.55"     stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <line x1="174" y1="230.0" x2="1026" y2="230.0"     stroke="#3fb950" stroke-width="1.2" stroke-opacity="0.55"     stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <line x1="174" y1="312.0" x2="1026" y2="312.0"     stroke="#58a6ff" stroke-width="1.2" stroke-opacity="0.55"     stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <line x1="1026" y1="394.0" x2="174" y2="394.0"     stroke="#d29922" stroke-width="1.2" stroke-opacity="0.55"     stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <line x1="1026" y1="476.0" x2="174" y2="476.0"     stroke="#a371f7" stroke-width="1.2" stroke-opacity="0.55"     stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <line x1="1026" y1="558.0" x2="174" y2="558.0"     stroke="#6e7681" stroke-width="1.2" stroke-opacity="0.55"     stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <text x="600.0" y="700" fill="#6e7681"     font-size="11" text-anchor="middle">every cross-membrane operation is gated · cost-aware · auditable</text>
+</svg>

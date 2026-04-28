@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" aria-label="Baseline vs Membrane benchmark" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
+  <title>Baseline vs Membrane benchmark</title>
+  <rect width="1200" height="540" fill="#0d1117"/>
+  <text x="32" y="44" fill="#e6edf3" font-size="22" font-weight="700">Baseline vs. Synthetic Membrane</text>
+  <text x="32" y="68" fill="#6e7681" font-size="13">3 agents · 5 facts each · lower is better — each metric uses its own linear scale</text>
+  <rect x="40.0" y="110" width="346.6666666666667" height="320"     rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="213.33333333333334" y="136" fill="#e6edf3"     font-size="14" font-weight="700" text-anchor="middle">messages</text>
+  <text x="213.33333333333334" y="156" fill="#6e7681"     font-size="11" text-anchor="middle">wire messages</text>
+  <rect x="141.33333333333334" y="180.0" width="56" height="180.0"     rx="3" fill="#d29922" fill-opacity="0.92"/>
+  <text x="169.33333333333334" y="172.0" fill="#d29922"     font-size="13" text-anchor="middle" font-weight="700">60</text>
+  <text x="169.33333333333334" y="378" fill="#6e7681"     font-size="10" text-anchor="middle">baseline</text>
+  <rect x="229.33333333333334" y="306.0" width="56" height="54.0"     rx="3" fill="#3fb950" fill-opacity="0.92"/>
+  <text x="257.33333333333337" y="298.0" fill="#3fb950"     font-size="13" text-anchor="middle" font-weight="700">18</text>
+  <text x="257.33333333333337" y="378" fill="#6e7681"     font-size="10" text-anchor="middle">membrane</text>
+  <text x="213.33333333333334" y="412" fill="#58a6ff"     font-size="14" text-anchor="middle" font-weight="700">−70.0%</text>
+  <rect x="426.6666666666667" y="110" width="346.6666666666667" height="320"     rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="600.0" y="136" fill="#e6edf3"     font-size="14" font-weight="700" text-anchor="middle">tokens</text>
+  <text x="600.0" y="156" fill="#6e7681"     font-size="11" text-anchor="middle">token-equivalent</text>
+  <rect x="528.0" y="180.0" width="56" height="180.0"     rx="3" fill="#d29922" fill-opacity="0.92"/>
+  <text x="556.0" y="172.0" fill="#d29922"     font-size="13" text-anchor="middle" font-weight="700">7,440</text>
+  <text x="556.0" y="378" fill="#6e7681"     font-size="10" text-anchor="middle">baseline</text>
+  <rect x="616.0" y="255.48387096774192" width="56" height="104.51612903225808"     rx="3" fill="#3fb950" fill-opacity="0.92"/>
+  <text x="644.0" y="247.48387096774192" fill="#3fb950"     font-size="13" text-anchor="middle" font-weight="700">4,320</text>
+  <text x="644.0" y="378" fill="#6e7681"     font-size="10" text-anchor="middle">membrane</text>
+  <text x="600.0" y="412" fill="#58a6ff"     font-size="14" text-anchor="middle" font-weight="700">−41.9%</text>
+  <rect x="813.3333333333334" y="110" width="346.6666666666667" height="320"     rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="986.6666666666667" y="136" fill="#e6edf3"     font-size="14" font-weight="700" text-anchor="middle">consensus steps</text>
+  <text x="986.6666666666667" y="156" fill="#6e7681"     font-size="11" text-anchor="middle">rounds to converge</text>
+  <rect x="914.6666666666667" y="180.0" width="56" height="180.0"     rx="3" fill="#d29922" fill-opacity="0.92"/>
+  <text x="942.6666666666667" y="172.0" fill="#d29922"     font-size="13" text-anchor="middle" font-weight="700">6</text>
+  <text x="942.6666666666667" y="378" fill="#6e7681"     font-size="10" text-anchor="middle">baseline</text>
+  <rect x="1002.6666666666667" y="300.0" width="56" height="60.0"     rx="3" fill="#3fb950" fill-opacity="0.92"/>
+  <text x="1030.6666666666667" y="292.0" fill="#3fb950"     font-size="13" text-anchor="middle" font-weight="700">2</text>
+  <text x="1030.6666666666667" y="378" fill="#6e7681"     font-size="10" text-anchor="middle">membrane</text>
+  <text x="986.6666666666667" y="412" fill="#58a6ff"     font-size="14" text-anchor="middle" font-weight="700">−66.7%</text>
+  <rect x="40" y="494" width="14" height="14" rx="3"     fill="#d29922"/>
+  <text x="60" y="506" fill="#e6edf3" font-size="12">baseline · point-to-point messaging</text>
+  <rect x="360" y="494" width="14" height="14" rx="3"     fill="#3fb950"/>
+  <text x="380" y="506" fill="#e6edf3" font-size="12">membrane · shared medium</text>
+  <text x="1160" y="506" fill="#6e7681"     font-size="11" text-anchor="end">envelope=90t · payload=60t · ack=8t</text>
+</svg>
