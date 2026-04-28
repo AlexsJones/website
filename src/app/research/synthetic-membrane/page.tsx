@@ -330,9 +330,14 @@ export default function SyntheticMembranePage() {
           work is in the interface between them.
         </p>
 
-        <pre className="my-8 overflow-x-auto rounded-lg border border-slate-800 bg-[#010409] p-5 text-[11px] leading-tight text-emerald-300/90 font-mono">
-          <code>{ARCHITECTURE_DIAGRAM}</code>
-        </pre>
+        <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram — layers 0-3 with immune layer" />
+
+        <details className="my-4">
+          <summary className="text-sm text-slate-500 cursor-pointer hover:text-slate-300 transition">ASCII version</summary>
+          <pre className="mt-4 overflow-x-auto rounded-lg border border-slate-800 bg-[#010409] p-5 text-[11px] leading-tight text-emerald-300/90 font-mono">
+            <code>{ARCHITECTURE_DIAGRAM}</code>
+          </pre>
+        </details>
 
         <p>
           <strong>Layer 1, the permeability layer.</strong> This is the
@@ -445,6 +450,8 @@ export default function SyntheticMembranePage() {
             — per agent, tracked, enforceable.
           </li>
         </ul>
+
+        <img src="/scaling.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Scaling chart — token reduction from 42% at 3 agents to 72% at 20 agents" />
 
         <p>
           Five years ago you could argue about whether a shared-state layer
@@ -559,6 +566,8 @@ export default function SyntheticMembranePage() {
           </li>
         </ul>
 
+        <img src="/swarm_timeline.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Swarm lifecycle timeline — registration, trust, coordination, dissolution" />
+
         <p>
           The thing I most want feedback on right now is the protocol itself
           — specifically, whether the field-level selectivity model is the
@@ -663,36 +672,21 @@ export default function SyntheticMembranePage() {
         </a>
       </div>
 
-      {/* === DIAGRAMS === */}
+      {/* === ADDITIONAL DIAGRAMS === */}
       <section className="mt-20 border-t border-slate-800 pt-12">
         <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
-          Architecture & Visualizations
+          Additional Visualizations
         </div>
 
         <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
-          Layered Architecture
-        </h2>
-        <img src="/architecture.svg" className="w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram" />
-
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
           State Graph
         </h2>
         <img src="/state_graph.svg" className="w-full rounded-lg border border-slate-800" alt="State transition graph" />
 
         <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
-          Swarm Timeline
-        </h2>
-        <img src="/swarm_timeline.svg" className="w-full rounded-lg border border-slate-800" alt="Swarm lifecycle timeline" />
-
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
           Baseline vs. Membrane Benchmark
         </h2>
         <img src="/benchmark.svg" className="w-full rounded-lg border border-slate-800" alt="Benchmark comparison chart" />
-
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
-          Scaling Analysis (3–20 Agents)
-        </h2>
-        <img src="/scaling.svg" className="w-full rounded-lg border border-slate-800" alt="Scaling chart showing token reduction" />
       </section>
 
       {/* === TERMINAL DEMO === */}
