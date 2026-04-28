@@ -26,7 +26,24 @@ PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
   ps: `  PID TTY          TIME CMD\n    1 pts/0    00:00:01 axjns.dev\n  222 pts/0    00:00:00 bash`,
   pwd: "/home/axjns",
   date: () => new Date().toString(),
-  fortune: "You will deploy to production on a Friday.",
+  fortune: () => {
+    const fortunes = [
+      "You will deploy to production on a Friday.",
+      "A strange game. The only winning move is not to rebase.",
+      "The Internet is a series of tubes. You are in tube #7.",
+      "Your code compiles. Do not question why.",
+      "640K ought to be enough for anybody.",
+      "In the future, everyone will be root for 15 minutes.",
+      "You've got mail! Just kidding. Nobody emails anymore.",
+      "There is no cloud. It's just someone else's Pentium.",
+      "Langford's Basilisk: Do not look at the kernel source.",
+      "Be excellent to each other. And party on, dudes.",
+      "All your base are belong to us.",
+      "The cake is a lie. The deploy is also a lie.",
+      "Have you tried turning it off and on again?",
+    ];
+    return fortunes[Math.floor(Math.random() * fortunes.length)];
+  },
   cowsay: ` ____________\n< axjns.dev >\n ------------\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||`,
   sudo: "We trust you have received the usual lecture from the local System Administrator.",
   finger: `Login: axjns\t\t\t\tName: Alex Jones\nDirectory: /home/axjns\t\t\tShell: /bin/bash\nNo mail.\nNo Plan.`,
@@ -249,6 +266,23 @@ MAN(1)                        February 2026                       MAN(1)`;
     ├── synthetic-membrane/  [Rust+TS] research
     └── secret-project/`,
   make: "make: *** No targets specified and no makefile found.  Stop.",
+  telnet: (host?: string) => {
+    const target = host || "towel.blinkenlights.nl";
+    return `Trying ${target}...\nConnected to ${target}.\nEscape character is '^]'.\n\n    Welcome to the BBS!\n    ==================\n    This system is for authorised users only.\n    All activity is logged.\n\n    Your strstrstrstrstrstrstrstrstrstr\n    Connection closed by foreign host.`;
+  },
+  pine: `STRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTR\nstrstrstrstrstrstrstrstrstrstrstrstrstrstr\n\nstrstrstrstrstrstrstrstr  strstrstr   strstrstrstrstrstrstrstrstrstr  strstrstr\n  strstrstrstrstrstrstr\n strstrstr  strstrstrstrstrstrstrstrstr   strstrstr   strstrstr   strstrstr\n\n   [strstrstrstrstrstrstr]     strstrstrstrstrstrstrstrstrstr`,
+  elm: `strstrstrstrstr: strstrstrstrstrstr. strstrstrstrstrstr pine.`,
+  netscape: `Error: Netscape Navigator 4.0 is not installed.\nTry: lynx, links, or w3m instead.\n\nJust kidding. This IS the website.`,
+  lynx: `\nLynx Version 2.8.9 (28 Apr 1999)\n\n                         axjns.dev\n\n   Alex Jones - Principal Engineer @ AWS\n\n   [1] about\n   [2] research (NEW!)\n   [3] speaking\n   [4] cv\n   [5] blog\n\n   Arrow keys: Up and Down to move. Right to follow a link.\n   Press 'q' to quit.`,
+  aol: "You've got mail!\n\n...just kidding. This isn't 1998.\n\nBut while you're here, try: guestbook sign <name> <message>",
+  'y2k': "Y2K STATUS: All systems nominal.\nDate overflow: SURVIVED\nMillennium bug: SQUASHED\nParty: STILL GOING",
+  dialup: `ATDT 5551337\nCONNECT 56000\n\n~~ kkssshhhhhhhhh ~~\n~~ BONG BONG ~~\n~~ krrrrrrr ~~\n~~ ksssssshhhhhh ~~\n~~ EEEE-URRRRR ~~\n~~ kssssshhhh ~~\n\nCONNECTED TO axjns.dev AT 56Kbps\n\nWelcome! You are already here.`,
+  'iddqd': "God mode activated. You are now invulnerable to segfaults.",
+  'idkfa': "All weapons and keys obtained. Full ammo.\n\n(You still can't fix that CSS bug though.)",
+  konami: "↑ ↑ ↓ ↓ ← → ← → B A\n\n+30 lives granted.\n\nNot that you need them. This site has zero enemies.\n...unless you count IE6.",
+  matrix: "Wake up, Neo...\n\nThe Matrix has you.\n\nFollow the white rabbit.\n\nKnock, knock, Neo.\n\n(try: theme matrix)",
+  'hack the planet': "HACK THE PLANET!\n\n  Type 'cookie' to steal the Gibson.",
+  cookie: "Cookie: session=YXhqbnMuZGV2; path=/; HttpOnly\n\nYou found the cookie. The Gibson is yours.",
   membrane: `synthetic-membrane
 ------------------
 A shared, permeable substrate for multi-agent AI systems.
@@ -267,7 +301,7 @@ Architecture:
   L2  Event log · CRDTs · semantic store · provenance · replay
   L3  Quorum sensing · task claiming · dynamic grouping
 
-Repo:    https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane
+Repo:    https://github.com/AlexsJones/research
 Read:    type 'research' for the full essay`,
 };
 

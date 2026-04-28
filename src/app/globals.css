@@ -24,3 +24,87 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* CRT scanlines overlay */
+.crt-scanlines::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* CRT phosphor glow on text */
+.crt-glow {
+  text-shadow:
+    0 0 2px currentColor,
+    0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+/* CRT screen curvature */
+.crt-curve {
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* CRT flicker on boot */
+@keyframes crt-flicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 0.9; }
+  10% { opacity: 0.98; }
+  15% { opacity: 0.92; }
+  20% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.crt-flicker {
+  animation: crt-flicker 2s ease-out forwards;
+}
+
+/* CRT power-on effect */
+@keyframes crt-turn-on {
+  0% {
+    transform: scaleY(0.01) scaleX(0.5);
+    filter: brightness(10);
+  }
+  10% {
+    transform: scaleY(0.01) scaleX(1);
+    filter: brightness(5);
+  }
+  30% {
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1.5);
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1);
+  }
+}
+
+.crt-turn-on {
+  animation: crt-turn-on 0.8s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+}
+
+/* Blinking NEW! badge */
+@keyframes blink-new {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.blink-new {
+  animation: blink-new 1s step-end infinite;
+  color: #ff0;
+  font-weight: bold;
+}

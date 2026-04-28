@@ -149,20 +149,46 @@ function TerminalShell() {
 
   // Boot sequence
   useEffect(() => {
+    // Visitor counter
+    let visits = 1;
+    if (typeof window !== "undefined") {
+      visits = parseInt(localStorage.getItem("axjns-visits") || "0") + 1;
+      localStorage.setItem("axjns-visits", String(visits));
+    }
+    const visitorNum = String(visits).padStart(6, "0");
+
     const bootSeq = [
-      "BIOS v69.420 (C) 2024 axjns Corp.",
+      "AMIBIOS (C) 1994 American Megatrends Inc.",
+      "axjns BIOS v69.420",
       "",
-      "Booting axjns.dev...",
-      "[ OK ] Started Matrix Rain Service",
+      "Main Processor: Intel Pentium 166MHz",
+      "Memory Test:  640K Base Memory",
+      "              65536K Extended Memory",
+      "",
+      "Detecting IDE drives...",
+      "  Primary Master:   QUANTUM FIREBALL SE 2.1GB",
+      "  Primary Slave:    ATAPI CD-ROM 24X",
+      "  Secondary Master: None",
+      "",
+      "Press DEL to enter Setup",
+      "",
+      "LILO boot:",
+      "",
+      "Loading axjns.dev...",
+      "[ OK ] Loaded kernel modules",
       "[ OK ] Mounted /home/axjns",
-      "[ OK ] Started Note Manager",
+      "[ OK ] Started Network Service",
+      "[ OK ] Started httpd (Apache/1.3.26)",
+      "[ OK ] Started sendmail",
       "[ OK ] Reached target Multi-User System",
       "",
       "axjns.dev login: axjns",
-      "Password: ",
+      "Password: ********",
       "Last login: " + new Date().toLocaleString(),
       "",
       FILE_CONTENT["/etc/motd"],
+      "",
+      `You are visitor #${visitorNum}`,
       "",
       PAGE_OUTPUT[initialPath.current] || PAGE_OUTPUT["/"],
     ];
@@ -176,7 +202,7 @@ function TerminalShell() {
         clearInterval(interval);
         setTimeout(() => setBootComplete(true), 500);
       }
-    }, 150);
+    }, 120);
 
     return () => clearInterval(interval);
   }, []);
@@ -669,9 +695,9 @@ function TerminalShell() {
   // Boot screen
   if (!bootComplete) {
     return (
-      <div className={`${themeConfig.bg} ${themeConfig.text} font-mono min-h-screen`}>
+      <div className={`${themeConfig.bg} ${themeConfig.text} font-mono min-h-screen crt-scanlines crt-turn-on`}>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="w-full max-w-4xl p-6">
+          <div className="w-full max-w-4xl p-6 crt-glow">
             {bootMessages.map((msg, i) => (
               <div key={i} className="whitespace-pre-wrap">{msg}</div>
             ))}
@@ -685,12 +711,12 @@ function TerminalShell() {
 
   return (
     <div
-      className={`${themeConfig.bg} ${themeConfig.text} font-mono min-h-screen relative antialiased overflow-x-hidden`}
+      className={`${themeConfig.bg} ${themeConfig.text} font-mono min-h-screen relative antialiased overflow-x-hidden crt-scanlines crt-flicker`}
     >
       <div id="matrix-rain" className="fixed inset-0 z-0 pointer-events-none" aria-hidden />
       <div className="flex flex-col items-center min-h-screen">
         <div
-          className={`w-full max-w-4xl mt-8 border ${themeConfig.text} border-opacity-30 ${themeConfig.bg} bg-opacity-95 rounded shadow-lg relative z-10`}
+          className={`w-full max-w-4xl mt-8 border ${themeConfig.text} border-opacity-30 ${themeConfig.bg} bg-opacity-95 shadow-lg relative z-10 crt-curve crt-glow`}
         >
           {/* Menu Bar */}
           <div
