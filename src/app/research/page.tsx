@@ -175,7 +175,7 @@ export default function ResearchPage() {
           </Link>
           <div className="flex gap-4 text-slate-400">
             <a
-              href="https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane"
+              href="https://github.com/AlexsJones/research"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-emerald-300 transition"
@@ -183,7 +183,7 @@ export default function ResearchPage() {
               github
             </a>
             <a
-              href="https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane/blob/main/PAPER.md"
+              href="https://github.com/AlexsJones/research/blob/main/paper/paper.md"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-emerald-300 transition"
@@ -618,7 +618,7 @@ export default function ResearchPage() {
 
         <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-2 gap-4 font-mono text-sm">
           <a
-            href="https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane"
+            href="https://github.com/AlexsJones/research"
             target="_blank"
             rel="noopener noreferrer"
             className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
@@ -632,7 +632,7 @@ export default function ResearchPage() {
             <div className="text-slate-500 text-xs mt-1">github.com →</div>
           </a>
           <a
-            href="https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane/blob/main/PAPER.md"
+            href="https://github.com/AlexsJones/research/blob/main/paper/paper.md"
             target="_blank"
             rel="noopener noreferrer"
             className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
