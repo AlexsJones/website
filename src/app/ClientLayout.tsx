@@ -48,6 +48,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </div>
     );
   }
+  if (pathname === "/geocities") {
+    return <>{children}</>;
+  }
   return <TerminalShell />;
 }
 
