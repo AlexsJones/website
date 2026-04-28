@@ -4,6 +4,18 @@ export const metadata = {
   title: "We've been building AI agents wrong. — axjns.dev",
   description:
     "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+  openGraph: {
+    title: "We've been building AI agents wrong.",
+    description:
+      "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+    type: "article" as const,
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "We've been building AI agents wrong.",
+    description:
+      "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+  },
 };
 
 const ARCHITECTURE_DIAGRAM = `                         ┌─────────────────────────────────────────┐

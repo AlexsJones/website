@@ -1,4 +1,5 @@
 export const THEMES = {
+  midnight: { bg: 'bg-[#0d1117]', text: 'text-slate-200', prompt: 'text-emerald-400', cursor: 'bg-emerald-400', name: 'Midnight' },
   matrix: { bg: 'bg-black', text: 'text-green-400', prompt: 'text-green-300', cursor: 'bg-green-400', name: 'Matrix' },
   amber: { bg: 'bg-black', text: 'text-amber-500', prompt: 'text-amber-400', cursor: 'bg-amber-500', name: 'Amber' },
   blue: { bg: 'bg-blue-950', text: 'text-blue-300', prompt: 'text-blue-200', cursor: 'bg-blue-300', name: 'IBM Blue' },
