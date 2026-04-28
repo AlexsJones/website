@@ -2,15 +2,17 @@ export const PAGE_OUTPUT: Record<string, string> = {
   "/": `Welcome to axjns.dev\nType a command or use the menu above.`,
   "/about": `About Me\n--------\nPrincipal Engineer @ AWS\nCloud Native Advocate, Speaker, Open Source Contributor.\nLondon, United Kingdom.`,
   "/speaking": `Speaking Events\n--------------\n- Beyond the Clouds: Charting the course for AI in the CloudNative world\n- K8sGPT: Balancing AI's Productivity Boost with Ethical Considerations in Cloud-Native\n- Rust Operators For Kubernetes\n- Crowdsourcing a Kubernetes distribution: What we learnt with MicroK8s\n- SLO's don't matter: A nihilist's guide to reliability\nSee more: https://sessionize.com/jonesax/`,
-  "/blog": `Blog\n----\nNo posts yet. Stay tuned!`,
+  "/blog": `Blog\n----\n[2026-04] We've been building AI agents wrong.\n         The MoltBook result, cognitive digestion, and why\n         we need a synthetic membrane between agents.\n         → type 'research' to read.\n\nMore posts coming. Stay tuned!`,
+  "/research": `Research: Synthetic Membrane\n----------------------------\nA shared, permeable substrate for multi-agent AI systems.\n\nThe MoltBook study put two million LLM agents in one room and\nmeasured ZERO collective intelligence. The fix is not bigger\nmodels — it's structure between them.\n\nThree layers:\n  L1  Permeability     field-level selective sharing\n  L2  Shared medium    event log + CRDTs + semantic query\n  L3  Coordination     quorum sensing, task claiming\n\nPlus discovery, governance, and an immune layer.\n\n→ Open the full essay:  https://axjns.dev/research\n→ Repo: https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane\n→ Try: 'membrane' for a quick stat card.`,
   "/cv": `Alex Jones - CV\n----------------\nPrincipal Engineer @ AWS\nLondon, United Kingdom\nEmail: alexsimonjones@gmail.com\nLinkedIn: www.linkedin.com/in/jonesax\n\nSummary:\nI am an individual contributor. My work is mysterious and important.\nOutside of work I contribute to open-source.\nExpertise: Distributed systems, Kubernetes, Systems Design, AI in Cloud.\n\nExperience:\n- AWS: Principal Engineer (Aug 2023 - Present)\n- k8sgpt.ai: Founder (Mar 2023 - Present)\n- Canonical: Engineering Director, Kubernetes (Jan 2022 - Aug 2023)\n- JPMorgan Chase: VP SRE (Dec 2020 - May 2021)\n- American Express: Engineering Director, SRE (May 2019 - Dec 2020)\n- Beamery: Head of Platform & Infrastructure (May 2017 - May 2019)\n- Sky: Lead DevOps Engineer (Apr 2016 - May 2017)\n- Microsoft: Senior Software Engineer (Oct 2014 - Apr 2015)\n...and more\n\nCertifications:\n- Speaker: KubeCon + CloudNativeCon North America 2021, 2022\n- Speaker: KubeCon + CloudNativeCon Europe 2023, 2025\n\nSkills:\nLong-term Vision, Communication, AWS, Distributed Systems, Kubernetes, Systems Design,\nAI in Cloud, DevOps, Observability, Go, Rust, Linux, Open Source, Platform Engineering\n\nEducation:\nKingston University — First class BsC with Honors, Computer Science (2007 - 2010)`
 };
 
 export const FS: Record<string, string[]> = {
   '/': ['home', 'tmp', 'opt', 'bin', 'var', 'etc', 'proc'],
   '/home': ['axjns'],
-  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'README.md', 'contact', 'projects', '.bash_history', '.ssh'],
-  '/home/axjns/projects': ['llmfit', 'website', 'hearthglow', 'kube-microcosm', 'kflow', 'joblin', 'lsrmod', 'py2rs', 'k8sgpt', 'secret-project'],
+  '/home/axjns': ['speaking', 'about', 'blog', 'cv', 'research', 'README.md', 'contact', 'projects', '.bash_history', '.ssh'],
+  '/home/axjns/projects': ['llmfit', 'website', 'hearthglow', 'kube-microcosm', 'kflow', 'joblin', 'lsrmod', 'py2rs', 'k8sgpt', 'synthetic-membrane', 'secret-project'],
+  '/home/axjns/projects/synthetic-membrane': ['README.md', 'PAPER.md', 'architecture.txt'],
   '/home/axjns/projects/llmfit': ['README.md', 'main.rs', 'Cargo.toml'],
   '/home/axjns/projects/website': ['README.md', 'package.json'],
   '/home/axjns/projects/hearthglow': ['README.md', 'main.rs', 'Cargo.toml'],
@@ -38,7 +40,46 @@ export const FILE_CONTENT: Record<string, string> = {
   '/home/axjns/about': PAGE_OUTPUT['/about'],
   '/home/axjns/blog': PAGE_OUTPUT['/blog'],
   '/home/axjns/cv': PAGE_OUTPUT['/cv'],
-  '/home/axjns/README.md': 'Welcome to the home directory of axjns!\n\nTry these commands:\n- cat about\n- cat cv\n- cat blog\n- cat speaking\n- cd projects\n- ls -la\n\nHave fun exploring!',
+  '/home/axjns/research': PAGE_OUTPUT['/research'],
+  '/home/axjns/projects/synthetic-membrane/README.md': '# synthetic-membrane\n\nA shared, permeable substrate for multi-agent AI systems.\n\nThree layers (Permeability, Shared Medium, Coordination) plus Discovery,\nGovernance, and an Immune layer. Default-deny, field-level selectivity,\ncost-aware crossing, CRDT-backed event log.\n\nMotivation: scale alone does not produce collective intelligence.\nThe MoltBook study (2M LLM agents) measured zero supermind. Structure\nbetween agents is the missing piece.\n\nLanguage: Rust + TypeScript | Status: WIP\n\nGitHub: https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane\n\nRead the essay: https://axjns.dev/research',
+  '/home/axjns/projects/synthetic-membrane/PAPER.md': '# We\'ve been building AI agents wrong.\n\nFull essay rendered at https://axjns.dev/research\n\nKey claims:\n- Current multi-agent stacks move messages, not minds.\n- Biology solved this with selective permeability.\n- The fix is a three-layer membrane between agents.\n- Token economics (1000x agentic spend) makes this urgent, not optional.\n\nSee architecture.txt for the layer diagram.',
+  '/home/axjns/projects/synthetic-membrane/architecture.txt': `                         +-----------------------------------------+
+                         |       LAYER -1: GOVERNANCE              |
+                         |  circuit breakers . human override      |
+                         |  value-conflict detection . audit       |
+                         +-----------------------------------------+
+                                            ^
+                                            |
+                         +-----------------------------------------+
+                         |       LAYER  0: DISCOVERY                |
+                         |  behavioral indexing . identity verify  |
+                         |  capability matching . reputation        |
+                         +-----------------------------------------+
+                                            ^
+                                            |
+   +----------+     +----------------------------------------+     +----------+
+   |  AGENT A | <-> |   LAYER 3: COORDINATION (swarm)        | <-> |  AGENT B |
+   | +------+ |     |   quorum sensing . task claiming       |     | +------+ |
+   | |Local | |     |   dynamic grouping . conflict resolve  |     | |Local | |
+   | | ctx  | |     +----------------------------------------+     | | ctx  | |
+   | +------+ |     |   LAYER 2: SHARED MEDIUM (memory)      |     | +------+ |
+   |   gate   | <-> |   event log . CRDTs . semantic store   | <-> |   gate   |
+   | channels |     |   provenance . time-decay . replay     |     | channels |
+   |          |     +----------------------------------------+     |          |
+   |  remix   | <-> |   LAYER 1: PERMEABILITY (protocol)     | <-> |  remix   |
+   |  digest  |     |   field-level selectivity . SVAF       |     |  digest  |
+   +----------+     |   default-deny . cost-aware crossing   |     +----------+
+                    +----------------------------------------+
+                                            ^
+                                            |
+                                  +---------------------+
+                                  |  IMMUNE LAYER       |
+                                  |  anomaly detection  |
+                                  |  threat gossip      |
+                                  |  memory cells       |
+                                  +---------------------+
+`,
+  '/home/axjns/README.md': 'Welcome to the home directory of axjns!\n\nTry these commands:\n- cat about\n- cat cv\n- cat blog\n- cat speaking\n- cat research      # synthetic-membrane research\n- membrane          # quick stat card\n- cd projects\n- ls -la\n\nHave fun exploring!',
   '/home/axjns/contact': 'Contact Alex Jones (axjns)\n--------------------------\nEmail: (see LinkedIn or GitHub)\nGitHub: https://github.com/AlexsJones\nLinkedIn: https://www.linkedin.com/in/jonesax/\nSessionize: https://sessionize.com/jonesax/\nYouTube: https://www.youtube.com/cloudnativeskunkworks',
   '/home/axjns/.bash_history': 'ls -la\ncd projects\ngit status\nkubectl get pods -A\nhistory | grep oops\nvim important-config.yaml\nping google.com\ncurl https://axjns.dev\nexit',
   '/home/axjns/projects/llmfit/README.md': '# llmfit\n\nA way to justify buying a more powerful laptop (and see what LLMs will run).\nRight-sizes LLM models to your system\'s RAM, CPU, and GPU.\n\nLanguage: Rust | Stars: 72\n\nGitHub: https://github.com/AlexsJones/llmfit',

@@ -6,6 +6,7 @@ export const COMMANDS: Record<string, string | null> = {
   speaking: "/speaking",
   blog: "/blog",
   cv: "/cv",
+  research: "/research",
   help: null,
   clear: null,
 };
@@ -226,6 +227,7 @@ MAN(1)                        February 2026                       MAN(1)`;
 ├── blog
 ├── cv
 ├── speaking
+├── research
 ├── README.md
 ├── contact
 ├── .bash_history
@@ -235,17 +237,38 @@ MAN(1)                        February 2026                       MAN(1)`;
 │   ├── known_hosts
 │   └── config
 └── projects/
-    ├── llmfit/          [Rust] ★72
-    ├── website/         [TypeScript]
-    ├── hearthglow/      [Rust]
-    ├── kube-microcosm/  [Makefile] ★59
-    ├── kflow/           [Rust] ★57
-    ├── joblin/          [Rust] ★4
-    ├── lsrmod/          [Rust] ★1
-    ├── py2rs/           [TypeScript] ★5
-    ├── k8sgpt/          [Go]
+    ├── llmfit/              [Rust] ★72
+    ├── website/             [TypeScript]
+    ├── hearthglow/          [Rust]
+    ├── kube-microcosm/      [Makefile] ★59
+    ├── kflow/               [Rust] ★57
+    ├── joblin/              [Rust] ★4
+    ├── lsrmod/              [Rust] ★1
+    ├── py2rs/               [TypeScript] ★5
+    ├── k8sgpt/              [Go]
+    ├── synthetic-membrane/  [Rust+TS] research
     └── secret-project/`,
   make: "make: *** No targets specified and no makefile found.  Stop.",
+  membrane: `synthetic-membrane
+------------------
+A shared, permeable substrate for multi-agent AI systems.
+
+Status:        Research / WIP
+Authors:       three foxes in a trenchcoat
+Layers:        Permeability (L1) · Shared Medium (L2) · Coordination (L3)
+                + Discovery, Governance, Immune
+
+Why:
+  Two million LLM agents on MoltBook produced ZERO collective
+  intelligence. Scale alone doesn't make minds. Structure does.
+
+Architecture:
+  L1  Field-level selective sharing · default-deny · cost-aware
+  L2  Event log · CRDTs · semantic store · provenance · replay
+  L3  Quorum sensing · task claiming · dynamic grouping
+
+Repo:    https://github.com/three-foxes-in-a-trenchcoat/synthetic-membrane
+Read:    type 'research' for the full essay`,
 };
 
 export function getCompletions(input: string, cwd: string): string[] {

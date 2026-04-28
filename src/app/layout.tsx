@@ -39,7 +39,21 @@ function BlinkingCursor({ theme }: { theme: string }) {
   );
 }
 
-export default function RootLayout() {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathnameForLayout = usePathname();
+  if (pathnameForLayout === "/research") {
+    return (
+      <html lang="en">
+        <body className="bg-[#0d1117] text-slate-200 antialiased min-h-screen">
+          {children}
+        </body>
+      </html>
+    );
+  }
+  return <TerminalShell />;
+}
+
+function TerminalShell() {
   const [bootComplete, setBootComplete] = useState(false);
   const [bootMessages, setBootMessages] = useState<string[]>([]);
   const [tabs, setTabs] = useState<TerminalTab[]>([
@@ -571,7 +585,7 @@ export default function RootLayout() {
         ...h,
         prompt(cwd) + " " + cmd,
         "Available commands:",
-        "  Navigation:  home, about, speaking, blog, cv",
+        "  Navigation:  home, about, speaking, blog, cv, research, membrane",
         "  Files:       ls, cd, pwd, cat, tree",
         "  System:      neofetch, whoami, uname, hostname, uptime, top, htop, ps, free, df, du",
         "  Network:     ping, curl, wget, ssh",
