@@ -8,10 +8,10 @@ export const metadata = {
 const POSTS = [
   {
     slug: "synthetic-membrane-research-update",
-    title: "New Research: 17 Papers Strengthen the Synthetic Membrane Thesis",
-    date: "April 28, 2026",
+    title: "17 Papers. One Thesis Getting Harder to Dismiss.",
+    date: "April 29, 2026",
     excerpt:
-      "A comprehensive sweep of recent agent and memory literature turned up 17 new papers backing the membrane architecture. Here are the findings that mattered most.",
+      "A research sweep turned up 17 new papers. None of them break the thesis. Most of them strengthen it.",
     tag: "Synthetic Membrane",
   },
 ];
