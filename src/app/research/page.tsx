@@ -203,7 +203,7 @@ export default function ResearchPage() {
             We&apos;ve been building AI agents wrong.
           </h1>
           <div className="mt-4 text-sm text-slate-400 font-mono">
-            Alex Jones · April 2026
+            Alex Jones · April 29, 2026
           </div>
         </div>
 
@@ -534,12 +534,17 @@ export default function ResearchPage() {
               A working sketch of the Layer 1 protocol — field-level selective
               sharing, default-deny semantics, a wire format that&apos;s
               compact enough to actually use under the token-economics
-              constraint.
+              constraint — now backed by a full 18-path implementation
+              roadmap covering everything from wire format to attack
+              surface.
             </li>
             <li>
               A reference Layer 2 implementation built on an event log with
-              CRDT operations, with semantic query on top. It&apos;s small,
-              it&apos;s slow, and it works.
+              CRDT operations, with semantic query on top. We&apos;re also
+              evaluating concrete candidates for the substrate underneath:
+              ZenBrain&apos;s 7-layer cognitive architecture, Prism&apos;s
+              evolutionary substrate, and ContextWeaver&apos;s
+              dependency-structured memory.
             </li>
             <li>
               A handful of Layer 3 coordination primitives — task broadcast,
@@ -552,6 +557,16 @@ export default function ResearchPage() {
               condition side by side, against the three-tier evaluation
               framework (joint reasoning, information synthesis, basic
               interaction).
+            </li>
+            <li>
+              A research wiki with 70 entity studies, 60 paper summaries, and
+              648 vector-searchable chunks — all feeding into the design.
+            </li>
+            <li>
+              A formal paper that&apos;s grown from 18 to 25+ referenced
+              works, now including neuroscience-inspired memory
+              architectures, memory lifecycle operations, and spore attack
+              threat models.
             </li>
           </ul>
 
@@ -601,9 +616,12 @@ export default function ResearchPage() {
           </ul>
 
           <p>
-            The repo is small enough that one good afternoon can move it
-            forward by a meaningful percentage. If you want to find me, the
-            contact info is at the top of this site, or just open an issue.
+            The research base has grown — 70 entity studies, 60 paper
+            summaries, a 25+ reference paper, and an 18-path implementation
+            roadmap — but the surface area where one good afternoon can move
+            things forward by a meaningful percentage has only gotten larger.
+            If you want to find me, the contact info is at the top of this
+            site, or just open an issue.
           </p>
 
           <p>
@@ -616,7 +634,7 @@ export default function ResearchPage() {
           </p>
         </Prose>
 
-        <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-2 gap-4 font-mono text-sm">
+        <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
           <a
             href="https://github.com/AlexsJones/research"
             target="_blank"
@@ -643,6 +661,16 @@ export default function ResearchPage() {
             <div className="text-slate-200">PAPER.md — full write-up</div>
             <div className="text-slate-500 text-xs mt-1">github.com →</div>
           </a>
+          <Link
+            href="/blog/synthetic-membrane-research-update"
+            className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          >
+            <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+              Latest Research
+            </div>
+            <div className="text-slate-200">17 new papers, April 2026</div>
+            <div className="text-slate-500 text-xs mt-1">/blog →</div>
+          </Link>
         </div>
 
         {/* === DIAGRAMS === */}
