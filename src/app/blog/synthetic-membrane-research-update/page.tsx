@@ -51,12 +51,12 @@ export default function BlogPostPage() {
             When I first wrote up the membrane thesis, the honest version of
             the argument was: <em>here is an architecture that should work,
             because it composes with how biology and distributed systems
-            already solve adjacent problems.</em> That's a reasonable
-            argument. It's an argument from analogy. Analogies wear out.
+            already solve adjacent problems.</em> That&apos;s a reasonable
+            argument. It&apos;s an argument from analogy. Analogies wear out.
           </p>
 
           <p>
-            I wanted measurements, not analogies. So I've been feeding the
+            I wanted measurements, not analogies. So I&apos;ve been feeding the
             research wiki new papers every week — arXiv sweeps, semantic
             scholar queries, forward and backward citation chasing — and
             looking for results that either support or break the thesis.
@@ -107,7 +107,7 @@ export default function BlogPostPage() {
             concrete implementation candidate. Up until now Layer 2 has been
             described in terms of primitives — event log, CRDTs, semantic
             store — rather than a working substrate someone has already built.
-            Prism is closer to a working substrate than anything else I've
+            Prism is closer to a working substrate than anything else I&apos;ve
             found.
           </p>
 
@@ -120,7 +120,7 @@ export default function BlogPostPage() {
 
           <p>
             Memory Metabolism (Patel et al., arXiv:2604.12034) articulates
-            something I'd been gesturing at without having the vocabulary for.
+            something I&apos;d been gesturing at without having the vocabulary for.
             It proposes four lifecycle operations — TRIAGE, DECAY, CONSOLIDATE,
             AUDIT — that transform shared state from passive storage into
             something metabolically active.
@@ -129,7 +129,7 @@ export default function BlogPostPage() {
           <p>
             Entries are triaged on ingestion. They decay over time. They
             consolidate into durable knowledge. And they are periodically
-            audited. A memory that doesn't metabolise is a swamp.
+            audited. A memory that doesn&apos;t metabolise is a swamp.
           </p>
 
           <p>
@@ -158,7 +158,7 @@ export default function BlogPostPage() {
           <p>
             Once a poisoned entry takes root in the substrate, it spreads by
             being read and re-shared, infecting agents that never directly
-            communicated with the attacker. The membrane's immune layer needs
+            communicated with the attacker. The membrane&apos;s immune layer needs
             quarantine, not just detection. A contaminated entry should be
             isolated before it spreads.
           </p>
@@ -187,7 +187,7 @@ export default function BlogPostPage() {
           </p>
 
           <p>
-            Trust is not a feature you bolt on. It's a property that falls out
+            Trust is not a feature you bolt on. It&apos;s a property that falls out
             of the architecture if Layer 2 is doing its job. The Layer 0
             reputation system is something that happens naturally and should
             be measured, not invented.
@@ -228,7 +228,7 @@ export default function BlogPostPage() {
 
           <p>
             The membrane thesis was always going to need empirical backing.
-            It's reassuring when the literature catches up to the intuition.
+            It&apos;s reassuring when the literature catches up to the intuition.
           </p>
         </Prose>
 
