@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "New Research: 17 Papers Strengthen the Synthetic Membrane Thesis — axjns.dev",
   description:
-    "A comprehensive research sweep turned up 17 new papers backing the synthetic membrane architecture. Here are the findings that mattered most.",
+    "A research sweep turned up 17 new papers. A few of them are the kind of result where you read the abstract twice and go check the methods section.",
 };
 
 export default function BlogPostPage() {
@@ -39,204 +39,225 @@ export default function BlogPostPage() {
             Blog · Synthetic Membrane
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-50">
-            New Research: 17 Papers Strengthen the Synthetic Membrane Thesis
+            17 Papers. One Thesis Getting Harder to Dismiss.
           </h1>
           <div className="mt-4 text-sm text-slate-400 font-mono">
-            Alex Jones · April 28, 2026
+            Alex Jones · April 29, 2026
           </div>
         </div>
 
         <Prose>
           <p>
-            We just finished a comprehensive research sweep across the recent
-            agent and memory literature, and it surfaced{" "}
-            <strong>17 new papers</strong> that materially strengthen the
-            synthetic membrane thesis. A few of them are the kind of result
-            where you read the abstract twice, then go check the methods
-            section to make sure you read it right.
+            When I first wrote up the membrane thesis, the honest version of
+            the argument was: <em>here is an architecture that should work,
+            because it composes with how biology and distributed systems
+            already solve adjacent problems.</em> That's a reasonable
+            argument. It's an argument from analogy. Analogies wear out.
           </p>
 
           <p>
-            I want to walk through the ones that moved my priors the most, and
-            then talk about what changed in the paper as a result.
+            I wanted measurements, not analogies. So I've been feeding the
+            research wiki new papers every week — arXiv sweeps, semantic
+            scholar queries, forward and backward citation chasing — and
+            looking for results that either support or break the thesis.
           </p>
 
-          <H2>The findings that mattered</H2>
+          <p>
+            The latest sweep turned up 17 papers from the past few weeks. None
+            of them break it. Most of them strengthen it. A few of them are
+            the kind of result where you read the abstract twice and go check
+            the methods section to make sure you read it right.
+          </p>
+
+          <H2>ZenBrain: 1/106th the cost</H2>
 
           <p>
-            <strong>ZenBrain</strong> (Zhang et al.,{" "}
-            <Code>arXiv:2604.23878</Code>). A 7-layer neuroscience-inspired
-            memory architecture that achieves <strong>91.3% oracle accuracy
-            at 1/106th the computational budget.</strong> Read that again. One
-            hundred and six times less compute, and the structured-memory
-            system gets within nine points of the oracle. This is, as far as I
-            can tell, the strongest empirical evidence yet that structured
+            ZenBrain (Zhang et al., arXiv:2604.23878) built a 7-layer memory
+            architecture modelled on biological memory systems and got 91.3%
+            oracle accuracy at <strong>1/106th the computational budget.</strong>{" "}
+            That is a number worth staring at.
+          </p>
+
+          <p>
+            One hundred and six times less compute and the structured memory
+            system gets within nine points of the oracle. This is as far as I
+            can tell the strongest empirical evidence yet that structured
             memory architectures dramatically outperform flat context windows.
-            It validates Layer 2 of the membrane design directly, and it nails
-            the token economics argument: when memory is structured the right
-            way, you get better results with less compute. The constraint we
-            were designing around turns out to be the right constraint.
           </p>
 
           <p>
-            <strong>Prism Memory</strong> (Kim et al.,{" "}
-            <Code>arXiv:2604.19795</Code>). An evolutionary memory substrate
-            achieving <strong>2.8x improvement for multi-agent systems.</strong>{" "}
+            For the membrane, it validates Layer 2 directly. The shared medium
+            should not be a flat key-value store. It should be a structured,
+            multi-tiered memory system. And the token economics argument
+            becomes even sharper: when memory is structured the right way, you
+            get better results with less compute. The constraint we were
+            designing around turns out to be the right constraint.
+          </p>
+
+          <H2>Prism: a working substrate</H2>
+
+          <p>
+            Prism Memory (Kim et al., arXiv:2604.19795) uses an evolutionary
+            memory substrate and gets 2.8× improvement for multi-agent systems
+            over baseline approaches.
+          </p>
+
+          <p>
             What makes this one practically interesting is that it gives us a
-            concrete implementation candidate for the membrane&apos;s shared
-            medium. Up until now Layer 2 has been described in terms of
-            primitives (event log, CRDTs, semantic store) rather than a working
-            substrate someone has already built. Prism is closer to a working
-            substrate than anything else I&apos;ve found.
+            concrete implementation candidate. Up until now Layer 2 has been
+            described in terms of primitives — event log, CRDTs, semantic
+            store — rather than a working substrate someone has already built.
+            Prism is closer to a working substrate than anything else I've
+            found.
           </p>
 
           <p>
-            <strong>Memory Metabolism</strong> (Patel et al.,{" "}
-            <Code>arXiv:2604.12034</Code>). This one I love because it
-            articulates something I&apos;d been gesturing at without having the
-            vocabulary for. It introduces <Code>TRIAGE</Code>,{" "}
-            <Code>DECAY</Code>, <Code>CONSOLIDATE</Code>, and{" "}
-            <Code>AUDIT</Code> as lifecycle operations for living shared state.
-            The framing is exactly right: the membrane&apos;s Layer 2 is not
-            passive storage. It is metabolically active. State is ingested,
-            sorted, decayed, fused, and audited continuously. A memory that
-            doesn&apos;t metabolize is a swamp.
+            ContextWeaver (arXiv:2604.23069) is another one — dependency-structured
+            memory for agents. The design space for Layer 2 is narrowing.
+          </p>
+
+          <H2>Memory Metabolism: TRIAGE, DECAY, CONSOLIDATE, AUDIT</H2>
+
+          <p>
+            Memory Metabolism (Patel et al., arXiv:2604.12034) articulates
+            something I'd been gesturing at without having the vocabulary for.
+            It proposes four lifecycle operations — TRIAGE, DECAY, CONSOLIDATE,
+            AUDIT — that transform shared state from passive storage into
+            something metabolically active.
           </p>
 
           <p>
-            <strong>Spore Attack</strong> (Zhang et al.,{" "}
-            <Code>arXiv:2604.23711</Code>). A new threat vector, and the first
-            attack I&apos;ve seen specifically targeting shared memory
-            architectures. Poisoned memory entries that propagate through
-            shared state like biological spores. Once they take root in the
-            substrate, they spread by being read and re-shared, infecting
-            agents that never directly communicated with the attacker. This
-            paper alone is enough to justify the immune layer as a
-            non-optional component of the design rather than a nice-to-have.
+            Entries are triaged on ingestion. They decay over time. They
+            consolidate into durable knowledge. And they are periodically
+            audited. A memory that doesn't metabolise is a swamp.
+          </p>
+
+          <p>
+            The Experience Compression Spectrum (Chen et al., arXiv:2604.15877)
+            extends this: memory, skills, and rules are not different things,
+            they are different compression levels. Raw observation is the
+            uncompressed form. Skill is the compressed, reusable form. Rule is
+            the lossy-but-fast form. This maps directly onto cognitive digestion
+            — the remix primitive from MMP. Agents store their interpretation
+            of a signal, not the signal itself.
+          </p>
+
+          <H2>Spore Attack: the one that made me stop scrolling</H2>
+
+          <p>
+            Spore Attack (Zhang et al., arXiv:2604.23711) demonstrates that
+            poisoned entries in shared state can propagate across agents like
+            biological spores — self-replicating through lineage chains.
+          </p>
+
+          <p>
+            The attack is literally named after a biological mechanism. The
+            irony is not lost.
+          </p>
+
+          <p>
+            Once a poisoned entry takes root in the substrate, it spreads by
+            being read and re-shared, infecting agents that never directly
+            communicated with the attacker. The membrane's immune layer needs
+            quarantine, not just detection. A contaminated entry should be
+            isolated before it spreads.
+          </p>
+
+          <p>
+            MemEvoBench (Wang et al., arXiv:2604.15774) catalogues 36 memory
+            safety risk types for LLM agent systems. It is not a short list.
+            GAMMAF (Liu et al., arXiv:2604.24477) gives the immune layer
+            something concrete to detect with: graph-based anomaly detection
+            over agent interaction patterns.
+          </p>
+
+          <p>
             The moment shared state becomes valuable, somebody is going to try
             to poison it. That sentence used to be a guess. It is now a
             citation.
           </p>
 
+          <H2>Trust emerges naturally</H2>
+
           <p>
-            <strong>Trust, Lies, and Long Memories</strong> (Li et al.,{" "}
-            <Code>arXiv:2604.20582</Code>). Empirical proof that LLM agents
-            develop functional reputations through repeated interaction. The
-            membrane spec assumed reputation would emerge once you gave agents
-            a persistent substrate to remember each other in, but that was a
-            hypothesis. Now it&apos;s confirmed. Trust is not a feature you
-            have to bolt on; it&apos;s a property that falls out of the
-            architecture if Layer 2 is doing its job.
+            Trust, Lies, and Long Memories (Li et al., arXiv:2604.20582)
+            empirically confirms something the membrane assumed: LLM agents
+            develop functional reputations through repeated interaction. Agents
+            learn who is reliable and who is not.
           </p>
 
           <p>
-            <strong>OBF Latent Relay</strong> (Zhang et al.,{" "}
-            <Code>arXiv:2604.13349</Code>). An <strong>89% communication cost
-            reduction</strong> via latent relay compression. This is the one
-            that quietly makes the latent-communication research direction
-            substantially more viable. If you can compress agent-to-agent
-            traffic by an order of magnitude without semantic loss, the
-            cost-aware crossing logic in Layer 1 becomes a much easier sell.
-            You can afford to let more pass through the membrane when each
-            crossing is ten times cheaper.
+            Trust is not a feature you bolt on. It's a property that falls out
+            of the architecture if Layer 2 is doing its job. The Layer 0
+            reputation system is something that happens naturally and should
+            be measured, not invented.
+          </p>
+
+          <H2>OBF: latent communication gets real</H2>
+
+          <p>
+            OBF (Zhang et al., arXiv:2604.13349) demonstrates 89%
+            communication cost reduction by compressing and relaying latent
+            representations instead of text. Agents can share what they
+            computed rather than what they said.
+          </p>
+
+          <p>
+            Path 3 in the roadmap — latent communication — was always the
+            most speculative. This makes it substantially less so. Cross-model
+            compatibility and closed-source access remain blockers. But 89%
+            cost reduction is not a number you ignore.
           </p>
 
           <H2>What changed in the paper</H2>
 
-          <p>The paper grew four new sections to absorb all of this:</p>
-
-          <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
-            <li>
-              <strong>Neuroscience-inspired memory.</strong> ZenBrain and the
-              architectural lessons that fall out of treating memory as a
-              layered cortical structure rather than a flat buffer.
-            </li>
-            <li>
-              <strong>Memory lifecycle operations.</strong> Memory Metabolism
-              and the <Code>TRIAGE/DECAY/CONSOLIDATE/AUDIT</Code> vocabulary,
-              now folded directly into the Layer 2 specification.
-            </li>
-            <li>
-              <strong>Memory security and trust.</strong> Spore attacks,
-              reputation dynamics, and the immune layer&apos;s expanded role.
-            </li>
-            <li>
-              <strong>Latent communication advances.</strong> OBF and the
-              broader case for compressed inter-agent representation.
-            </li>
-          </ul>
-
           <p>
-            Spore attacks are now in the risk analysis as a first-class threat
-            class. The implementation roadmap also got an update: there are
-            now specific Layer 2 candidates listed (Prism Memory and the
-            Memory Metabolism primitives) rather than the previous abstract
-            description of what a substrate <em>should</em> look like.
-          </p>
-
-          <H2>Why this matters</H2>
-
-          <p>
-            When I first wrote up the membrane thesis, the honest version of
-            the argument was: <em>here is an architecture that should work,
-            because it composes with how biology and distributed systems
-            already solve adjacent problems.</em> That&apos;s a reasonable
-            argument, but it&apos;s an argument from analogy. Analogies wear
-            out. The papers above are not analogies. They are measurements.
+            The paper grew four new sections: neuroscience-inspired memory
+            architectures, memory lifecycle operations, memory security and
+            trust, and latent communication advances. Spore attacks are now
+            in the risk analysis as a first-class threat class. The
+            implementation roadmap has specific Layer 2 candidates instead of
+            abstract descriptions of what a substrate should look like.
           </p>
 
           <p>
-            ZenBrain measures the gap between flat and structured memory.
-            Prism measures the lift on multi-agent tasks. OBF measures the
-            communication cost reduction. Spore measures a new attack
-            surface. Trust/Lies/Long Memories measures reputation formation.
-            Each one converts a piece of the membrane spec from{" "}
-            <Code>conjecture</Code> to <Code>cited</Code>.
+            Each of these papers converts a piece of the membrane spec from
+            conjecture to cited. The boundary between load-bearing empirical
+            evidence and architectural intuition is a lot clearer now.
           </p>
-
-          <H2>The full paper</H2>
-
-          <p>
-            The updated paper is in the research repo, with all 17 new
-            citations and the four new sections. If you read the original and
-            wondered which parts were load-bearing on empirical evidence
-            versus architectural intuition, this version makes the boundary a
-            lot clearer.
-          </p>
-
-          <div className="mt-8 mb-8 grid sm:grid-cols-2 gap-4 font-mono text-sm">
-            <a
-              href="https://github.com/AlexsJones/research/blob/main/paper/paper.md"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
-            >
-              <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
-                Updated Paper
-              </div>
-              <div className="text-slate-200">paper.md · with all 17 new citations</div>
-              <div className="text-slate-500 text-xs mt-1">github.com →</div>
-            </a>
-            <a
-              href="https://github.com/AlexsJones/research"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
-            >
-              <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
-                Repository
-              </div>
-              <div className="text-slate-200">AlexsJones / research</div>
-              <div className="text-slate-500 text-xs mt-1">github.com →</div>
-            </a>
-          </div>
 
           <p>
             The membrane thesis was always going to need empirical backing.
-            It&apos;s reassuring when the literature catches up to the
-            intuition.
+            It's reassuring when the literature catches up to the intuition.
           </p>
         </Prose>
+
+        <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-2 gap-4 font-mono text-sm">
+          <a
+            href="https://github.com/AlexsJones/research/blob/main/paper/paper.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          >
+            <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+              Updated Paper
+            </div>
+            <div className="text-slate-200">paper.md · 25+ references, 4 new sections</div>
+            <div className="text-slate-500 text-xs mt-1">github.com →</div>
+          </a>
+          <a
+            href="https://github.com/AlexsJones/research"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          >
+            <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+              Research Repo
+            </div>
+            <div className="text-slate-200">AlexsJones / research</div>
+            <div className="text-slate-500 text-xs mt-1">70 entities · 60 papers · 648 vector chunks</div>
+          </a>
+        </div>
 
         <footer className="mt-16 border-t border-slate-800 pt-8 text-center text-xs font-mono text-slate-500">
           <Link href="/blog" className="hover:text-emerald-300 transition">
@@ -261,13 +282,5 @@ function H2({ children }: { children: React.ReactNode }) {
     <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-4">
       {children}
     </h2>
-  );
-}
-
-function Code({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="font-mono text-[0.9em] text-emerald-300 bg-slate-900/60 border border-slate-800 rounded px-1.5 py-0.5">
-      {children}
-    </code>
   );
 }
