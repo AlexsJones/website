@@ -7,6 +7,14 @@ export const metadata = {
 
 const POSTS = [
   {
+    slug: "the-sticky-note-problem",
+    title: "The Sticky-Note Problem: Why Multi-Agent AI Is Broken at the Coordination Layer",
+    date: "May 5, 2026",
+    excerpt:
+      "Every framework gives you agents that send messages to each other. There is a better way. This is the first article in a series on the synthetic membrane — a coordination layer for multi-agent AI.",
+    tag: "Synthetic Membrane",
+  },
+  {
     slug: "synthetic-membrane-research-update",
     title: "17 Papers. One Thesis Getting Harder to Dismiss.",
     date: "April 29, 2026",
