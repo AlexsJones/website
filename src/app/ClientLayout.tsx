@@ -841,7 +841,7 @@ function TerminalShell() {
           {/* Terminal */}
           <div
             ref={terminalRef}
-            className="p-6 whitespace-pre-wrap break-words font-mono text-base min-h-[60vh] max-h-[80vh] overflow-y-auto"
+            className="p-6 whitespace-pre-wrap break-words font-mono text-base min-h-[60vh] max-h-[80vh] overflow-y-auto terminal-scroll"
             onClick={() => inputRef.current && inputRef.current.focus()}
           >
             {history.map((line, i) => (
