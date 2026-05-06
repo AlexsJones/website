@@ -62,13 +62,38 @@ function parseMarkdownToJSX(markdown) {
 
   function escapeJSX(str) {
     return str
-      .replace(/'/g, '&#039;')
-      .replace(/"/g, '&quot;')
-      .replace(/{/g, '&#123;')
-      .replace(/}/g, '&#125;')
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/>/g, '&gt;')
+      .replace(/{/g, '&#123;')
+      .replace(/}/g, '&#125;')
+      .replace(/'/g, '&apos;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function processInline(str) {
+    // Protect inline code first
+    var processed = str.replace(/`(.+?)`/g, function(m, p1) { return '<<INLINE_CODE>>' + p1 + '<</INLINE_CODE>>'; });
+    // Protect links before escaping
+    var links = [];
+    processed = processed.replace(/\[(.+?)\]\((.+?)\)/g, function(m, text, url) {
+      var idx = links.length;
+      links.push({ text: text, url: url });
+      return '<<LINK_' + idx + '>>';
+    });
+    processed = escapeJSX(processed);
+    // Restore inline code
+    processed = processed.replace(/<<INLINE_CODE>>(.+?)<<\/INLINE_CODE>>/g, '<code className="bg-slate-800 px-1 rounded text-sm">$1</code>');
+    // Bold before italic
+    processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    processed = processed.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    // Restore links
+    processed = processed.replace(/<<LINK_(\d+)>>/g, function(m, idx) {
+      var link = links[parseInt(idx)];
+      return '<a href="' + link.url + '" className="text-emerald-400 hover:text-emerald-300">' + link.text + '</a>';
+    });
+    // Handle em-dashes and apostrophes as literal characters (JSX handles unicode fine)
+    return processed;
   }
 
   for (var i = 0; i < lines.length; i++) {
@@ -94,21 +119,21 @@ function parseMarkdownToJSX(markdown) {
     if (line.startsWith('### ')) {
       closeList();
       headerIndex++;
-      elements.push('<h3 key={"h3-' + headerIndex + '"} className="text-xl font-bold text-slate-100 mb-2 mt-8">' + escapeJSX(line.replace('### ', '')) + '</h3>');
+      elements.push('<h3 key={"h3-' + headerIndex + '"} className="text-xl font-bold text-slate-100 mb-2 mt-8">' + processInline(line.replace('### ', '')) + '</h3>');
     } else if (line.startsWith('## ')) {
       closeList();
       headerIndex++;
-      elements.push('<h2 key={"h2-' + headerIndex + '"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">' + escapeJSX(line.replace('## ', '')) + '</h2>');
+      elements.push('<h2 key={"h2-' + headerIndex + '"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">' + processInline(line.replace('## ', '')) + '</h2>');
     } else if (line.startsWith('# ')) {
       closeList();
       headerIndex++;
-      elements.push('<h1 key={"h1-' + headerIndex + '"} className="text-3xl font-bold text-slate-100 mb-4 mt-8">' + escapeJSX(line.replace('# ', '')) + '</h1>');
+      elements.push('<h1 key={"h1-' + headerIndex + '"} className="text-3xl font-bold text-slate-100 mb-4 mt-8">' + processInline(line.replace('# ', '')) + '</h1>');
     } else if (line.startsWith('> ')) {
       closeList();
       blockquoteIndex++;
       elements.push(
         '<blockquote key={"bq-' + blockquoteIndex + '"} className="border-l-4 border-emerald-500 pl-4 italic text-slate-300 my-4">' +
-        escapeJSX(line.replace('> ', '')) +
+        processInline(line.replace('> ', '')) +
         '</blockquote>'
       );
     } else if (line.startsWith('- ') || line.startsWith('* ')) {
@@ -116,7 +141,7 @@ function parseMarkdownToJSX(markdown) {
       listIndex++;
       listItems.push(
         '<li key={"li-' + listIndex + '"} className="ml-4 text-slate-300">' +
-        escapeJSX(line.replace(/^[-*] /, '')) +
+        processInline(line.replace(/^[-*] /, '')) +
         '</li>'
       );
     } else if (line.match(/^---+$/)) {
@@ -128,16 +153,9 @@ function parseMarkdownToJSX(markdown) {
     } else {
       closeList();
       paragraphIndex++;
-      var processed = line.replace(/`(.+?)`/g, function(m, p1) { return '<<INLINE_CODE>>' + p1 + '<</INLINE_CODE>>'; });
-      processed = escapeJSX(processed);
-      processed = processed.replace(/<<INLINE_CODE>>(.+?)<<\/INLINE_CODE>>/g, '<code className="bg-slate-800 px-1 rounded text-sm">$1</code>');
-      processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      processed = processed.replace(/\*(.+?)\*/g, '<em>$1</em>');
-      processed = processed.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" className="text-emerald-400 hover:text-emerald-300">$1</a>');
-
       elements.push(
         '<p key={"p-' + paragraphIndex + '"} className="text-slate-300 leading-relaxed mb-4">' +
-        processed +
+        processInline(line) +
         '</p>'
       );
     }

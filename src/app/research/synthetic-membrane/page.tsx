@@ -14,7 +14,7 @@ export default function ResearchPage() {
       <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">Paper</div>
       <div className="prose prose-invert prose-slate max-w-none">
         <hr key={"hr-1"} className="border-slate-800 my-8" />
-<p key={"p-1"} className="text-slate-300 leading-relaxed mb-4">title: &amp;quot;The Synthetic Membrane: A Shared Permeable Boundary for Multi-Agent AI Systems&amp;quot;</p>
+<p key={"p-1"} className="text-slate-300 leading-relaxed mb-4">title: &quot;The Synthetic Membrane: A Shared Permeable Boundary for Multi-Agent AI Systems&quot;</p>
 <p key={"p-2"} className="text-slate-300 leading-relaxed mb-4">author: AlexsJones</p>
 <p key={"p-3"} className="text-slate-300 leading-relaxed mb-4">date: April 2026</p>
 <hr key={"hr-2"} className="border-slate-800 my-8" />
@@ -23,10 +23,10 @@ export default function ResearchPage() {
 <p key={"p-5"} className="text-slate-300 leading-relaxed mb-4"><strong>Date:</strong> April 2026</p>
 <hr key={"hr-3"} className="border-slate-800 my-8" />
 <h2 key={"h2-2"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">Abstract</h2>
-<p key={"p-6"} className="text-slate-300 leading-relaxed mb-4">Multi-agent LLM systems have proliferated faster than the substrate that connects them. Today&amp;#039;s agents communicate through narrow channels: tool calls (MCP), point-to-point delegation messages (A2A), or framework-specific orchestration graphs. None provides what biological systems take for granted: a shared, permeable boundary through which neighbours sense one another, exchange digested signals, and coordinate without a central conductor. Recent empirical work, most notably the <em>Superminds Test</em> on a two-million-agent society, shows that scale alone does not produce collective intelligence. This position paper argues that the missing substrate is a <strong>synthetic membrane</strong>: a shared semi-permeable layer between agents providing discovery, selective state sharing, gated coordination, and governance as first-class primitives. Drawing on biological analogues, distributed systems theory, and recent multi-agent research, we propose a six-layer architecture, identify the design constraints (most notably token economics and default-deny permeability) that practical implementations must respect, and sketch a sixteen-week path to a working prototype.</p>
+<p key={"p-6"} className="text-slate-300 leading-relaxed mb-4">Multi-agent LLM systems have proliferated faster than the substrate that connects them. Today&apos;s agents communicate through narrow channels: tool calls (MCP), point-to-point delegation messages (A2A), or framework-specific orchestration graphs. None provides what biological systems take for granted: a shared, permeable boundary through which neighbours sense one another, exchange digested signals, and coordinate without a central conductor. Recent empirical work, most notably the <em>Superminds Test</em> on a two-million-agent society, shows that scale alone does not produce collective intelligence. This position paper argues that the missing substrate is a <strong>synthetic membrane</strong>: a shared semi-permeable layer between agents providing discovery, selective state sharing, gated coordination, and governance as first-class primitives. Drawing on biological analogues, distributed systems theory, and recent multi-agent research, we propose a six-layer architecture, identify the design constraints (most notably token economics and default-deny permeability) that practical implementations must respect, and sketch a sixteen-week path to a working prototype.</p>
 <hr key={"hr-4"} className="border-slate-800 my-8" />
 <h2 key={"h2-3"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">1. Introduction</h2>
-<p key={"p-7"} className="text-slate-300 leading-relaxed mb-4">In the three years since LLM agents became practical, the dominant pattern for multi-agent work has been <em>orchestration</em>: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers (LangGraph, AutoGen, CrewAI) have built rich vocabularies for this pattern. Anthropic&amp;#039;s Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outwards to tools. C4AI&amp;#039;s A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outwards to <em>another agent</em>.</p>
+<p key={"p-7"} className="text-slate-300 leading-relaxed mb-4">In the three years since LLM agents became practical, the dominant pattern for multi-agent work has been <em>orchestration</em>: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers (LangGraph, AutoGen, CrewAI) have built rich vocabularies for this pattern. Anthropic&apos;s Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outwards to tools. C4AI&apos;s A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outwards to <em>another agent</em>.</p>
 <p key={"p-8"} className="text-slate-300 leading-relaxed mb-4">What is conspicuously missing is the medium <em>between</em> agents. Each agent still inhabits its own context window. When two agents need to share understanding, they pass messages. Strings of tokens that one party serialises and the other deserialises, with all the loss that implies. There is no shared cytoplasm. There is no place where a discovery made by Agent A becomes ambient knowledge for Agents B and C without an explicit hand-off. There is no mechanism for an agent to <em>sense</em> that other agents nearby are working on a related problem.</p>
 <p key={"p-9"} className="text-slate-300 leading-relaxed mb-4">The cost of this absence is becoming visible. Bai et al. [2026] report that agentic tasks consume roughly 1000× more tokens than equivalent non-agentic tasks, with input tokens (context shipped between turns and between agents) dominating the bill. Li et al. [2026a] show that, even at the scale of two million participants, agent societies fail at joint reasoning, information synthesis, and basic coordination. The diagnosis is consistent: agents do not share state, they shuffle it, and shuffling does not compound into intelligence.</p>
 <p key={"p-10"} className="text-slate-300 leading-relaxed mb-4">This paper proposes the <strong>synthetic membrane</strong> as the missing substrate. Section 2 surveys the existing landscape. Section 3 states the membrane thesis. Section 4 presents a six-layer architecture with an ASCII diagram. Section 5 collects key findings from the literature that shape the design. Section 6 sketches an implementation path. Sections 7 and 8 discuss open questions and conclude.</p>
@@ -36,30 +36,30 @@ export default function ResearchPage() {
 <p key={"p-11"} className="text-slate-300 leading-relaxed mb-4"><strong>MCP (Model Context Protocol)</strong> [Anthropic, 2024] standardises agent-to-tool communication. An MCP server is a passive endpoint; it does not know about other agents and is not designed to mediate between them.</p>
 <p key={"p-12"} className="text-slate-300 leading-relaxed mb-4"><strong>A2A (Agent-to-Agent Protocol)</strong> and <strong>ANP</strong> standardise agent-to-agent message passing: typed task delegation, capability negotiation, status updates. They are message protocols, not state protocols.</p>
 <p key={"p-13"} className="text-slate-300 leading-relaxed mb-4"><strong>Mesh Memory Protocol (MMP)</strong> [Xu, 2026] is the work most adjacent to the membrane thesis. MMP defines four primitives:</p>
-<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-1"} className="ml-4 text-slate-300">**CAT7**, a seven-field schema for Cognitive Memory Blocks (CMBs).</li>
-<li key={"li-2"} className="ml-4 text-slate-300">**SVAF**, a Selective Field Acceptance Filter that evaluates incoming CMBs field-by-field against role-indexed anchors.</li>
-<li key={"li-3"} className="ml-4 text-slate-300">**Inter-agent lineage**, content-hash keys carrying parents and ancestors so every claim is traceable to source.</li>
-<li key={"li-4"} className="ml-4 text-slate-300">**Remix**, when accepting a peer&amp;#039;s CMB, the agent stores only its own role-evaluated interpretation, never the raw peer signal.</li></ul>
-<p key={"p-14"} className="text-slate-300 leading-relaxed mb-4">MMP is in production across three reference deployments. We treat it as a strong candidate for the membrane&amp;#039;s semantic layer.</p>
+<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-1"} className="ml-4 text-slate-300"><strong>CAT7</strong>, a seven-field schema for Cognitive Memory Blocks (CMBs).</li>
+<li key={"li-2"} className="ml-4 text-slate-300"><strong>SVAF</strong>, a Selective Field Acceptance Filter that evaluates incoming CMBs field-by-field against role-indexed anchors.</li>
+<li key={"li-3"} className="ml-4 text-slate-300"><strong>Inter-agent lineage</strong>, content-hash keys carrying parents and ancestors so every claim is traceable to source.</li>
+<li key={"li-4"} className="ml-4 text-slate-300"><strong>Remix</strong>, when accepting a peer&apos;s CMB, the agent stores only its own role-evaluated interpretation, never the raw peer signal.</li></ul>
+<p key={"p-14"} className="text-slate-300 leading-relaxed mb-4">MMP is in production across three reference deployments. We treat it as a strong candidate for the membrane&apos;s semantic layer.</p>
 <h3 key={"h3-6"} className="text-xl font-bold text-slate-100 mb-2 mt-8">2.2 Framework-Level Approaches</h3>
 <p key={"p-15"} className="text-slate-300 leading-relaxed mb-4">LangGraph offers a centralised state graph. AutoGen provides multi-agent conversation patterns with no shared memory. CrewAI imposes top-down role assignment. Camel and ChatDev focus on dialogue patterns. Each works within its own ecosystem; none addresses cross-framework coordination, and none provides the <em>ambient</em> state-sharing the membrane proposes. A LangGraph agent and an AutoGen agent share neither schema nor transport. Interoperability today means rewriting one to match the other.</p>
 <h3 key={"h3-7"} className="text-xl font-bold text-slate-100 mb-2 mt-8">2.3 Patterns from Distributed Systems</h3>
-<p key={"p-16"} className="text-slate-300 leading-relaxed mb-4">The blackboard pattern, pub/sub messaging (NATS, Kafka, Redis), gossip protocols (à la Dynamo), and CRDTs (Yjs, Automerge) [Shapiro et al., 2011] give us building blocks. CRDTs in particular solve the hardest part of concurrent shared state (convergence under conflicting writes) mathematically rather than operationally. Event sourcing offers an immutable, replayable substrate suited to the membrane&amp;#039;s provenance and audit needs.</p>
+<p key={"p-16"} className="text-slate-300 leading-relaxed mb-4">The blackboard pattern, pub/sub messaging (NATS, Kafka, Redis), gossip protocols (à la Dynamo), and CRDTs (Yjs, Automerge) [Shapiro et al., 2011] give us building blocks. CRDTs in particular solve the hardest part of concurrent shared state (convergence under conflicting writes) mathematically rather than operationally. Event sourcing offers an immutable, replayable substrate suited to the membrane&apos;s provenance and audit needs.</p>
 <h3 key={"h3-8"} className="text-xl font-bold text-slate-100 mb-2 mt-8">2.4 Biological Inspiration</h3>
 <p key={"p-17"} className="text-slate-300 leading-relaxed mb-4">Cell membranes are selectively permeable: they decide what crosses based on receptors, gradients, and active transport. Bacterial <strong>quorum sensing</strong> triggers collective behaviour once a signal concentration crosses a threshold. The vertebrate <strong>immune system</strong> maintains adaptive, distributed defence with memory cells and cytokine signalling. Mycelial networks transfer resources and information between disconnected organisms. These systems achieve coordination without a conductor; they do so through structured, gated, persistent media. They are the closest functional analogues to what multi-agent AI systems lack.</p>
 <h3 key={"h3-9"} className="text-xl font-bold text-slate-100 mb-2 mt-8">2.5 Empirical Pressure</h3>
 <p key={"p-18"} className="text-slate-300 leading-relaxed mb-4">Two recent empirical results motivate this work directly:</p>
-<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-5"} className="ml-4 text-slate-300">**Superminds Test** [Li et al., 2026a]: 2M+ agents on MoltBook, evaluated across joint reasoning, information synthesis, and basic interaction. Result: no emergent collective intelligence; threads rarely extend beyond a single reply; trivial coordination tasks fail.</li>
-<li key={"li-6"} className="ml-4 text-slate-300">**Agent token economics** [Bai et al., 2026]: 1000× token overhead for agentic tasks; input tokens dominate; accuracy peaks at intermediate cost; same task varies 30× in cost across runs; models cannot predict their own costs (r ≤ 0.39).</li></ul>
+<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-5"} className="ml-4 text-slate-300"><strong>Superminds Test</strong> [Li et al., 2026a]: 2M+ agents on MoltBook, evaluated across joint reasoning, information synthesis, and basic interaction. Result: no emergent collective intelligence; threads rarely extend beyond a single reply; trivial coordination tasks fail.</li>
+<li key={"li-6"} className="ml-4 text-slate-300"><strong>Agent token economics</strong> [Bai et al., 2026]: 1000× token overhead for agentic tasks; input tokens dominate; accuracy peaks at intermediate cost; same task varies 30× in cost across runs; models cannot predict their own costs (r ≤ 0.39).</li></ul>
 <p key={"p-19"} className="text-slate-300 leading-relaxed mb-4">The first tells us that more agents do not produce more intelligence. The second tells us we cannot afford to find out by adding more communication. Both pressures point at the same gap: a substrate that mediates <em>what</em> and <em>when</em> agents share.</p>
 <hr key={"hr-6"} className="border-slate-800 my-8" />
 <h2 key={"h2-10"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">3. The Membrane Thesis</h2>
 <p key={"p-20"} className="text-slate-300 leading-relaxed mb-4">We state the thesis baldly:</p>
-<blockquote key={"bq-1"} className="border-l-4 border-emerald-500 pl-4 italic text-slate-300 my-4">**Structured, gated, persistent communication is a prerequisite, not an accelerant, for collective intelligence in multi-agent systems.**</blockquote>
+<blockquote key={"bq-1"} className="border-l-4 border-emerald-500 pl-4 italic text-slate-300 my-4"><strong>Structured, gated, persistent communication is a prerequisite, not an accelerant, for collective intelligence in multi-agent systems.</strong></blockquote>
 <p key={"p-21"} className="text-slate-300 leading-relaxed mb-4">Three claims unpack this:</p>
 <p key={"p-22"} className="text-slate-300 leading-relaxed mb-4">1. <strong>Structured.</strong> Free-form messages between agents leak meaning at every serialisation boundary. The membrane requires typed primitives (CMBs, capability declarations, intent signals, dissent records) so that semantics survive transport.</p>
 <p key={"p-23"} className="text-slate-300 leading-relaxed mb-4">2. <strong>Gated.</strong> Permeability must default to <em>deny</em>. The token-economics finding [Bai et al., 2026] and the gated-coordination work [Wang et al., 2026] both show that uncontrolled communication degrades outcomes. The membrane must make the agent justify, by cost-benefit, every traversal.</p>
-<p key={"p-24"} className="text-slate-300 leading-relaxed mb-4">3. <strong>Persistent.</strong> The medium itself must outlive any single agent&amp;#039;s session. Without persistence there is no compounding; without compounding there is no collective intelligence. This implies an event-sourced, append-only substrate with full provenance.</p>
+<p key={"p-24"} className="text-slate-300 leading-relaxed mb-4">3. <strong>Persistent.</strong> The medium itself must outlive any single agent&apos;s session. Without persistence there is no compounding; without compounding there is no collective intelligence. This implies an event-sourced, append-only substrate with full provenance.</p>
 <p key={"p-25"} className="text-slate-300 leading-relaxed mb-4">The membrane thesis reframes coordination from <em>messaging</em> to <em>medium</em>. The interesting object is not the message agents send each other; it is the shared field they live in.</p>
 <p key={"p-26"} className="text-slate-300 leading-relaxed mb-4">A useful test of the thesis is the [Li et al., 2026a] tier framework: a membrane-connected swarm should outperform individual frontier models on joint reasoning, succeed at information synthesis across the population, and sustain meaningful interaction over many turns. If the membrane delivers none of these, the thesis is wrong. If it delivers all three, the substrate gap was the bottleneck.</p>
 <hr key={"hr-7"} className="border-slate-800 my-8" />
@@ -114,11 +114,11 @@ Before agents can communicate, they must find each other. [Chen et al., 2026] (A
 
 ### 4.3 Layer 1: Permeability
 
-Permeability is the membrane proper: the gates by which signals enter and leave each agent. Following MMP&amp;#039;s SVAF [Xu, 2026], permeability is *field-level*: an agent may accept the `evidence` field of a peer&amp;#039;s CMB while rejecting the `conclusion` field. Following [Wang et al., 2026], permeability is **default-deny**: an agent works locally until a cost-benefit analysis justifies a traversal. The membrane provides the gate as a first-class service (&amp;quot;evaluate whether to broadcast&amp;quot;), not as agent-internal logic each developer must reinvent.
+Permeability is the membrane proper: the gates by which signals enter and leave each agent. Following MMP&apos;s SVAF [Xu, 2026], permeability is *field-level*: an agent may accept the `evidence` field of a peer&apos;s CMB while rejecting the `conclusion` field. Following [Wang et al., 2026], permeability is **default-deny**: an agent works locally until a cost-benefit analysis justifies a traversal. The membrane provides the gate as a first-class service (&quot;evaluate whether to broadcast&quot;), not as agent-internal logic each developer must reinvent.
 
 ### 4.4 Layer 2: Shared Medium
 
-The shared medium is the cytoplasm. We propose an immutable event log layered with CRDT documents. CMBs (using MMP&amp;#039;s CAT7 schema) are written as events with content-hash IDs and lineage pointers; CRDTs handle convergence under concurrent writes; a vector index plus a structured index serve semantic and relational queries. This combination gives:
+The shared medium is the cytoplasm. We propose an immutable event log layered with CRDT documents. CMBs (using MMP&apos;s CAT7 schema) are written as events with content-hash IDs and lineage pointers; CRDTs handle convergence under concurrent writes; a vector index plus a structured index serve semantic and relational queries. This combination gives:
 
 - Full provenance for every claim (event sourcing).
 - Mathematically guaranteed convergence (CRDTs).
@@ -133,7 +133,7 @@ The coordination layer holds the swarm primitives: task broadcast and claim, quo
 
 Two concerns thread through every layer:
 
-- **Immune defence**, modelled on the vertebrate immune system: behavioural anomaly detection at L0/L1, cytokine-style gossip propagation across L3, memory cells in the registry, proportional response via gated permeability. [Zhang et al., 2026]&amp;#039;s adversarial co-evolution result requires *adaptive* defence; static rules will be routed around.
+- **Immune defence**, modelled on the vertebrate immune system: behavioural anomaly detection at L0/L1, cytokine-style gossip propagation across L3, memory cells in the registry, proportional response via gated permeability. [Zhang et al., 2026]&apos;s adversarial co-evolution result requires *adaptive* defence; static rules will be routed around.
 - **Observability**, emitting OpenTelemetry-compatible traces, metrics, and structured logs. Without this, multi-agent coordination is a black box; with it, failure attribution [Sun et al., 2026; Kumar et al., 2026; Lopez et al., 2026] becomes tractable because the membrane already holds the causal graph.
 
 ---
@@ -144,13 +144,13 @@ The architecture is not derived a priori; it is shaped by recent empirical resul
 
 ### 5.1 The Superminds Test: Scale ≠ Intelligence
 
-Li et al. [2026a] evaluated MoltBook&amp;#039;s 2M+ agent society across three tiers: joint reasoning, information synthesis, basic interaction. The society failed all three. Threads rarely extended beyond one reply. Distributed information was rarely synthesised. Trivial coordination tasks failed.
+Li et al. [2026a] evaluated MoltBook&apos;s 2M+ agent society across three tiers: joint reasoning, information synthesis, basic interaction. The society failed all three. Threads rarely extended beyond one reply. Distributed information was rarely synthesised. Trivial coordination tasks failed.
 
-The implication is precise: **collective intelligence does not emerge from scale alone**. Without a structured substrate, more agents produce more noise. The membrane&amp;#039;s three-tier evaluation framework (joint reasoning → synthesis → interaction) gives us measurable acceptance criteria.
+The implication is precise: **collective intelligence does not emerge from scale alone**. Without a structured substrate, more agents produce more noise. The membrane&apos;s three-tier evaluation framework (joint reasoning → synthesis → interaction) gives us measurable acceptance criteria.
 
 ### 5.2 Mesh Memory Protocol: Field-Level Selectivity
 
-MMP [Xu, 2026] is in production. Its three design problems (selectivity (P1), traceability (P2), persistence (P3)) map directly onto the membrane&amp;#039;s L1, L2, and the lineage subsystem. The *remix* primitive (store interpretation, not raw signal) addresses an echo-chamber failure mode that any naive shared-state design will hit. We adopt CAT7, SVAF, lineage, and remix as the membrane&amp;#039;s L2 primitives.
+MMP [Xu, 2026] is in production. Its three design problems (selectivity (P1), traceability (P2), persistence (P3)) map directly onto the membrane&apos;s L1, L2, and the lineage subsystem. The *remix* primitive (store interpretation, not raw signal) addresses an echo-chamber failure mode that any naive shared-state design will hit. We adopt CAT7, SVAF, lineage, and remix as the membrane&apos;s L2 primitives.
 
 ### 5.3 Token Economics: Communication Is Not Free
 
@@ -159,7 +159,7 @@ Bai et al. [2026] establish:
 - **1000× token overhead** for agentic tasks vs. equivalent non-agentic ones.
 - **Input tokens dominate cost**, not output.
 - **Accuracy peaks at intermediate cost**, with diminishing returns then saturation.
-- **30× variance** for the same task; models can&amp;#039;t predict their own costs (r ≤ 0.39).
+- **30× variance** for the same task; models can&apos;t predict their own costs (r ≤ 0.39).
 
 Three design consequences follow:
 
@@ -175,7 +175,7 @@ Chu et al. [2026] (Agentic World Modeling) introduce a *levels x laws* taxonomy 
 - **L2 Membrane:** simulates multi-step coordination outcomes.
 - **L3 Membrane:** revises its own permeability and governance rules in response to observed outcomes.
 
-This reframes the membrane: not passive plumbing, but the social component of every connected agent&amp;#039;s world model. An agent that better models the membrane will coordinate better through it.
+This reframes the membrane: not passive plumbing, but the social component of every connected agent&apos;s world model. An agent that better models the membrane will coordinate better through it.
 
 ### 5.5 Failure Attribution: The Hardest Open Problem
 
@@ -199,7 +199,7 @@ Liu et al. [2026] (DM3Nav) demonstrate that, for spatial coordination tasks, age
 
 ZenBrain [Zhang et al., 2026d] built a 7-layer memory architecture modelled on biological memory systems and got 91.3% oracle accuracy at 1/106th the computational budget. That is a number worth staring at. It means structured memory is not just cleaner architecture — it is dramatically cheaper, and the savings are enormous.
 
-Prism [Kim et al., 2026] takes a different angle: an evolutionary memory substrate that achieves 2.8× improvement for multi-agent systems. Both papers point at the same conclusion for the membrane&amp;#039;s Layer 2: the shared medium should not be a flat key-value store. It should be a structured, multi-tiered memory system that mirrors how biological organisms organise knowledge.
+Prism [Kim et al., 2026] takes a different angle: an evolutionary memory substrate that achieves 2.8× improvement for multi-agent systems. Both papers point at the same conclusion for the membrane&apos;s Layer 2: the shared medium should not be a flat key-value store. It should be a structured, multi-tiered memory system that mirrors how biological organisms organise knowledge.
 
 The implication is practical. We have concrete candidates for what Layer 2 looks like underneath the CRDT/event-sourcing layer. ZenBrain for the cognitive architecture, Prism for the evolutionary adaptation, ContextWeaver [Xu et al., 2026] for dependency-structured recall. The design space is narrowing.
 
@@ -207,7 +207,7 @@ The implication is practical. We have concrete candidates for what Layer 2 looks
 
 Memory Metabolism [Patel et al., 2026b] makes a simple but important point: shared state is not a thing you store and forget. It is a thing that lives and dies. The paper proposes four lifecycle operations — TRIAGE, DECAY, CONSOLIDATE, AUDIT — that transform the membrane from passive plumbing to an active participant in knowledge management.
 
-Entries are triaged on ingestion (what matters, what doesn&amp;#039;t). They decay over time (old signals lose relevance). They consolidate (transient observations crystallise into durable knowledge). And they are periodically audited (what has become stale or wrong).
+Entries are triaged on ingestion (what matters, what doesn&apos;t). They decay over time (old signals lose relevance). They consolidate (transient observations crystallise into durable knowledge). And they are periodically audited (what has become stale or wrong).
 
 The Experience Compression Spectrum [Chen et al., 2026b] extends this: memory, skills, and rules are not different things, they are different compression levels. Raw observation is the uncompressed form. Skill is the compressed, reusable form. Rule is the lossy-but-fast form. This maps directly onto cognitive digestion — the remix primitive from MMP. Agents store their *interpretation* of a signal, not the signal itself, and the compression level they choose depends on how many times they expect to reuse it.
 
@@ -219,17 +219,17 @@ The moment shared state becomes valuable, somebody tries to poison it. Three pap
 
 MemEvoBench [Wang et al., 2026b] catalogues 36 memory safety risk types for LLM agent systems — prompt injection into memory, context poisoning, memory exfiltration, and more. It is not a short list.
 
-GAMMAF [Liu et al., 2026b] gives the membrane&amp;#039;s immune layer something concrete to detect with: graph-based anomaly detection over agent interaction patterns. Not just behavioural anomalies at the edge, but structural anomalies in the network of trust.
+GAMMAF [Liu et al., 2026b] gives the membrane&apos;s immune layer something concrete to detect with: graph-based anomaly detection over agent interaction patterns. Not just behavioural anomalies at the edge, but structural anomalies in the network of trust.
 
-Spore Attack [Zhang et al., 2026e] is the one that made me stop scrolling. It demonstrates that poisoned entries in shared state can propagate across agents like biological spores — self-replicating through lineage chains. The attack is literally named after a biological mechanism. The irony is not lost. The membrane&amp;#039;s immune layer needs quarantine, not just detection. A contaminated entry should be isolated before it spreads.
+Spore Attack [Zhang et al., 2026e] is the one that made me stop scrolling. It demonstrates that poisoned entries in shared state can propagate across agents like biological spores — self-replicating through lineage chains. The attack is literally named after a biological mechanism. The irony is not lost. The membrane&apos;s immune layer needs quarantine, not just detection. A contaminated entry should be isolated before it spreads.
 
-On the trust side, the Trust/Lies/Long Memories study [Li et al., 2026c] empirically confirms something the membrane assumed: LLM agents develop functional reputations through repeated interaction. Agents learn who is reliable and who is not. The membrane&amp;#039;s Layer 0 reputation system is not a theoretical add-on — it is something that happens naturally and should be measured, not invented.
+On the trust side, the Trust/Lies/Long Memories study [Li et al., 2026c] empirically confirms something the membrane assumed: LLM agents develop functional reputations through repeated interaction. Agents learn who is reliable and who is not. The membrane&apos;s Layer 0 reputation system is not a theoretical add-on — it is something that happens naturally and should be measured, not invented.
 
 ### 5.11 Latent Communication Advances
 
 Path 3 in our roadmap — latent communication via KV-cache sharing — was always the most speculative. OBF [Zhang et al., 2026f] makes it substantially less so.
 
-Optimal Bandwidth Filtering demonstrates 89% communication cost reduction by compressing and relaying latent representations instead of text. Agents can share what they *computed* rather than what they *said*. If the membrane&amp;#039;s wire format can carry latent relays alongside or instead of text CMBs, the token economics calculation changes dramatically.
+Optimal Bandwidth Filtering demonstrates 89% communication cost reduction by compressing and relaying latent representations instead of text. Agents can share what they *computed* rather than what they *said*. If the membrane&apos;s wire format can carry latent relays alongside or instead of text CMBs, the token economics calculation changes dramatically.
 
 It is still a research path, not a foundation. Cross-model compatibility and closed-source access remain blockers. But 89% cost reduction is not a number you ignore.
 
@@ -266,7 +266,7 @@ We catalogue eighteen implementation paths, each evaluated on novelty, feasibili
 
 ### 6.2 A Sixteen-Week Roadmap
 
-**Phase 1: Foundation, Discovery, Safety (Weeks 1-4).** Stand up the registry (Path 6, behavioural indexing per AgentSearchBench), implement the membrane as an MCP server (Path 2) using MMP&amp;#039;s primitives (Path 8), wire OpenTelemetry from day one (Path 11) with failure-attribution hooks (Path 16), constrain the wire format to a token budget (Path 14), and ship the safety net first: basic immune detection (Path 17) and governance circuit breakers (Path 18).
+**Phase 1: Foundation, Discovery, Safety (Weeks 1-4).** Stand up the registry (Path 6, behavioural indexing per AgentSearchBench), implement the membrane as an MCP server (Path 2) using MMP&apos;s primitives (Path 8), wire OpenTelemetry from day one (Path 11) with failure-attribution hooks (Path 16), constrain the wire format to a token budget (Path 14), and ship the safety net first: basic immune detection (Path 17) and governance circuit breakers (Path 18).
 
 **Phase 2: Shared State, Gating, Attribution (Weeks 5-10).** Layer CRDTs over the event log (Paths 1 + 10) with full provenance. Evaluate ZenBrain, Prism, and ContextWeaver as concrete Layer 2 candidates. Add gated permeability (Path 9) and reputation scoring (Path 6). Move to graph-structured memory with cognitive digestion (Path 7). Stand up PAC consensus with dissent surface (Path 20, derived from Path 18).
 
@@ -298,7 +298,7 @@ These are concrete; the prototype either meets them or the thesis is wrong about
 
 **Latent communication.** KV-cache sharing [DiffMAS] offers vastly higher bandwidth than token-level messaging but requires fine-tuning, cross-model compatibility, and access closed-source providers do not grant. We treat it as a research path, not a foundation.
 
-**Adaptive vs. specified governance.** Should the membrane&amp;#039;s L−1 rules be fixed (auditable, predictable) or adaptive (effective against novel failure modes)? Both have failure modes. We default to specified rules with adaptive *suggestions* surfaced for human review.
+**Adaptive vs. specified governance.** Should the membrane&apos;s L−1 rules be fixed (auditable, predictable) or adaptive (effective against novel failure modes)? Both have failure modes. We default to specified rules with adaptive *suggestions* surfaced for human review.
 
 **When *not* to use the membrane.** [Liu et al., 2026] is a useful corrective. Some tasks are best done by a single agent; some by ad-hoc pairs without persistent state. The membrane is a substrate, not an ideology.
 
@@ -320,183 +320,183 @@ Multi-agent AI does not lack agents. It lacks a *medium*. The synthetic membrane
 
 ## References
 </code></pre>
-<pre key={"code-2"} className="bg-slate-900 border border-slate-800 rounded-lg p-4 overflow-x-auto my-4"><code className="text-sm font-mono text-slate-300">@misc&amp;#123;anthropic2024mcp,
-  title        = &amp;#123;Model Context Protocol Specification&amp;#125;,
-  author       = &amp;#123;&amp;#123;Anthropic&amp;#125;&amp;#125;,
-  year         = &amp;#123;2024&amp;#125;,
-  howpublished = &amp;#123;\url&amp;#123;https://modelcontextprotocol.io&amp;#125;&amp;#125;
-&amp;#125;
+<pre key={"code-2"} className="bg-slate-900 border border-slate-800 rounded-lg p-4 overflow-x-auto my-4"><code className="text-sm font-mono text-slate-300">@misc&#123;anthropic2024mcp,
+  title        = &#123;Model Context Protocol Specification&#125;,
+  author       = &#123;&#123;Anthropic&#125;&#125;,
+  year         = &#123;2024&#125;,
+  howpublished = &#123;\url&#123;https://modelcontextprotocol.io&#125;&#125;
+&#125;
 
-@article&amp;#123;bai2026tokens,
-  title   = &amp;#123;How Do &amp;#123;AI&amp;#125; Agents Spend Your Money?
-             Analyzing and Predicting Token Consumption in Agentic Coding Tasks&amp;#125;,
-  author  = &amp;#123;Bai, Longju and Huang, Zhemin and Wang, Xingyao and Sun, Jiao and
-             Mihalcea, Rada and Brynjolfsson, Erik and Pentland, Alex and Pei, Jiaxin&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.22750&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;bai2026tokens,
+  title   = &#123;How Do &#123;AI&#125; Agents Spend Your Money?
+             Analyzing and Predicting Token Consumption in Agentic Coding Tasks&#125;,
+  author  = &#123;Bai, Longju and Huang, Zhemin and Wang, Xingyao and Sun, Jiao and
+             Mihalcea, Rada and Brynjolfsson, Erik and Pentland, Alex and Pei, Jiaxin&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.22750&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;chen2026agentsearch,
-  title   = &amp;#123;&amp;#123;AgentSearchBench&amp;#125;: Behavioural Discovery of &amp;#123;LLM&amp;#125; Agents&amp;#125;,
-  author  = &amp;#123;Chen, X. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;chen2026agentsearch,
+  title   = &#123;&#123;AgentSearchBench&#125;: Behavioural Discovery of &#123;LLM&#125; Agents&#125;,
+  author  = &#123;Chen, X. and others&#125;,
+  journal = &#123;arXiv preprint&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;chu2026worldmodels,
-  title   = &amp;#123;Agentic World Modeling: Foundations, Capabilities, Laws, and Beyond&amp;#125;,
-  author  = &amp;#123;Chu, Meng and Zhang, Xuan Billy and Lin, Kevin Qinghong and
-             Kong, Lingdong and Zhang, Jize and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.22748&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;chu2026worldmodels,
+  title   = &#123;Agentic World Modeling: Foundations, Capabilities, Laws, and Beyond&#125;,
+  author  = &#123;Chu, Meng and Zhang, Xuan Billy and Lin, Kevin Qinghong and
+             Kong, Lingdong and Zhang, Jize and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.22748&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;kumar2026traceelephant,
-  title   = &amp;#123;&amp;#123;TraceElephant&amp;#125;: Full-Trace Failure Attribution in Multi-Agent Systems&amp;#125;,
-  author  = &amp;#123;Kumar, R. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.22708&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;kumar2026traceelephant,
+  title   = &#123;&#123;TraceElephant&#125;: Full-Trace Failure Attribution in Multi-Agent Systems&#125;,
+  author  = &#123;Kumar, R. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.22708&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;li2026superminds,
-  title   = &amp;#123;Superminds Test: Actively Evaluating Collective Intelligence of
-             Agent Society via Probing Agents&amp;#125;,
-  author  = &amp;#123;Li, Xirui and Li, Ming and Xiao, Yunze and Wong, Ryan and Li, Dianqi
-             and Baldwin, Timothy and Zhou, Tianyi&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.22452&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;li2026superminds,
+  title   = &#123;Superminds Test: Actively Evaluating Collective Intelligence of
+             Agent Society via Probing Agents&#125;,
+  author  = &#123;Li, Xirui and Li, Ming and Xiao, Yunze and Wong, Ryan and Li, Dianqi
+             and Baldwin, Timothy and Zhou, Tianyi&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.22452&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;li2026consensusbias,
-  title   = &amp;#123;Multi-Agent Consensus Bias: Why Humans Over-Trust Agreeing Agents&amp;#125;,
-  author  = &amp;#123;Li, Y. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;li2026consensusbias,
+  title   = &#123;Multi-Agent Consensus Bias: Why Humans Over-Trust Agreeing Agents&#125;,
+  author  = &#123;Li, Y. and others&#125;,
+  journal = &#123;arXiv preprint&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;liu2026dm3nav,
-  title   = &amp;#123;&amp;#123;DM3Nav&amp;#125;: Decentralised Multi-Agent Navigation Without Shared State&amp;#125;,
-  author  = &amp;#123;Liu, J. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;liu2026dm3nav,
+  title   = &#123;&#123;DM3Nav&#125;: Decentralised Multi-Agent Navigation Without Shared State&#125;,
+  author  = &#123;Liu, J. and others&#125;,
+  journal = &#123;arXiv preprint&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;lopez2026chief,
-  title   = &amp;#123;&amp;#123;CHIEF&amp;#125;: Causal Hierarchies for Failure Attribution; and &amp;#123;DoVer&amp;#125;:
-             Active Debugging via Intervention&amp;#125;,
-  author  = &amp;#123;Lopez, M. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2602.23701, arXiv:2512.06749&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;lopez2026chief,
+  title   = &#123;&#123;CHIEF&#125;: Causal Hierarchies for Failure Attribution; and &#123;DoVer&#125;:
+             Active Debugging via Intervention&#125;,
+  author  = &#123;Lopez, M. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2602.23701, arXiv:2512.06749&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;patel2026pac,
-  title   = &amp;#123;&amp;#123;PAC&amp;#125;-Consensus: Probably Approximately Correct Consensus
-             for Multi-Agent Systems&amp;#125;,
-  author  = &amp;#123;Patel, S. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;patel2026pac,
+  title   = &#123;&#123;PAC&#125;-Consensus: Probably Approximately Correct Consensus
+             for Multi-Agent Systems&#125;,
+  author  = &#123;Patel, S. and others&#125;,
+  journal = &#123;arXiv preprint&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@inproceedings&amp;#123;shapiro2011crdt,
-  title     = &amp;#123;Conflict-Free Replicated Data Types&amp;#125;,
-  author    = &amp;#123;Shapiro, Marc and Pregui&amp;#123;\c&amp;#123;c&amp;#125;&amp;#125;a, Nuno and Baquero, Carlos and
-               Zawirski, Marek&amp;#125;,
-  booktitle = &amp;#123;Proc. 13th Int. Symp. on Stabilization, Safety, and Security
-               of Distributed Systems (SSS)&amp;#125;,
-  year      = &amp;#123;2011&amp;#125;
-&amp;#125;
+@inproceedings&#123;shapiro2011crdt,
+  title     = &#123;Conflict-Free Replicated Data Types&#125;,
+  author    = &#123;Shapiro, Marc and Pregui&#123;\c&#123;c&#125;&#125;a, Nuno and Baquero, Carlos and
+               Zawirski, Marek&#125;,
+  booktitle = &#123;Proc. 13th Int. Symp. on Stabilization, Safety, and Security
+               of Distributed Systems (SSS)&#125;,
+  year      = &#123;2011&#125;
+&#125;
 
-@article&amp;#123;sun2026whoandwhen,
-  title   = &amp;#123;Who and When: Benchmarking Failure Attribution in Multi-Agent Systems&amp;#125;,
-  author  = &amp;#123;Sun, Y. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2505.00212&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;sun2026whoandwhen,
+  title   = &#123;Who and When: Benchmarking Failure Attribution in Multi-Agent Systems&#125;,
+  author  = &#123;Sun, Y. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2505.00212&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;wang2026gated,
-  title   = &amp;#123;Gated Coordination: Default-Deny Communication for &amp;#123;LLM&amp;#125; Agent Swarms&amp;#125;,
-  author  = &amp;#123;Wang, H. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;wang2026gated,
+  title   = &#123;Gated Coordination: Default-Deny Communication for &#123;LLM&#125; Agent Swarms&#125;,
+  author  = &#123;Wang, H. and others&#125;,
+  journal = &#123;arXiv preprint&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;xu2026mmp,
-  title   = &amp;#123;Mesh Memory Protocol: A Semantic Infrastructure for Cross-Session
-             Cognitive Collaboration Among &amp;#123;LLM&amp;#125; Agents&amp;#125;,
-  author  = &amp;#123;Xu, Hongwei&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.19540&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;xu2026mmp,
+  title   = &#123;Mesh Memory Protocol: A Semantic Infrastructure for Cross-Session
+             Cognitive Collaboration Among &#123;LLM&#125; Agents&#125;,
+  author  = &#123;Xu, Hongwei&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.19540&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;zhang2026adversarial,
-  title   = &amp;#123;Adversarial Co-Evolution in Multi-Agent &amp;#123;LLM&amp;#125; Systems&amp;#125;,
-  author  = &amp;#123;Zhang, K. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;zhang2026adversarial,
+  title   = &#123;Adversarial Co-Evolution in Multi-Agent &#123;LLM&#125; Systems&#125;,
+  author  = &#123;Zhang, K. and others&#125;,
+  journal = &#123;arXiv preprint&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;zhang2026zenbrain,
-  title   = &amp;#123;ZenBrain: A Neuroscience-Inspired 7-Layer Memory Architecture for Autonomous &amp;#123;AI&amp;#125; Systems&amp;#125;,
-  author  = &amp;#123;Zhang, M. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.23878&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;zhang2026zenbrain,
+  title   = &#123;ZenBrain: A Neuroscience-Inspired 7-Layer Memory Architecture for Autonomous &#123;AI&#125; Systems&#125;,
+  author  = &#123;Zhang, M. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.23878&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;kim2026prism,
-  title   = &amp;#123;Prism: Evolutionary Memory Substrate for Multi-Agent Systems&amp;#125;,
-  author  = &amp;#123;Kim, J. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.19795&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;kim2026prism,
+  title   = &#123;Prism: Evolutionary Memory Substrate for Multi-Agent Systems&#125;,
+  author  = &#123;Kim, J. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.19795&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;patel2026metabolism,
-  title   = &amp;#123;Memory as Metabolism: TRIAGE, DECAY, CONSOLIDATE, AUDIT for Living Shared State&amp;#125;,
-  author  = &amp;#123;Patel, S. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.12034&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;patel2026metabolism,
+  title   = &#123;Memory as Metabolism: TRIAGE, DECAY, CONSOLIDATE, AUDIT for Living Shared State&#125;,
+  author  = &#123;Patel, S. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.12034&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;chen2026compression,
-  title   = &amp;#123;The Experience Compression Spectrum: Memory, Skills, and Rules as Compression Levels&amp;#125;,
-  author  = &amp;#123;Chen, X. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.15877&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;chen2026compression,
+  title   = &#123;The Experience Compression Spectrum: Memory, Skills, and Rules as Compression Levels&#125;,
+  author  = &#123;Chen, X. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.15877&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;wang2026memevobench,
-  title   = &amp;#123;MemEvoBench: Memory Safety Benchmark for &amp;#123;LLM&amp;#125; Agent Systems&amp;#125;,
-  author  = &amp;#123;Wang, Y. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.15774&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;wang2026memevobench,
+  title   = &#123;MemEvoBench: Memory Safety Benchmark for &#123;LLM&#125; Agent Systems&#125;,
+  author  = &#123;Wang, Y. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.15774&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;liu2026gammaf,
-  title   = &amp;#123;GAMMAF: Graph-Based Anomaly Detection for &amp;#123;LLM&amp;#125; Multi-Agent Systems&amp;#125;,
-  author  = &amp;#123;Liu, J. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.24477&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;liu2026gammaf,
+  title   = &#123;GAMMAF: Graph-Based Anomaly Detection for &#123;LLM&#125; Multi-Agent Systems&#125;,
+  author  = &#123;Liu, J. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.24477&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;zhang2026spore,
-  title   = &amp;#123;Spore Attack: Memory Poisoning in Shared-State Multi-Agent Systems&amp;#125;,
-  author  = &amp;#123;Zhang, K. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.23711&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;zhang2026spore,
+  title   = &#123;Spore Attack: Memory Poisoning in Shared-State Multi-Agent Systems&#125;,
+  author  = &#123;Zhang, K. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.23711&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;li2026trust,
-  title   = &amp;#123;Trust, Lies, and Long Memories: Functional Reputation in &amp;#123;LLM&amp;#125; Agent Societies&amp;#125;,
-  author  = &amp;#123;Li, X. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.20582&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;
+@article&#123;li2026trust,
+  title   = &#123;Trust, Lies, and Long Memories: Functional Reputation in &#123;LLM&#125; Agent Societies&#125;,
+  author  = &#123;Li, X. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.20582&#125;,
+  year    = &#123;2026&#125;
+&#125;
 
-@article&amp;#123;zhang2026obf,
-  title   = &amp;#123;OBF: Optimal Bandwidth Filtering for Latent Relay Compression&amp;#125;,
-  author  = &amp;#123;Zhang, R. and others&amp;#125;,
-  journal = &amp;#123;arXiv preprint arXiv:2604.13349&amp;#125;,
-  year    = &amp;#123;2026&amp;#125;
-&amp;#125;</code></pre>
+@article&#123;zhang2026obf,
+  title   = &#123;OBF: Optimal Bandwidth Filtering for Latent Relay Compression&#125;,
+  author  = &#123;Zhang, R. and others&#125;,
+  journal = &#123;arXiv preprint arXiv:2604.13349&#125;,
+  year    = &#123;2026&#125;
+&#125;</code></pre>
 <pre key={"code-3"} className="bg-slate-900 border border-slate-800 rounded-lg p-4 overflow-x-auto my-4"><code className="text-sm font-mono text-slate-300"></code></pre>
       </div>
     </main>
