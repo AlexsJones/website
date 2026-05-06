@@ -21,6 +21,9 @@ function parseMarkdownToJSX(markdown) {
   var codeBlockIndex = 0;
   var paragraphIndex = 0;
   var hrIndex = 0;
+  var inTable = false;
+  var tableRows = [];
+  var tableIndex = 0;
   
   function closeList() {
     if (inList && listItems.length > 0) {
@@ -44,16 +47,41 @@ function parseMarkdownToJSX(markdown) {
       codeBlockIndex++;
     }
   }
+
+  function closeTable() {
+    if (inTable && tableRows.length > 0) {
+      var isHeader = false;
+      var isSeparator = false;
+      var html = '<table className="w-full border-collapse my-4"><tbody>';
+      for (var r = 0; r < tableRows.length; r++) {
+        var row = tableRows[r];
+        var isSep = row.split('|').filter(function(c) { return c.trim().match(/^-+$/); }).length > 0;
+        if (isSep) { isSeparator = true; continue; }
+        var cells = row.split('|').filter(function(c) { return c.trim() !== ''; });
+        var tag = (isHeader || (!isHeader && !isSeparator && r === 0)) ? 'th' : 'td';
+        var cls = (isHeader || (!isHeader && !isSeparator && r === 0))
+          ? 'className="border border-slate-700 px-3 py-2 text-left font-semibold text-slate-100"'
+          : 'className="border border-slate-700 px-3 py-2 text-left text-slate-300"';
+        html += '<tr>';
+        for (var c = 0; c < cells.length; c++) {
+          html += '<' + tag + ' ' + cls + '>' + escapeJSX(cells[c].trim()) + '</' + tag + '>';
+        }
+        html += '</tr>';
+        if (!isHeader) isHeader = true;
+      }
+      html += '</tbody></table>';
+      elements.push(html);
+      tableRows = [];
+      inTable = false;
+      tableIndex++;
+    }
+  }
   
   function escapeJSX(str) {
-    return str
-      .replace(/'/g, '&#039;')
-      .replace(/"/g, '&quot;')
-      .replace(/{/g, '&#123;')
-      .replace(/}/g, '&#125;')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    return str.replace(/[&'"{}<>]/g, function(m) {
+      var map = {'&':'&amp;',"'":'&#039;','"':'&quot;','{':'&#123;','}':'&#125;','<':'&lt;','>':'&gt;'};
+      return map[m];
+    });
   }
   
   for (var i = 0; i < lines.length; i++) {
@@ -110,8 +138,14 @@ function parseMarkdownToJSX(markdown) {
       elements.push('<hr key={"hr-' + hrIndex + '"} className="border-slate-800 my-8" />');
     } else if (line.trim() === '') {
       closeList();
+      closeTable();
+    } else if (line.match(/^\|/) && line.match(/\|$/)) {
+      closeList();
+      inTable = true;
+      tableRows.push(line);
     } else {
       closeList();
+      closeTable();
       paragraphIndex++;
       var processed = line.replace(/`(.+?)`/g, function(m, p1) { return '<<INLINE_CODE>>' + p1 + '<</INLINE_CODE>>'; });
       processed = escapeJSX(processed);
@@ -119,6 +153,7 @@ function parseMarkdownToJSX(markdown) {
       processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       processed = processed.replace(/\*(.+?)\*/g, '<em>$1</em>');
       processed = processed.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" className="text-emerald-400 hover:text-emerald-300">$1</a>');
+      processed = processed.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" className="w-full rounded-lg my-4" />');
       
       elements.push(
         '<p key={"p-' + paragraphIndex + '"} className="text-slate-300 leading-relaxed mb-4">' +
