@@ -18,38 +18,6 @@ export const metadata = {
   },
 };
 
-const ARCHITECTURE_DIAGRAM = `+---------------------------------------------------------------+
-||                     L-1: GOVERNANCE                           ||
-||      circuit breakers | human override | dissent surface      ||
-||         value-conflict detection | accountability log         ||
-+---------------------------------------------------------------+
-||                     L0:  DISCOVERY / REGISTRY                 ||
-||     behavioural index | execution traces | identity / auth    ||
-||              capability vectors | reputation                  ||
-+---------------------------------------------------------------+
-||                     L1:  PERMEABILITY                         ||
-||       expose / subscribe | field-level filters                ||
-||       gated permeability (default-deny, cost-benefit)         ||
-+---------------------------------------------------------------+
-||                     L2:  SHARED MEDIUM                        ||
-||      CRDT document store + immutable event log                ||
-||      structured claims | lineage hashes | semantic index      ||
-+---------------------------------------------------------------+
-||                     L3:  COORDINATION                         ||
-||     quorum sensing | task claim/release | swarm formation     ||
-||     consensus with dissent | multi-mode coordination          ||
-+---------------------------------------------------------------+
-||              IMMUNE / OBSERVABILITY (cross-cutting)           ||
-||   anomaly detection | cytokine gossip | OTel traces           ||
-||         memory cells | failure attribution graphs             ||
-+---------------------------------------------------------------+
-                            ^
-                            |  (agents speak MCP / A2A / native)
-                +-------+   +   +-------+   +-------+
-                | Agent |       | Agent |   | Agent |
-                |   A   |       |   B   |   |   C   |
-                +-------+       +-------+   +-------+`;
-
 export default function StickyNoteProblemPage() {
   return (
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
@@ -327,16 +295,6 @@ export default function StickyNoteProblemPage() {
         </p>
 
         <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Six-layer synthetic membrane architecture: Governance, Discovery, Permeability, Shared Medium, Coordination, and Immune layers between agents" />
-
-        <div className="rounded-lg border border-slate-800 bg-[#010409] overflow-hidden my-8">
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900/50">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-2 text-xs text-slate-500 font-mono">membrane architecture</span>
-          </div>
-          <pre className="p-4 text-[11px] leading-tight text-emerald-300/90 font-mono overflow-x-auto whitespace-pre">{ARCHITECTURE_DIAGRAM}</pre>
-        </div>
 
         <p>Here&apos;s what each layer does, in plain terms:</p>
 
