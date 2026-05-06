@@ -297,9 +297,9 @@ function PageResearch() {
   );
 }
 
-export default function GeocitiesMode({ onExit }: { onExit: () => void }) {
+export default function GeocitiesMode({ onExit, initialPage = "home" }: { onExit: () => void; initialPage?: GeoPage }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState<GeoPage>("home");
+  const [page, setPage] = useState<GeoPage>(initialPage);
 
   // Sparkle cursor trail
   useEffect(() => {
