@@ -1,0 +1,3 @@
+[submodule "content/research"]
+	path = content/research
+	url = https://github.com/AlexsJones/research.git
