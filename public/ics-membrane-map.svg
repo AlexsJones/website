@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="'SF Mono', 'Fira Mono', 'IBM Plex Mono', Menlo, monospace">
+  <rect width="720" height="400" fill="#0d1117" rx="8"/>
+  <text x="360" y="32" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="bold">ICS/NIMS to Synthetic Membrane Mapping</text>
+  <text x="360" y="50" text-anchor="middle" fill="#8b949e" font-size="10">50 years of human coordination doctrine mapped to agent architecture</text>
+
+  <!-- Column headers -->
+  <text x="180" y="82" text-anchor="middle" fill="#58a6ff" font-size="12" font-weight="bold">Incident Command System</text>
+  <text x="540" y="82" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="bold">Synthetic Membrane</text>
+
+  <!-- Divider -->
+  <line x1="360" y1="70" x2="360" y2="380" stroke="#30363d" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Row 1 -->
+  <g transform="translate(0, 100)">
+    <rect x="30" y="0" width="300" height="44" rx="6" fill="#58a6ff" opacity="0.1" stroke="#58a6ff" stroke-opacity="0.3"/>
+    <text x="180" y="18" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="bold">Shared Situational Awareness</text>
+    <text x="180" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Common operating picture for all responders</text>
+
+    <line x1="330" y1="22" x2="390" y2="22" stroke="#484f58" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <rect x="390" y="0" width="300" height="44" rx="6" fill="#3fb950" opacity="0.1" stroke="#3fb950" stroke-opacity="0.3"/>
+    <text x="540" y="18" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">L2: Shared Medium</text>
+    <text x="540" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Event log + CRDTs + semantic store</text>
+  </g>
+
+  <!-- Row 2 -->
+  <g transform="translate(0, 160)">
+    <rect x="30" y="0" width="300" height="44" rx="6" fill="#58a6ff" opacity="0.1" stroke="#58a6ff" stroke-opacity="0.3"/>
+    <text x="180" y="18" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="bold">Structured Handoffs</text>
+    <text x="180" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Transfer-of-command briefings</text>
+
+    <line x1="330" y1="22" x2="390" y2="22" stroke="#484f58" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <rect x="390" y="0" width="300" height="44" rx="6" fill="#3fb950" opacity="0.1" stroke="#3fb950" stroke-opacity="0.3"/>
+    <text x="540" y="18" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">L1: Permeability</text>
+    <text x="540" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Field-level selective sharing, default-deny</text>
+  </g>
+
+  <!-- Row 3 -->
+  <g transform="translate(0, 220)">
+    <rect x="30" y="0" width="300" height="44" rx="6" fill="#58a6ff" opacity="0.1" stroke="#58a6ff" stroke-opacity="0.3"/>
+    <text x="180" y="18" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="bold">Role Boundaries</text>
+    <text x="180" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Roles assigned by demonstrated capability</text>
+
+    <line x1="330" y1="22" x2="390" y2="22" stroke="#484f58" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <rect x="390" y="0" width="300" height="44" rx="6" fill="#3fb950" opacity="0.1" stroke="#3fb950" stroke-opacity="0.3"/>
+    <text x="540" y="18" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">L0: Discovery + L-1: Governance</text>
+    <text x="540" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Behavioural registry + authority boundaries</text>
+  </g>
+
+  <!-- Row 4 -->
+  <g transform="translate(0, 280)">
+    <rect x="30" y="0" width="300" height="44" rx="6" fill="#58a6ff" opacity="0.1" stroke="#58a6ff" stroke-opacity="0.3"/>
+    <text x="180" y="18" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="bold">Escalation Protocols</text>
+    <text x="180" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Circuit breakers, human-in-the-loop</text>
+
+    <line x1="330" y1="22" x2="390" y2="22" stroke="#484f58" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <rect x="390" y="0" width="300" height="44" rx="6" fill="#3fb950" opacity="0.1" stroke="#3fb950" stroke-opacity="0.3"/>
+    <text x="540" y="18" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">L-1: Governance + Immune</text>
+    <text x="540" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Circuit breakers + anomaly detection</text>
+  </g>
+
+  <!-- Row 5 -->
+  <g transform="translate(0, 340)">
+    <rect x="30" y="0" width="300" height="44" rx="6" fill="#58a6ff" opacity="0.1" stroke="#58a6ff" stroke-opacity="0.3"/>
+    <text x="180" y="18" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="bold">Incident Action Plans</text>
+    <text x="180" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Structured objectives, assignments, timelines</text>
+
+    <line x1="330" y1="22" x2="390" y2="22" stroke="#484f58" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <rect x="390" y="0" width="300" height="44" rx="6" fill="#3fb950" opacity="0.1" stroke="#3fb950" stroke-opacity="0.3"/>
+    <text x="540" y="18" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="bold">L3: Coordination</text>
+    <text x="540" y="34" text-anchor="middle" fill="#8b949e" font-size="9">Task broadcast, claim, quorum sensing</text>
+  </g>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#484f58"/>
+    </marker>
+  </defs>
+</svg>

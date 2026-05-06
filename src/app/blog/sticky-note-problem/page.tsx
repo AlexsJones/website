@@ -238,6 +238,8 @@ export default function StickyNoteProblemPage() {
           essential is lost in translation.
         </p>
 
+        <img src="/mast-failures.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="MAST study failure breakdown: 13.2% reasoning-action mismatch, 7.4% task derailment, 6.8% wrong-assumption, 1.9% ignoring agents, 0.85% information withholding" />
+
         <p>This is the coordination gap, quantified.</p>
 
         <p>
@@ -323,6 +325,8 @@ export default function StickyNoteProblemPage() {
           six conceptual layers that together provide what biology provides
           naturally: a shared, permeable boundary.
         </p>
+
+        <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Six-layer synthetic membrane architecture: Governance, Discovery, Permeability, Shared Medium, Coordination, and Immune layers between agents" />
 
         <div className="rounded-lg border border-slate-800 bg-[#010409] overflow-hidden my-8">
           <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900/50">
@@ -458,6 +462,8 @@ export default function StickyNoteProblemPage() {
           objectives, agents claim tasks based on capability, progress is
           tracked in the shared medium.
         </p>
+
+        <img src="/ics-membrane-map.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Mapping from ICS/NIMS concepts to Synthetic Membrane layers: Shared Situational Awareness to L2, Structured Handoffs to L1, Role Boundaries to L0/L-1, Escalation to Governance/Immune, Incident Action Plans to L3" />
 
         <p>
           The parallel isn&apos;t coincidental. ICS and NIMS emerged from the
