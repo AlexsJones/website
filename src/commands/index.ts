@@ -273,7 +273,7 @@ MAN(1)                        February 2026                       MAN(1)`;
   pine: `STRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTRSTR\nstrstrstrstrstrstrstrstrstrstrstrstrstrstr\n\nstrstrstrstrstrstrstrstr  strstrstr   strstrstrstrstrstrstrstrstrstr  strstrstr\n  strstrstrstrstrstrstr\n strstrstr  strstrstrstrstrstrstrstrstr   strstrstr   strstrstr   strstrstr\n\n   [strstrstrstrstrstrstr]     strstrstrstrstrstrstrstrstrstr`,
   elm: `strstrstrstrstr: strstrstrstrstrstr. strstrstrstrstrstr pine.`,
   netscape: `Error: Netscape Navigator 4.0 is not installed.\nTry: lynx, links, or w3m instead.\n\nJust kidding. This IS the website.`,
-  lynx: `\nLynx Version 2.8.9 (28 Apr 1999)\n\n                         axjns.dev\n\n   Alex Jones - Principal Engineer @ AWS\n\n   [1] about\n   [2] research (NEW!)\n   [3] speaking\n   [4] cv\n   [5] blog\n\n   Arrow keys: Up and Down to move. Right to follow a link.\n   Press 'q' to quit.`,
+  lynx: `\nLynx Version 2.8.9 (28 Apr 1999)\n\n                         axjns.dev\n\n   Alex Jones - Principal Engineer @ AWS\n\n   [1] about\n   [2] blog (NEW!)\n   [3] research\n   [4] speaking\n   [5] cv\n\n   Arrow keys: Up and Down to move. Right to follow a link.\n   Press 'q' to quit.`,
   aol: "You've got mail!\n\n...just kidding. This isn't 1998.\n\nBut while you're here, try: guestbook sign <name> <message>",
   'y2k': "Y2K STATUS: All systems nominal.\nDate overflow: SURVIVED\nMillennium bug: SQUASHED\nParty: STILL GOING",
   dialup: `ATDT 5551337\nCONNECT 56000\n\n~~ kkssshhhhhhhhh ~~\n~~ BONG BONG ~~\n~~ krrrrrrr ~~\n~~ ksssssshhhhhh ~~\n~~ EEEE-URRRRR ~~\n~~ kssssshhhh ~~\n\nCONNECTED TO axjns.dev AT 56Kbps\n\nWelcome! You are already here.`,

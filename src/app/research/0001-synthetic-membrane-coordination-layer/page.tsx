@@ -1,30 +1,19 @@
-import Link from "next/link";
-/* eslint-disable react/no-unescaped-entities */
-
 export const metadata = {
   title: "The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems — axjns.dev",
-  description: "Research content from the synthetic membrane project.",
+  description: "Research paper by Alex Jones.",
   openGraph: {
     title: "The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems",
-    description: "Research content from the synthetic membrane project.",
+    description: "Research paper by Alex Jones.",
     type: "article",
   },
 };
 
 export default function ResearchPage() {
   return (
-    <div className="min-h-screen bg-[#0d1117] text-slate-200">
-      <header className="border-b border-slate-800/80 bg-[#0d1117]/95 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between text-sm font-mono">
-          <Link href="/" className="text-emerald-400 hover:text-emerald-300 transition">← axjns.dev</Link>
-          <span className="text-slate-500">Synthetic Membrane</span>
-        </div>
-      </header>
-      <main className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-4xl font-bold text-slate-100 mb-4">The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems</h1>
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">Paper · Synthetic Membrane</div>
-        <div className="prose prose-invert prose-slate max-w-none">
-          <h1 key={"h1-1"} className="text-3xl font-bold text-slate-100 mb-4 mt-8">The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems</h1>
+    <main className="max-w-3xl mx-auto px-6 py-12">
+      <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">Paper</div>
+      <div className="prose prose-invert prose-slate max-w-none">
+        <h1 key={"h1-1"} className="text-3xl font-bold text-slate-100 mb-4 mt-8">The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems</h1>
 <p key={"p-1"} className="text-slate-300 leading-relaxed mb-4"><strong>Author:</strong> AlexsJones</p>
 <p key={"p-2"} className="text-slate-300 leading-relaxed mb-4"><strong>Date:</strong> May 2026</p>
 <p key={"p-3"} className="text-slate-300 leading-relaxed mb-4"><strong>Version:</strong> 2.0 — Expanded position paper</p>
@@ -837,8 +826,7 @@ Three observations from this mapping:
 
 3. **Common terminology is upstream of message passing.** A2A and ANP standardise the *envelope*; ICS standardises the *vocabulary*. Without shared terminology, message passing protocols just transmit ambiguity faster. MAST&amp;#039;s &amp;quot;wrong assumption&amp;quot; and &amp;quot;info withholding&amp;quot; failure modes are essentially terminology failures — agents using the same words to mean different things.
 </code></pre>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

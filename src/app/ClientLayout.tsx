@@ -41,7 +41,7 @@ function BlinkingCursor({ theme }: { theme: string }) {
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  if (pathname.startsWith("/research")) {
+  if (pathname.startsWith("/research") || pathname.startsWith("/blog")) {
     return (
       <div className="text-slate-200 min-h-screen">
         {children}

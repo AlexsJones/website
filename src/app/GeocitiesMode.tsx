@@ -187,27 +187,38 @@ function PageSpeaking() {
   );
 }
 
-function PageBlog({ onNavigate }: { onNavigate: (p: GeoPage) => void }) {
+function PageBlog() {
   return (
     <GeoSection title="📝 My Blog!!!">
-      <div style={{ border: "2px solid #00ff00", padding: "12px", background: "rgba(0,128,0,0.1)" }}>
-        <div style={{ color: "#808080", fontSize: "12px" }}>[2026-04]</div>
+      <div style={{ border: "2px solid #00ff00", padding: "12px", marginBottom: "12px", background: "rgba(0,128,0,0.1)" }}>
+        <div style={{ color: "#808080", fontSize: "12px" }}>[May 2026]</div>
         <div style={{ color: "#00ff00", fontWeight: "bold", fontSize: "16px", marginTop: "4px" }}>
-          We&apos;ve been building AI agents wrong.
+          The Sticky-Note Problem: Why Multi-Agent AI Is Broken at the Coordination Layer
         </div>
         <p style={{ marginTop: "8px" }}>
-          The MoltBook result, cognitive digestion, and why
-          we need a synthetic membrane between agents.
+          Why every multi-agent system built today is passing sticky notes
+          between people in different rooms.
         </p>
         <p style={{ marginTop: "8px" }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); onNavigate("research"); }} style={{ color: "#00ffff", fontWeight: "bold" }}>
+          <a href="/blog/generated/0001-sticky-note-problem" style={{ color: "#00ffff", fontWeight: "bold" }}>
             ➜ READ IT ➜
           </a>
         </p>
       </div>
-      <div style={{ textAlign: "center", marginTop: "20px", color: "#808080" }}>
-        <div style={{ fontSize: "40px" }}>🚧</div>
-        <div>More posts coming. Stay tuned!!!</div>
+      <div style={{ border: "2px solid #00ff00", padding: "12px", background: "rgba(0,128,0,0.1)" }}>
+        <div style={{ color: "#808080", fontSize: "12px" }}>[2026]</div>
+        <div style={{ color: "#00ff00", fontWeight: "bold", fontSize: "16px", marginTop: "4px" }}>
+          We&apos;ve been building AI agents wrong.
+        </div>
+        <p style={{ marginTop: "8px" }}>
+          Two million agents, zero collective intelligence. The MoltBook result
+          and why we need a synthetic membrane between agents.
+        </p>
+        <p style={{ marginTop: "8px" }}>
+          <a href="/blog/generated/blog-post" style={{ color: "#00ffff", fontWeight: "bold" }}>
+            ➜ READ IT ➜
+          </a>
+        </p>
       </div>
     </GeoSection>
   );
@@ -216,31 +227,37 @@ function PageBlog({ onNavigate }: { onNavigate: (p: GeoPage) => void }) {
 function PageResearch() {
   return (
     <GeoSection title="🔬 Research!!!">
-      <div style={{ border: "2px solid #00ff00", padding: "12px", marginBottom: "15px", background: "rgba(0,128,0,0.1)" }}>
-        <div style={{ color: "#00ff00", fontWeight: "bold", fontSize: "18px" }}>
-          We&apos;ve been building AI agents wrong.{" "}
-          <span className="geo-blink" style={{ color: "#ff0000", fontSize: "14px" }}>HOT!</span>
+      <div style={{ color: "#ffff00", fontWeight: "bold", fontSize: "16px", marginBottom: "12px" }}>📄 Papers</div>
+
+      <div style={{ border: "2px solid #00ff00", padding: "12px", marginBottom: "12px", background: "rgba(0,128,0,0.1)" }}>
+        <div style={{ color: "#00ff00", fontWeight: "bold", fontSize: "16px" }}>
+          The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems{" "}
+          <span className="geo-blink" style={{ color: "#ff0000", fontSize: "14px" }}>NEW!</span>
         </div>
-        <div style={{ color: "#808080", fontSize: "12px", marginTop: "4px" }}>Synthetic Membrane · April 2026</div>
-        <p style={{ marginTop: "10px" }}>
+        <div style={{ color: "#808080", fontSize: "12px", marginTop: "4px" }}>May 2026 · Expanded position paper</div>
+        <p style={{ marginTop: "8px" }}>
+          Six-layer architecture for multi-agent coordination. Default-deny permeability,
+          CRDTs, quorum sensing, and an immune layer.
+        </p>
+        <div style={{ marginTop: "10px" }}>
+          <a href="/research/0001-synthetic-membrane-coordination-layer" style={{ color: "#00ffff", fontWeight: "bold", border: "2px outset #00ffff", padding: "4px 12px", background: "rgba(0,255,255,0.1)" }}>
+            📖 Read Paper
+          </a>
+        </div>
+      </div>
+
+      <div style={{ border: "2px solid #00ff00", padding: "12px", marginBottom: "15px", background: "rgba(0,128,0,0.1)" }}>
+        <div style={{ color: "#00ff00", fontWeight: "bold", fontSize: "16px" }}>
+          The Synthetic Membrane: A Shared Permeable Boundary for Multi-Agent AI Systems
+        </div>
+        <div style={{ color: "#808080", fontSize: "12px", marginTop: "4px" }}>April 2026 · Original position paper</div>
+        <p style={{ marginTop: "8px" }}>
           Two million LLM agents on MoltBook produced <span style={{ color: "#ff0000", fontWeight: "bold" }}>ZERO</span> collective intelligence.
           The fix is not bigger models. It&apos;s <span style={{ color: "#ffff00" }}>structure</span> between them.
         </p>
-        <p style={{ marginTop: "8px" }}>
-          Three layers: <span style={{ color: "#00ffff" }}>Permeability</span> (field-level selective sharing),{" "}
-          <span style={{ color: "#ff00ff" }}>Shared Medium</span> (event log + CRDTs),{" "}
-          <span style={{ color: "#ffff00" }}>Coordination</span> (quorum sensing, task claiming).
-        </p>
-        <p style={{ marginTop: "8px" }}>
-          Being built inside <a href="https://github.com/sympozium-ai/sympozium" target="_blank" rel="noopener noreferrer" style={{ color: "#00ffff", fontWeight: "bold" }}>Sympozium</a>,
-          a Kubernetes-native agent orchestrator.
-        </p>
-        <div style={{ marginTop: "12px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        <div style={{ marginTop: "10px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <a href="/research/synthetic-membrane" style={{ color: "#00ffff", fontWeight: "bold", border: "2px outset #00ffff", padding: "4px 12px", background: "rgba(0,255,255,0.1)" }}>
-            📖 Read the Article
-          </a>
-          <a href="/research/synthetic-membrane/paper" style={{ color: "#ffff00", fontWeight: "bold", border: "2px outset #ffff00", padding: "4px 12px", background: "rgba(255,255,0,0.1)" }}>
-            📄 Full Paper
+            📖 Read Paper
           </a>
           <a href="https://github.com/AlexsJones/research" target="_blank" rel="noopener noreferrer" style={{ color: "#00ff00", fontWeight: "bold", border: "2px outset #00ff00", padding: "4px 12px", background: "rgba(0,255,0,0.1)" }}>
             🐙 GitHub Repo
@@ -327,7 +344,7 @@ export default function GeocitiesMode({ onExit }: { onExit: () => void }) {
       case "about": return <PageAbout />;
       case "cv": return <PageCV />;
       case "speaking": return <PageSpeaking />;
-      case "blog": return <PageBlog onNavigate={setPage} />;
+      case "blog": return <PageBlog />;
       case "research": return <PageResearch />;
     }
   }
