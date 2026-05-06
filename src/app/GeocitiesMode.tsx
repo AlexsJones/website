@@ -200,13 +200,13 @@ function PageBlog() {
           between people in different rooms.
         </p>
         <p style={{ marginTop: "8px" }}>
-          <a href="/blog/generated/0001-sticky-note-problem" style={{ color: "#00ffff", fontWeight: "bold" }}>
+          <a href="/blog/sticky-note-problem" style={{ color: "#00ffff", fontWeight: "bold" }}>
             ➜ READ IT ➜
           </a>
         </p>
       </div>
       <div style={{ border: "2px solid #00ff00", padding: "12px", background: "rgba(0,128,0,0.1)" }}>
-        <div style={{ color: "#808080", fontSize: "12px" }}>[2026]</div>
+        <div style={{ color: "#808080", fontSize: "12px" }}>[April 2026]</div>
         <div style={{ color: "#00ff00", fontWeight: "bold", fontSize: "16px", marginTop: "4px" }}>
           We&apos;ve been building AI agents wrong.
         </div>
@@ -215,7 +215,7 @@ function PageBlog() {
           and why we need a synthetic membrane between agents.
         </p>
         <p style={{ marginTop: "8px" }}>
-          <a href="/blog/generated/blog-post" style={{ color: "#00ffff", fontWeight: "bold" }}>
+          <a href="/blog/synthetic-membrane" style={{ color: "#00ffff", fontWeight: "bold" }}>
             ➜ READ IT ➜
           </a>
         </p>
