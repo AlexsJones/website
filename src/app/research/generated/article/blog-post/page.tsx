@@ -46,110 +46,48 @@ export default function ResearchPage() {
 <p key={"p-17"} className="text-slate-300 leading-relaxed mb-4">The difference is the membrane.</p>
 <h2 key={"h2-4"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">What the membrane actually is</h2>
 <p key={"p-18"} className="text-slate-300 leading-relaxed mb-4">Let me try to be concrete. The thing I&#039;ve been calling a &quot;synthetic membrane&quot; is a shared, permeable substrate between agents, with three layers. None of these layers are individually new — that&#039;s actually the point. The interesting work is in the interface between them.</p>
-<pre key={"code-0"} className="bg-slate-900 border border-slate-800 rounded-lg p-4 overflow-x-auto my-4"><code className="text-sm font-mono text-slate-300">                         ┌─────────────────────────────────────────┐
-                         │       LAYER -1: GOVERNANCE              │
-                         │  circuit breakers · human override      │
-                         │  value-conflict detection · audit       │
-                         └─────────────────────────────────────────┘
-                                            ▲
-                                            │
-                         ┌─────────────────────────────────────────┐
-                         │       LAYER  0: DISCOVERY                │
-                         │  behavioral indexing · identity verify  │
-                         │  capability matching · reputation        │
-                         └─────────────────────────────────────────┘
-                                            ▲
-                                            │
-   ┌──────────┐     ┌────────────────────────────────────────┐     ┌──────────┐
-   │  AGENT A │ ◀─▶ │   LAYER 3: COORDINATION (swarm)        │ ◀─▶ │  AGENT B │
-   │ ┌──────┐ │     │   quorum sensing · task claiming       │     │ ┌──────┐ │
-   │ │Local │ │     │   dynamic grouping · conflict resolve  │     │ │Local │ │
-   │ │ ctx  │ │     ├────────────────────────────────────────┤     │ │ ctx  │ │
-   │ └──────┘ │     │   LAYER 2: SHARED MEDIUM (memory)      │     │ └──────┘ │
-   │   gate   │ ◀─▶ │   event log · CRDTs · semantic store   │ ◀─▶ │   gate   │
-   │ channels │     │   provenance · time-decay · replay     │     │ channels │
-   │          │     ├────────────────────────────────────────┤     │          │
-   │  remix   │ ◀─▶ │   LAYER 1: PERMEABILITY (protocol)     │ ◀─▶ │  remix   │
-   │  digest  │     │   field-level selectivity · SVAF       │     │  digest  │
-   └──────────┘     │   default-deny · cost-aware crossing   │     └──────────┘
-                    └────────────────────────────────────────┘
-                                            ▲
-                                            │
-                                  ┌─────────────────────┐
-                                  │  IMMUNE LAYER       │
-                                  │  anomaly detection  │
-                                  │  threat gossip      │
-                                  │  memory cells       │
-                                  └─────────────────────┘</code></pre>
-<pre key={"code-1"} className="bg-slate-900 border border-slate-800 rounded-lg p-4 overflow-x-auto my-4"><code className="text-sm font-mono text-slate-300">
-**Layer 1, the permeability layer.** This is the protocol — the part that says what an agent exposes and what it&#039;s willing to receive. Every agent declares: *here are my capabilities, here are the slices of my state I&#039;m willing to publish, here are the events I&#039;m listening for.* The crucial design choice: **default-deny, field-level selectivity.** An agent can accept some fields from a peer&#039;s state and reject others. The membrane is permeable, but selectively. Just like ion channels.
-
-This is also where **cognitive digestion** happens. Agents don&#039;t dump raw output into the shared medium. They store their *interpretation* of what they saw — a remix, in the language of mesh-memory protocols. This matters because raw signal accumulation creates echo chambers and burns input tokens for nothing. (We&#039;ll get to tokens in a second; they turn out to dominate everything.)
-
-**Layer 2, the shared medium.** The cytoplasm. This is the substrate where state actually lives — not the messages between agents, but the *fact pool* the agents are drawing from. The right primitive here, I think, is an immutable event log with CRDT semantics. Every state change is an event with a timestamp and a provenance. New agents joining the swarm can replay history. Conflicts are detected at write time. Old entries decay. The whole thing is semantically queryable so an agent can ask &quot;what does the swarm know about X&quot; and get a meaningful answer.
-
-This is the layer that&#039;s most missing from current systems. AutoGen doesn&#039;t have it. CrewAI doesn&#039;t have it. LangGraph has a centralized state graph, which is closer, but it&#039;s still one orchestrator&#039;s view of the world rather than a substrate the agents share.
-
-**Layer 3, the coordination layer.** The thing that actually lets a swarm form. Task broadcasting, claiming, dynamic grouping, dissolution. Think of it as the bacterial quorum-sensing layer — agents emit &quot;intent signals&quot; into the medium, and when the concentration crosses a threshold, the swarm activates around the problem. Then it dissolves. No top-down orchestrator deciding who does what.
-
-There are two layers wrapping the whole thing — **discovery** (you can&#039;t coordinate with agents you can&#039;t find, and description-based search demonstrably fails; you need behavioral indexing) and **governance** (circuit breakers, human override, audit trails, value-conflict escalation). Plus a parallel **immune layer** doing adaptive defense via anomaly detection and threat gossip — because the moment shared state becomes valuable, somebody is going to try to poison it.
-
-## Why now
-
-I want to flag a constraint that has been quietly reshaping the design space, because if you don&#039;t know about it, the whole architecture looks like over-engineering.
-
-**Agentic tasks consume roughly 1000x more tokens than non-agentic ones.** Input tokens dominate cost. And — this is the cruel part — accuracy peaks at *intermediate* token spend, not maximum. Past a certain point, more communication makes results worse, not better.
-
-This changes everything about how a membrane has to be designed. It means:
-
-- Wire formats have to be compact. You cannot afford verbose JSON.
-- Permeability has to be **gated by cost-benefit analysis**, not just by access control. An agent should only cross the membrane when crossing is worth it.
-- Cognitive digestion (storing interpretations rather than raw data) becomes economically essential, not just architecturally cleaner.
-- Communication budgets need to be a first-class membrane concept — per agent, tracked, enforceable.
-
-Five years ago you could argue about whether a shared-state layer was worth the complexity. Today the math runs the other way: in a 1000x-input-token regime, you cannot afford to broadcast everything to everyone. The membrane is not a luxury. It&#039;s the only way to keep agentic systems economically viable as they scale.
-
-This is the &quot;why now&quot; and it&#039;s also why I think this isn&#039;t a problem that solves itself with bigger context windows or better models. The bigger the context windows get, the more they cost. The bigger the models get, the more their input-token bill dominates. The constraint isn&#039;t going away — it&#039;s getting tighter.
-
-## What &quot;ZERO collective intelligence&quot; actually maps to
-
-Coming back to the two million agents. The reason that result lands so hard, once you sit with it, is that it&#039;s not a model-quality problem. The agents on MoltBook are real frontier-model agents. Smart enough individually to do real work. The problem isn&#039;t IQ — it&#039;s plumbing.
-
-Specifically, four pieces of plumbing are missing:
-
-1. **No structured protocol** — they communicate via raw text, which means every interaction is shallow, ambiguous, and impossible to build on. → Layer 1 fixes this.
-2. **No shared memory** — there&#039;s no place for distributed knowledge to synthesize. → Layer 2 fixes this.
-3. **No quality gating** — every interaction is weighted equally; reputation and trust don&#039;t exist. → Layer 1 (gated permeability) and the immune layer fix this.
-4. **No coordination primitives** — no swarming, no role assignment, no task claiming. → Layer 3 fixes this.
-
-The MoltBook result is, in a strange way, the cleanest empirical case yet for why something like a membrane has to exist. We tried scale. Scale alone doesn&#039;t produce minds. **Structure does.**
-
-## What we&#039;re building
-
-Now, the embarrassing part. None of this is a finished thing yet. I&#039;m writing this blog post in the middle of the work, not after it.
-
-What we have right now is:
-
-- A working sketch of the Layer 1 protocol — field-level selective sharing, default-deny semantics, a wire format that&#039;s compact enough to actually use under the token-economics constraint.
-- A reference Layer 2 implementation built on an event log with CRDT operations, with semantic query on top. It&#039;s small, it&#039;s slow, and it works.
-- A handful of Layer 3 coordination primitives — task broadcast, claim, quorum activation. Mostly cribbed from biological quorum sensing and from gossip protocols.
-- A running test harness that lets us replay the MoltBook-style &quot;shallow swarm&quot; condition and the membrane-mediated condition side by side, against the three-tier evaluation framework (joint reasoning, information synthesis, basic interaction).
-
-The thing I most want feedback on right now is the protocol itself — specifically, whether the field-level selectivity model is the right primitive or whether we should be thinking in terms of capabilities, like an object-capability system. Both have working prototypes. Both have arguments for them. I genuinely don&#039;t know which is right.
-
-## Call for collaborators
-
-If any of this rhymes with something you&#039;ve been thinking about, I&#039;d love to talk. Specifically, I&#039;m looking for people who are:
-
-- **Building multi-agent systems in production** and feeling the pain of message-passing-only architectures. Your war stories are the most valuable thing in the world right now.
-- **Working on agent protocols** — A2A, ACP, ANP, MCP extensions. The membrane should compose with these, not replace them, and figuring out the composition story is open work.
-- **Coming from biology, distributed systems, or game theory.** The interesting questions in this space — quorum sensing, CRDT design, mechanism design for cooperation — are all stolen from older fields. I want more theft.
-- **Skeptical that any of this matters.** Especially this one. The strongest version of the &quot;you&#039;re overthinking it&quot; argument is something I haven&#039;t heard yet, and I&#039;d rather hear it from you now than from reality in twelve months.
-
-The repo is small enough that one good afternoon can move it forward by a meaningful percentage. If you want to find me, the contact info is at the top of this site, or just open an issue.
-
-We&#039;ve been building AI agents wrong. The fix is not bigger models or longer contexts — those help individual agents, not collective ones. The fix is the substrate between them. We&#039;re going to need a membrane, and the sooner we agree on what one looks like, the sooner the next two million agents will actually have something to say to each other.
-</code></pre>
+<p key={"p-19"} className="text-slate-300 leading-relaxed mb-4"><div dangerouslySetInnerHTML={{__html:'<iframe src="/research/diagrams/six-layer-architecture.html" className="w-full rounded-lg border-0" style={{minHeight:"700px"}} title="The Synthetic Membrane Architecture — Six Layers of Agent Coordination"></iframe>'}} className="my-6"></div></p>
+<p key={"p-20"} className="text-slate-300 leading-relaxed mb-4"><div dangerouslySetInnerHTML={{__html:'<iframe src="/research/diagrams/orchestration-vs-membrane.html" className="w-full rounded-lg border-0" style={{minHeight:"700px"}} title="Why Current Orchestration Fails — Membrane vs Centralized Control"></iframe>'}} className="my-6"></div></p>
+<p key={"p-21"} className="text-slate-300 leading-relaxed mb-4"><strong>Layer 1, the permeability layer.</strong> This is the protocol — the part that says what an agent exposes and what it&#039;s willing to receive. Every agent declares: <em>here are my capabilities, here are the slices of my state I&#039;m willing to publish, here are the events I&#039;m listening for.</em> The crucial design choice: <strong>default-deny, field-level selectivity.</strong> An agent can accept some fields from a peer&#039;s state and reject others. The membrane is permeable, but selectively. Just like ion channels.</p>
+<p key={"p-22"} className="text-slate-300 leading-relaxed mb-4">This is also where <strong>cognitive digestion</strong> happens. Agents don&#039;t dump raw output into the shared medium. They store their <em>interpretation</em> of what they saw — a remix, in the language of mesh-memory protocols. This matters because raw signal accumulation creates echo chambers and burns input tokens for nothing. (We&#039;ll get to tokens in a second; they turn out to dominate everything.)</p>
+<p key={"p-23"} className="text-slate-300 leading-relaxed mb-4"><strong>Layer 2, the shared medium.</strong> The cytoplasm. This is the substrate where state actually lives — not the messages between agents, but the <em>fact pool</em> the agents are drawing from. The right primitive here, I think, is an immutable event log with CRDT semantics. Every state change is an event with a timestamp and a provenance. New agents joining the swarm can replay history. Conflicts are detected at write time. Old entries decay. The whole thing is semantically queryable so an agent can ask &quot;what does the swarm know about X&quot; and get a meaningful answer.</p>
+<p key={"p-24"} className="text-slate-300 leading-relaxed mb-4">This is the layer that&#039;s most missing from current systems. AutoGen doesn&#039;t have it. CrewAI doesn&#039;t have it. LangGraph has a centralized state graph, which is closer, but it&#039;s still one orchestrator&#039;s view of the world rather than a substrate the agents share.</p>
+<p key={"p-25"} className="text-slate-300 leading-relaxed mb-4"><strong>Layer 3, the coordination layer.</strong> The thing that actually lets a swarm form. Task broadcasting, claiming, dynamic grouping, dissolution. Think of it as the bacterial quorum-sensing layer — agents emit &quot;intent signals&quot; into the medium, and when the concentration crosses a threshold, the swarm activates around the problem. Then it dissolves. No top-down orchestrator deciding who does what.</p>
+<p key={"p-26"} className="text-slate-300 leading-relaxed mb-4">There are two layers wrapping the whole thing — <strong>discovery</strong> (you can&#039;t coordinate with agents you can&#039;t find, and description-based search demonstrably fails; you need behavioral indexing) and <strong>governance</strong> (circuit breakers, human override, audit trails, value-conflict escalation). Plus a parallel <strong>immune layer</strong> doing adaptive defense via anomaly detection and threat gossip — because the moment shared state becomes valuable, somebody is going to try to poison it.</p>
+<h2 key={"h2-5"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">Why now</h2>
+<p key={"p-27"} className="text-slate-300 leading-relaxed mb-4">I want to flag a constraint that has been quietly reshaping the design space, because if you don&#039;t know about it, the whole architecture looks like over-engineering.</p>
+<p key={"p-28"} className="text-slate-300 leading-relaxed mb-4"><strong>Agentic tasks consume roughly 1000x more tokens than non-agentic ones.</strong> Input tokens dominate cost. And — this is the cruel part — accuracy peaks at <em>intermediate</em> token spend, not maximum. Past a certain point, more communication makes results worse, not better.</p>
+<p key={"p-29"} className="text-slate-300 leading-relaxed mb-4">This changes everything about how a membrane has to be designed. It means:</p>
+<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-1"} className="ml-4 text-slate-300">Wire formats have to be compact. You cannot afford verbose JSON.</li>
+<li key={"li-2"} className="ml-4 text-slate-300">Permeability has to be **gated by cost-benefit analysis**, not just by access control. An agent should only cross the membrane when crossing is worth it.</li>
+<li key={"li-3"} className="ml-4 text-slate-300">Cognitive digestion (storing interpretations rather than raw data) becomes economically essential, not just architecturally cleaner.</li>
+<li key={"li-4"} className="ml-4 text-slate-300">Communication budgets need to be a first-class membrane concept — per agent, tracked, enforceable.</li></ul>
+<p key={"p-30"} className="text-slate-300 leading-relaxed mb-4">Five years ago you could argue about whether a shared-state layer was worth the complexity. Today the math runs the other way: in a 1000x-input-token regime, you cannot afford to broadcast everything to everyone. The membrane is not a luxury. It&#039;s the only way to keep agentic systems economically viable as they scale.</p>
+<p key={"p-31"} className="text-slate-300 leading-relaxed mb-4">This is the &quot;why now&quot; and it&#039;s also why I think this isn&#039;t a problem that solves itself with bigger context windows or better models. The bigger the context windows get, the more they cost. The bigger the models get, the more their input-token bill dominates. The constraint isn&#039;t going away — it&#039;s getting tighter.</p>
+<h2 key={"h2-6"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">What &quot;ZERO collective intelligence&quot; actually maps to</h2>
+<p key={"p-32"} className="text-slate-300 leading-relaxed mb-4">Coming back to the two million agents. The reason that result lands so hard, once you sit with it, is that it&#039;s not a model-quality problem. The agents on MoltBook are real frontier-model agents. Smart enough individually to do real work. The problem isn&#039;t IQ — it&#039;s plumbing.</p>
+<p key={"p-33"} className="text-slate-300 leading-relaxed mb-4">Specifically, four pieces of plumbing are missing:</p>
+<p key={"p-34"} className="text-slate-300 leading-relaxed mb-4">1. <strong>No structured protocol</strong> — they communicate via raw text, which means every interaction is shallow, ambiguous, and impossible to build on. → Layer 1 fixes this.</p>
+<p key={"p-35"} className="text-slate-300 leading-relaxed mb-4">2. <strong>No shared memory</strong> — there&#039;s no place for distributed knowledge to synthesize. → Layer 2 fixes this.</p>
+<p key={"p-36"} className="text-slate-300 leading-relaxed mb-4">3. <strong>No quality gating</strong> — every interaction is weighted equally; reputation and trust don&#039;t exist. → Layer 1 (gated permeability) and the immune layer fix this.</p>
+<p key={"p-37"} className="text-slate-300 leading-relaxed mb-4">4. <strong>No coordination primitives</strong> — no swarming, no role assignment, no task claiming. → Layer 3 fixes this.</p>
+<p key={"p-38"} className="text-slate-300 leading-relaxed mb-4">The MoltBook result is, in a strange way, the cleanest empirical case yet for why something like a membrane has to exist. We tried scale. Scale alone doesn&#039;t produce minds. <strong>Structure does.</strong></p>
+<h2 key={"h2-7"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">What we&#039;re building</h2>
+<p key={"p-39"} className="text-slate-300 leading-relaxed mb-4">Now, the embarrassing part. None of this is a finished thing yet. I&#039;m writing this blog post in the middle of the work, not after it.</p>
+<p key={"p-40"} className="text-slate-300 leading-relaxed mb-4">What we have right now is:</p>
+<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-5"} className="ml-4 text-slate-300">A working sketch of the Layer 1 protocol — field-level selective sharing, default-deny semantics, a wire format that&#039;s compact enough to actually use under the token-economics constraint.</li>
+<li key={"li-6"} className="ml-4 text-slate-300">A reference Layer 2 implementation built on an event log with CRDT operations, with semantic query on top. It&#039;s small, it&#039;s slow, and it works.</li>
+<li key={"li-7"} className="ml-4 text-slate-300">A handful of Layer 3 coordination primitives — task broadcast, claim, quorum activation. Mostly cribbed from biological quorum sensing and from gossip protocols.</li>
+<li key={"li-8"} className="ml-4 text-slate-300">A running test harness that lets us replay the MoltBook-style &quot;shallow swarm&quot; condition and the membrane-mediated condition side by side, against the three-tier evaluation framework (joint reasoning, information synthesis, basic interaction).</li></ul>
+<p key={"p-41"} className="text-slate-300 leading-relaxed mb-4">The thing I most want feedback on right now is the protocol itself — specifically, whether the field-level selectivity model is the right primitive or whether we should be thinking in terms of capabilities, like an object-capability system. Both have working prototypes. Both have arguments for them. I genuinely don&#039;t know which is right.</p>
+<h2 key={"h2-8"} className="text-2xl font-bold text-slate-100 mb-3 mt-8">Call for collaborators</h2>
+<p key={"p-42"} className="text-slate-300 leading-relaxed mb-4">If any of this rhymes with something you&#039;ve been thinking about, I&#039;d love to talk. Specifically, I&#039;m looking for people who are:</p>
+<ul className="list-disc ml-6 space-y-1 my-4"><li key={"li-9"} className="ml-4 text-slate-300">**Building multi-agent systems in production** and feeling the pain of message-passing-only architectures. Your war stories are the most valuable thing in the world right now.</li>
+<li key={"li-10"} className="ml-4 text-slate-300">**Working on agent protocols** — A2A, ACP, ANP, MCP extensions. The membrane should compose with these, not replace them, and figuring out the composition story is open work.</li>
+<li key={"li-11"} className="ml-4 text-slate-300">**Coming from biology, distributed systems, or game theory.** The interesting questions in this space — quorum sensing, CRDT design, mechanism design for cooperation — are all stolen from older fields. I want more theft.</li>
+<li key={"li-12"} className="ml-4 text-slate-300">**Skeptical that any of this matters.** Especially this one. The strongest version of the &quot;you&#039;re overthinking it&quot; argument is something I haven&#039;t heard yet, and I&#039;d rather hear it from you now than from reality in twelve months.</li></ul>
+<p key={"p-43"} className="text-slate-300 leading-relaxed mb-4">The repo is small enough that one good afternoon can move it forward by a meaningful percentage. If you want to find me, the contact info is at the top of this site, or just open an issue.</p>
+<p key={"p-44"} className="text-slate-300 leading-relaxed mb-4">We&#039;ve been building AI agents wrong. The fix is not bigger models or longer contexts — those help individual agents, not collective ones. The fix is the substrate between them. We&#039;re going to need a membrane, and the sooner we agree on what one looks like, the sooner the next two million agents will actually have something to say to each other.</p>
         </div>
       </main>
     </div>

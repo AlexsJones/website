@@ -121,14 +121,13 @@ simulation complete · 32 events · 22ms wall-clock`;
 
 const BENCHMARK_TABLE_TEXT = `──  Baseline vs. Membrane  ·  3 agents  ·  5 facts each  ──
 
-┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
-┃  metric               ┃  baseline  ┃  membrane  ┃           reduction  ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
-│  messages             │        60  │        18  │      70.0%  (60→18)  │
-│  token-equivalent     │     7,440  │     4,320  │               41.9%  │
-│  cost                 │            │            │         (7440→4320)  │
-│  consensus steps      │         6  │         2  │        66.7%  (6→2)  │
-└───────────────────────┴────────────┴────────────┴──────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃  metric                       ┃  baseline  ┃  membrane  ┃           reduction  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│  messages (structural)        │        60  │        18  │      70.0%  (60→18)  │
+│  consensus steps (structural) │         6  │         2  │        66.7%  (6→2)  │
+│  token-equivalent (modelled)  │     7,440  │     4,320  │  41.9%  (7440→4320)  │
+└───────────────────────────────┴────────────┴────────────┴──────────────────────┘
 
 ──  Scaling sweep — N agents · 5 facts each  ──
 
@@ -418,8 +417,8 @@ export default function SyntheticMembranePage() {
 
         <p>
           <strong>
-            Agentic tasks consume roughly 1000x more tokens than non-agentic
-            ones.
+            Agentic coding tasks consume roughly 1000x more tokens than
+            non-agentic coding uses.
           </strong>{" "}
           Input tokens dominate cost. Here&apos;s the cruel part:
           accuracy peaks at <em>intermediate</em> token spend, not maximum.
@@ -715,6 +714,25 @@ export default function SyntheticMembranePage() {
         <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
           Scaling: N agents × 5 facts each
         </h2>
+
+        <p className="text-[15px] leading-[1.7] text-slate-400 mb-6">
+          A note on what these numbers are. This is an{" "}
+          <strong className="text-slate-200">analytical communication-cost model</strong>, not a
+          measurement of real LLM token bills. The message and consensus-step
+          counts follow <em>structurally</em> from the interaction pattern (the
+          membrane condition actually runs through the real store), so they are
+          exact. The token figures are <em>modelled</em>: because the
+          implementation runs no LLM inference, they apply stipulated
+          per-message constants (a 90-token envelope, a 60-token payload, an
+          8-token ack) rather than observed usage. The load-bearing claim is not
+          the specific percentages but the{" "}
+          <strong className="text-slate-200">
+            O(N²·F) vs. O(N·F) asymptotic separation
+          </strong>{" "}
+          between broadcast-to-all and membrane-mediated coordination — the gap
+          that widens with every agent added.
+        </p>
+
         <BenchmarkTable />
 
         <div className="mt-8 rounded-lg border border-slate-800 bg-[#010409] overflow-hidden">

@@ -150,10 +150,17 @@ function parseMarkdownToJSX(markdown) {
       var processed = line.replace(/`(.+?)`/g, function(m, p1) { return '<<INLINE_CODE>>' + p1 + '<</INLINE_CODE>>'; });
       processed = escapeJSX(processed);
       processed = processed.replace(/<<INLINE_CODE>>(.+?)<<\/INLINE_CODE>>/g, '<code className="bg-slate-800 px-1 rounded text-sm">$1</code>');
-      processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       processed = processed.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      // Images BEFORE links — ! prefix prevents link regex from matching
+      processed = processed.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function(m, alt, url) {
+        if (url.endsWith('.html')) {
+          return '__IFRAME__' + url + '___IFRAME_ALT__' + alt.replace(/'/g, "\\'") + '__END__';
+        }
+        return '<img src="' + url + '" alt="' + alt + '" className="w-full rounded-lg my-4" />';
+      });
+      processed = processed.replace(/__IFRAME__(.+?)___IFRAME_ALT__(.+?)__END__/g, '<div dangerouslySetInnerHTML={{__html:\'<iframe src="$1" className="w-full rounded-lg border-0" style={{minHeight:"700px"}} title="$2"></iframe>\'}} className="my-6"></div>');
       processed = processed.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" className="text-emerald-400 hover:text-emerald-300">$1</a>');
-      processed = processed.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" className="w-full rounded-lg my-4" />');
       
       elements.push(
         '<p key={"p-' + paragraphIndex + '"} className="text-slate-300 leading-relaxed mb-4">' +
