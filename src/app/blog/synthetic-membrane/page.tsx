@@ -684,6 +684,16 @@ export default function SyntheticMembranePage() {
         <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
           Baseline vs. Membrane Benchmark
         </h2>
+        <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+          A note on what this is: an <strong>analytical communication-cost model</strong>, not a
+          measurement of real LLM token bills. The message and consensus-step counts follow
+          structurally from the interaction pattern (all-pairs point-to-point vs. expose-once /
+          read-once), and the membrane side runs through the real reference store. The{" "}
+          <em>token-equivalent</em> figures apply a fixed per-message cost model (a 90-token
+          envelope plus a 60-token fact or 8-token ack — stipulated illustrative constants). The
+          load-bearing result is the O(N²·F) vs. O(N·F) scaling of messages, which holds
+          regardless of those constants.
+        </p>
         <img src="/benchmark.svg" className="w-full rounded-lg border border-slate-800" alt="Benchmark comparison chart" />
       </section>
 
@@ -715,6 +725,12 @@ export default function SyntheticMembranePage() {
         <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
           Scaling: N agents × 5 facts each
         </h2>
+        <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+          Token figures below are <strong>modelled</strong>, not measured (see the note above): they
+          apply the fixed per-message cost model to the O(N²·F) vs. O(N·F) message counts. The
+          reduction widens with scale because point-to-point exchange grows quadratically in agents
+          while the shared medium grows linearly.
+        </p>
         <BenchmarkTable />
 
         <div className="mt-8 rounded-lg border border-slate-800 bg-[#010409] overflow-hidden">
