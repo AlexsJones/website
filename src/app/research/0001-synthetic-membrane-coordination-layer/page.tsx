@@ -17,7 +17,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "The Synthetic Membrane: Full Paper (v2.0)",
+    title: "The Synthetic Membrane: Full Paper (v2.1)",
     description:
       "Position paper proposing a six-layer synthetic membrane architecture as a coordination layer for multi-agent AI systems.",
   },
@@ -813,7 +813,7 @@ export default function PaperPage() {
           Systems
         </h1>
         <div className="mt-4 text-sm text-slate-400 font-mono">
-          Alex Jones · May 2026 · v2.0
+          Alex Jones · July 2026 · v2.1
         </div>
       </div>
 
