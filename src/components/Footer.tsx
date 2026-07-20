@@ -33,6 +33,14 @@ export default function Footer() {
               LinkedIn &#8599;
             </a>
             <a
+              href="https://x.com/AlexJonesax"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bone-dark hover:text-ember transition-colors"
+            >
+              X &#8599;
+            </a>
+            <a
               href="https://sessionize.com/jonesax/"
               target="_blank"
               rel="noopener noreferrer"

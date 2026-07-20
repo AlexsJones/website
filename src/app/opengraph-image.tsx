@@ -14,77 +14,83 @@ export default async function Image() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#0d1117",
-          padding: "60px 80px",
+          justifyContent: "space-between",
+          backgroundColor: "#b4b4b2",
+          backgroundImage:
+            "linear-gradient(rgba(20,20,20,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(20,20,20,0.08) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          padding: "64px 72px",
           fontFamily: "monospace",
+          color: "#141414",
         }}
       >
+        {/* top bar */}
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginBottom: "40px",
-          }}
-        >
-          <div
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              backgroundColor: "#f85149",
-            }}
-          />
-          <div
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              backgroundColor: "#d29922",
-            }}
-          />
-          <div
-            style={{
-              width: "12px",
-              height: "12px",
-              borderRadius: "50%",
-              backgroundColor: "#3fb950",
-            }}
-          />
-          <span style={{ color: "#484f58", fontSize: 16, marginLeft: "8px" }}>
-            terminal
-          </span>
-        </div>
-        <div style={{ color: "#34d399", fontSize: 20, marginBottom: "24px" }}>
-          axjns@dev:~$
-        </div>
-        <div
-          style={{
-            color: "#e6edf3",
-            fontSize: 64,
-            fontWeight: "bold",
-            marginBottom: "20px",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          axjns.dev
-        </div>
-        <div style={{ color: "#8b949e", fontSize: 28, lineHeight: 1.4 }}>
-          Alex Jones — Principal Engineer @ AWS
-        </div>
-        <div
-          style={{
-            color: "#34d399",
+            justifyContent: "space-between",
             fontSize: 18,
-            marginTop: "auto",
-            display: "flex",
-            gap: "24px",
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            color: "#4c4c4a",
           }}
         >
-          <span>about</span>
-          <span>research</span>
-          <span>speaking</span>
-          <span>cv</span>
+          <span>OPERATIONAL BY DESIGN</span>
+          <span>[ AXJNS.DEV ]</span>
+        </div>
+
+        {/* headline */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              fontSize: 40,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "#4c4c4a",
+              marginBottom: "18px",
+            }}
+          >
+            [ 001 / IDENTITY ]
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              fontSize: 104,
+              fontWeight: 900,
+              lineHeight: 0.98,
+              letterSpacing: "-0.02em",
+              textTransform: "uppercase",
+            }}
+          >
+            <span>ALEX&nbsp;JONES&nbsp;BUILDS&nbsp;</span>
+            <span
+              style={{
+                backgroundColor: "#141414",
+                color: "#b4b4b2",
+                padding: "0 14px",
+              }}
+            >
+              INFRASTRUCTURE
+            </span>
+          </div>
+        </div>
+
+        {/* bottom bar */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            borderTop: "2px solid #141414",
+            paddingTop: "20px",
+            fontSize: 22,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+          }}
+        >
+          <span>Principal Engineer @ AWS &mdash; Founder, K8sGPT</span>
+          <span style={{ color: "#4c4c4a" }}>&gt;&gt;&gt;</span>
         </div>
       </div>
     ),
