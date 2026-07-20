@@ -1,94 +1,312 @@
-"use client";
-import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { PROJECTS, Project } from "../data/projects";
+import ProjectsShowcase from "../components/ProjectsShowcase";
+import Reveal from "../components/Reveal";
+import { ARTICLES } from "./research/articles";
+import { speakingEvents } from "./speaking/events";
 
-const asciiArt = `
-    _      _            _       _                      
-   / \\    | | __ _  ___| | __  | |      ___   ___  ___ 
-  / _ \\   | |/ _\` |/ __| |/ /  | |     / _ \\ / _ \\/ __|
- / ___ \\  | | (_| | (__|   <   | |___ | (_) |  __/\\__ \\
-/_/   \\_\\ |_|\\__,_|\\___|_|\\_\\  |____(_)\\___/ \\___||___/
-
-              Alex Jones
-`;
-
-function BlinkingCursor() {
-  return <span className="inline-block w-2 h-5 bg-green-400 align-bottom animate-blink ml-1" style={{animation: 'blink 1s steps(2, start) infinite'}}></span>;
+/** Refresh star counts daily; fall back to checked-in numbers on failure. */
+async function getProjects(): Promise<Project[]> {
+  return Promise.all(
+    PROJECTS.map(async (p) => {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${p.repo}`, {
+          next: { revalidate: 86400 },
+        });
+        if (!res.ok) return p;
+        const data = await res.json();
+        return { ...p, stars: data.stargazers_count ?? p.stars };
+      } catch {
+        return p;
+      }
+    })
+  );
 }
 
-const COMMANDS = {
-  about: "/about",
-  speaking: "/speaking",
-  blog: "/blog",
-  cv: "/cv",
-  help: null,
-  clear: null,
-};
+function Stamp() {
+  return (
+    <div className="relative w-40 h-40 hidden lg:block" aria-hidden>
+      <svg viewBox="0 0 160 160" className="stamp-rotate w-full h-full">
+        <defs>
+          <path
+            id="circlePath"
+            d="M 80,80 m -62,0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"
+          />
+        </defs>
+        <circle
+          cx="80"
+          cy="80"
+          r="76"
+          fill="none"
+          stroke="var(--color-surface-lighter)"
+          strokeWidth="1"
+        />
+        <circle
+          cx="80"
+          cy="80"
+          r="48"
+          fill="none"
+          stroke="var(--color-steel)"
+          strokeWidth="0.75"
+          opacity="0.5"
+        />
+        <text
+          fontSize="11"
+          letterSpacing="4"
+          fill="var(--color-ash)"
+          fontFamily="var(--font-jetbrains)"
+        >
+          <textPath href="#circlePath">
+            OPEN SOURCE &#9656; FIELD TESTED &#9656; AXJNS.DEV &#9656;
+          </textPath>
+        </text>
+        <text
+          x="80"
+          y="85"
+          textAnchor="middle"
+          fontSize="16"
+          fill="var(--color-ember)"
+          fontFamily="var(--font-jetbrains)"
+        >
+          &#9656;&#9656;&#9656;
+        </text>
+      </svg>
+    </div>
+  );
+}
 
-export default function Home() {
-  const [history, setHistory] = useState([
-    asciiArt,
-    "Welcome to axjns.dev",
-    "Type a command or use the menu above.",
-  ]);
-  const [input, setInput] = useState("");
-  const [showCursor] = useState(true);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
-
-  const handleCommand = (cmd: string) => {
-    const command = cmd.trim().toLowerCase() as keyof typeof COMMANDS;
-    if (COMMANDS[command] && typeof COMMANDS[command] === "string") {
-      router.push(COMMANDS[command]!);
-      return;
-    }
-    if (command === "help") {
-      setHistory((h) => [
-        ...h,
-        `axjns@dev:~$ ${cmd}`,
-        "Available commands: about, speaking, blog, cv, help, clear",
-      ]);
-      return;
-    }
-    if (command === "clear") {
-      setHistory([]);
-      return;
-    }
-    setHistory((h) => [
-      ...h,
-      `axjns@dev:~$ ${cmd}`,
-      `command not found: ${cmd}`,
-    ]);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleCommand(input);
-      setInput("");
-    }
-  };
+export default async function Home() {
+  const projects = await getProjects();
+  const totalStars = projects.reduce((sum, p) => sum + p.stars, 0);
 
   return (
-    <div
-      className="whitespace-pre text-green-400 font-mono text-base min-h-[60vh]"
-      onClick={() => inputRef.current && inputRef.current.focus()}
-    >
-      {history.map((line, i) => (
-        <div key={i}>{line}</div>
-      ))}
-      <div className="flex items-center">
-        <span className="text-green-300">axjns@dev:~$</span>
-        <input
-          ref={inputRef}
-          className="bg-transparent border-none outline-none text-green-400 font-mono ml-2 w-48"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          autoFocus
-          spellCheck={false}
-        />
-        {showCursor && <BlinkingCursor />}
-      </div>
-    </div>
+    <>
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="relative grid-pattern overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 corner-ticks">
+          <div className="flex items-start justify-between gap-12">
+            <div className="max-w-3xl">
+              <Reveal>
+                <div className="label mb-6">
+                  [ 001 / identity ] &mdash; principal engineer @ aws &mdash;
+                  founder, k8sgpt.ai
+                </div>
+                <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl text-bone leading-[0.95] mb-6">
+                  Alex Jones builds{" "}
+                  <span className="text-ember italic">infrastructure</span> for
+                  the agentic era.
+                </h1>
+              </Reveal>
+              <Reveal delay={150}>
+                <p className="text-sm sm:text-base text-bone-dark/80 leading-relaxed max-w-xl mb-8">
+                  Distributed systems, Kubernetes, and the machinery that lets
+                  AI run on real hardware. Everything below is open source,
+                  field tested, and in production somewhere it probably
+                  shouldn&rsquo;t be.
+                </p>
+                <div className="flex flex-wrap items-center gap-4">
+                  <a
+                    href="#projects"
+                    className="font-mono text-[11px] uppercase tracking-[0.12em] font-medium px-5 py-3 bg-ember text-white hover:bg-ember-dark transition-colors rounded-[2px]"
+                  >
+                    View projects &#9662;
+                  </a>
+                  <a
+                    href="https://github.com/AlexsJones"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-[11px] uppercase tracking-[0.12em] font-medium px-5 py-3 border-2 border-bone text-bone hover:bg-bone hover:text-surface transition-colors rounded-[2px]"
+                  >
+                    github.com/AlexsJones
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+            <Reveal delay={300} className="shrink-0 self-center">
+              <Stamp />
+            </Reveal>
+          </div>
+
+          {/* spec strip */}
+          <Reveal delay={200}>
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 border border-surface-lighter rounded-[2px] divide-y md:divide-y-0 md:divide-x divide-surface-lighter bg-surface-light/40">
+              {[
+                {
+                  k: "github stars",
+                  v: `${(totalStars / 1000).toFixed(1)}k`,
+                },
+                { k: "flagship", v: "llmfit" },
+                { k: "cncf project", v: "k8sgpt" },
+                { k: "position papers", v: String(ARTICLES.length) },
+              ].map((s) => (
+                <div key={s.k} className="px-5 py-4">
+                  <div className="font-display text-3xl text-bone">{s.v}</div>
+                  <div className="label mt-1">{s.k}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Projects ─────────────────────────────────────── */}
+      <section
+        id="projects"
+        data-label="projects"
+        className="section-industrial grid-lines scroll-mt-24"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+          <Reveal>
+            <div className="label mb-4">[ 002 / manifest ]</div>
+            <h2 className="font-display text-4xl sm:text-6xl text-bone mb-3">
+              Selected <span className="italic text-ember">works</span>
+            </h2>
+            <p className="font-mono text-xs text-ash uppercase tracking-[0.08em] mb-12">
+              Live star counts &mdash; refreshed daily from GitHub
+            </p>
+          </Reveal>
+          <ProjectsShowcase projects={projects} />
+        </div>
+      </section>
+
+      {/* ── Research — cream panel ───────────────────────── */}
+      <section
+        data-label="research"
+        className="section-industrial section-cream grid-lines-dark"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+          <Reveal>
+            <div className="label mb-4">[ 003 / papers ]</div>
+            <h2 className="font-display text-4xl sm:text-6xl text-ink mb-12">
+              The <span className="italic text-ember">Synthetic Membrane</span>
+            </h2>
+          </Reveal>
+          <div className="grid md:grid-cols-2 gap-4">
+            {ARTICLES.map((a, i) => (
+              <Reveal key={a.slug} delay={i * 100}>
+                <Link
+                  href={`/research/${a.slug}`}
+                  className="group block border border-ink/15 bg-white p-7 rounded-[2px] hover:border-ember transition-colors h-full"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white bg-ink px-1.5 py-0.5 rounded-[2px]">
+                      {a.type}
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#8a8880]">
+                      {a.date}
+                    </span>
+                  </div>
+                  <h3 className="font-display normal-case tracking-normal text-2xl text-ink group-hover:text-ember transition-colors mb-3 leading-snug">
+                    {a.title}
+                  </h3>
+                  <p className="text-xs text-[#5a5a54] leading-relaxed">
+                    {a.description}
+                  </p>
+                  <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ember">
+                    Read paper &#8599;
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Speaking + Writing ───────────────────────────── */}
+      <section
+        data-label="dispatches"
+        className="section-industrial grid-lines"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+          <div className="grid lg:grid-cols-2 gap-14">
+            <div>
+              <Reveal>
+                <div className="label mb-4">[ 004 / on stage ]</div>
+                <h2 className="font-display text-4xl sm:text-5xl text-bone mb-10">
+                  Speaking
+                </h2>
+              </Reveal>
+              <div className="border-t border-surface-lighter">
+                {speakingEvents.slice(0, 4).map((e, i) => (
+                  <Reveal key={e.title} delay={i * 80}>
+                    <a
+                      href={e.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-baseline justify-between gap-4 border-b border-surface-lighter py-4 hover:bg-surface-light/40 transition-colors px-2 -mx-2"
+                    >
+                      <div>
+                        <div className="text-sm text-bone group-hover:text-ember transition-colors leading-snug">
+                          {e.title}
+                        </div>
+                        <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash mt-1">
+                          {e.event} &mdash; {e.date}
+                        </div>
+                      </div>
+                      <span className="row-arrow shrink-0 text-ember font-mono text-xs">
+                        &#8599;
+                      </span>
+                    </a>
+                  </Reveal>
+                ))}
+              </div>
+              <Reveal delay={200}>
+                <Link
+                  href="/speaking"
+                  className="inline-block mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-ember hover:text-ember-dark transition-colors"
+                >
+                  All talks &#9656;&#9656;&#9656;
+                </Link>
+              </Reveal>
+            </div>
+
+            <div>
+              <Reveal>
+                <div className="label mb-4">[ 005 / on record ]</div>
+                <h2 className="font-display text-4xl sm:text-5xl text-bone mb-10">
+                  Writing
+                </h2>
+              </Reveal>
+              <Reveal delay={100}>
+                <Link
+                  href="/blog"
+                  className="group block border border-surface-lighter bg-surface-light/60 p-7 rounded-[2px] hover:border-ember transition-colors"
+                >
+                  <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-ash mb-3">
+                    Latest from the blog
+                  </div>
+                  <div className="font-display text-2xl text-bone group-hover:text-ember transition-colors mb-2">
+                    Essays on agents, reliability &amp; infrastructure
+                  </div>
+                  <p className="text-xs text-bone-dark/70 leading-relaxed mb-5">
+                    Long-form writing on multi-agent coordination, the sticky
+                    note problem, and what it takes to keep distributed systems
+                    honest.
+                  </p>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ember">
+                    Read the blog &#8599;
+                  </span>
+                </Link>
+              </Reveal>
+
+              <Reveal delay={200}>
+                <Link
+                  href="/terminal"
+                  className="group mt-4 block border border-dashed border-surface-lighter p-5 rounded-[2px] hover:border-ash transition-colors"
+                >
+                  <div className="font-mono text-[11px] text-ash">
+                    <span className="text-ember">$</span> ssh axjns.dev{" "}
+                    <span className="blink inline-block w-[6px] h-[12px] bg-ash align-middle" />
+                  </div>
+                  <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-ash/60 mt-2 normal-case">
+                    Miss the old site? The terminal still boots. &#8599;
+                  </div>
+                </Link>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,31 +1,290 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Stencil palette — ref: M3/UAS. Monochrome print on gray, black stencil type */
+  --color-bone: #141414;
+  --color-bone-dark: #2e2e2c;
+  --color-ember: #141414;
+  --color-ember-dark: #000000;
+  --color-surface: #b4b4b2;
+  --color-surface-light: #a9a9a7;
+  --color-surface-lighter: #141414;
+  --color-ash: #4c4c4a;
+  --color-steel: #141414;
+  --color-cream: #e9e9e7;
+  --color-ink: #141414;
+
+  --font-sans: var(--font-jetbrains), "Fira Code", monospace;
+  --font-mono: var(--font-jetbrains), "Fira Code", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-bone);
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01" on;
 }
 
-/* CRT scanlines overlay */
+::selection {
+  background: var(--color-ember);
+  color: #fff;
+}
+
+/* ── Typography ── */
+.font-display {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+
+/* Accent words become a reversed bar (ref: "Field Deployment Ready") */
+.font-display .italic {
+  font-style: normal;
+  background: var(--color-bone);
+  color: var(--color-surface);
+  padding: 0 0.14em;
+}
+
+.label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 10px;
+  color: var(--color-ash);
+}
+
+/* ── Print grid — dark hairlines on gray stock ── */
+.grid-pattern,
+.grid-lines {
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--color-bone) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-bone) 8%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 48px 48px;
+}
+
+.grid-lines-dark {
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--color-ink) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-ink) 5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 48px 48px;
+}
+
+/* ── Section machinery: bracket label + chevron divider + corner ticks ── */
+.section-industrial {
+  position: relative;
+  border-top: 2px solid var(--color-surface-lighter);
+}
+
+.section-industrial::before {
+  content: "[ " attr(data-label) " ]";
+  position: absolute;
+  top: 12px;
+  right: 24px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-ash);
+  z-index: 1;
+}
+
+.section-industrial::after {
+  content: ">>> >>> >>>";
+  position: absolute;
+  bottom: -1px;
+  left: 24px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: var(--color-ember);
+  opacity: 0.5;
+  z-index: 2;
+  transform: translateY(50%);
+  background: var(--color-surface);
+  padding: 0 8px;
+}
+
+.section-cream {
+  background-color: var(--color-cream);
+  border-top-color: color-mix(in srgb, var(--color-ink) 20%, var(--color-cream));
+  color: var(--color-ink);
+}
+.section-cream::after {
+  background: var(--color-cream);
+}
+.section-cream::before {
+  color: color-mix(in srgb, var(--color-ink) 50%, var(--color-cream));
+}
+.section-cream .label {
+  color: color-mix(in srgb, var(--color-ink) 55%, var(--color-cream));
+}
+
+.corner-ticks {
+  position: relative;
+}
+.corner-ticks::before,
+.corner-ticks::after {
+  content: "+";
+  position: absolute;
+  top: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-ember);
+  opacity: 0.35;
+  line-height: 1;
+}
+.corner-ticks::before {
+  left: -8px;
+}
+.corner-ticks::after {
+  right: -8px;
+}
+
+/* ── Ticker bar ── */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.ticker-scroll {
+  animation: ticker-scroll 40s linear infinite;
+}
+
+/* ── Rotating stamp ── */
+@keyframes stamp-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.stamp-rotate {
+  animation: stamp-rotate 120s linear infinite;
+}
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.6, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .ticker-scroll,
+  .stamp-rotate {
+    animation: none;
+  }
+}
+
+/* ── Project card cursor spotlight ── */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    360px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    color-mix(in srgb, var(--color-ember) 9%, transparent),
+    transparent 65%
+  );
+  z-index: 0;
+}
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* ── Marquee row hover arrow ── */
+.row-arrow {
+  transform: translateX(-6px);
+  opacity: 0;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+.group:hover .row-arrow {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* ── Blinking cursor for wordmark ── */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.blink {
+  animation: blink 1.2s steps(2, start) infinite;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ember);
+  border-radius: 0;
+}
+
+/* ── Specimen checkerboard strip (ref: LAB badge sheet) ── */
+.checker {
+  background-image: repeating-conic-gradient(
+    var(--color-bone) 0% 25%,
+    transparent 0% 50%
+  );
+  background-size: 10px 10px;
+  opacity: 0.85;
+}
+
+/* ═══ Terminal easter egg (/terminal) — CRT effects ═══ */
+
 .crt-scanlines::after {
   content: "";
   position: fixed;
@@ -44,14 +303,12 @@ body {
   );
 }
 
-/* CRT phosphor glow on text */
 .crt-glow {
   text-shadow:
     0 0 2px currentColor,
     0 0 8px rgba(255, 255, 255, 0.05);
 }
 
-/* CRT screen curvature */
 .crt-curve {
   border-radius: 12px;
   box-shadow:
@@ -59,21 +316,30 @@ body {
     0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* CRT flicker on boot */
 @keyframes crt-flicker {
-  0% { opacity: 0.97; }
-  5% { opacity: 0.9; }
-  10% { opacity: 0.98; }
-  15% { opacity: 0.92; }
-  20% { opacity: 1; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.97;
+  }
+  5% {
+    opacity: 0.9;
+  }
+  10% {
+    opacity: 0.98;
+  }
+  15% {
+    opacity: 0.92;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-
 .crt-flicker {
   animation: crt-flicker 2s ease-out forwards;
 }
 
-/* CRT power-on effect */
 @keyframes crt-turn-on {
   0% {
     transform: scaleY(0.01) scaleX(0.5);
@@ -92,43 +358,39 @@ body {
     filter: brightness(1);
   }
 }
-
 .crt-turn-on {
   animation: crt-turn-on 0.8s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
 }
 
-/* Blinking NEW! badge */
 @keyframes blink-new {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
-
 .blink-new {
   animation: blink-new 1s step-end infinite;
   color: #ff0;
   font-weight: bold;
 }
 
-/* Retro terminal scrollbar */
 .terminal-scroll::-webkit-scrollbar {
   width: 14px;
 }
-
 .terminal-scroll::-webkit-scrollbar-track {
   background: #0a0a0a;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
-
 .terminal-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border: 2px solid #0a0a0a;
 }
-
 .terminal-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
 }
-
-/* Firefox */
 .terminal-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) #0a0a0a;

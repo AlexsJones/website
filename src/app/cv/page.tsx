@@ -1,82 +1,169 @@
+import PageHeader from "../../components/PageHeader";
+import Reveal from "../../components/Reveal";
+
+export const metadata = {
+  title: "CV — axjns.dev",
+  description: "Curriculum vitae of Alex Jones.",
+};
+
+const EXPERIENCE = [
+  { org: "Amazon Web Services", role: "Principal Engineer", span: "Aug 2023 — present", loc: "London" },
+  { org: "k8sgpt.ai", role: "Founder (open-source project)", span: "Mar 2023 — present", loc: "" },
+  { org: "OpenFeature", role: "Governing Committee", span: "Jul 2023 — Feb 2024", loc: "" },
+  { org: "CNCF", role: "Tech Lead, TAG App-Delivery", span: "Jun 2021 — Feb 2024", loc: "" },
+  { org: "Keptn", role: "Advisory Board Member", span: "May 2021 — Sep 2023", loc: "" },
+  {
+    org: "Canonical",
+    role: "Engineering Director, Kubernetes",
+    span: "Jan 2022 — Aug 2023",
+    loc: "",
+    detail:
+      "Led the Kubernetes organisation: product and engineering vision, new MicroK8s capabilities, community ecosystem growth.",
+  },
+  { org: "Ondat", role: "Advisor (until Akamai acquisition)", span: "Jun 2022 — Mar 2023", loc: "UK" },
+  {
+    org: "Civo",
+    role: "Principal SRE",
+    span: "May 2021 — Jan 2022",
+    loc: "",
+    detail:
+      "Built super-cluster capabilities, observability, recovery, backup and security systems.",
+  },
+  { org: "JPMorgan Chase & Co.", role: "VP, Site Reliability Engineering", span: "Dec 2020 — May 2021", loc: "London" },
+  { org: "American Express", role: "Engineering Director, SRE", span: "May 2019 — Dec 2020", loc: "London" },
+  { org: "Beamery", role: "Head of Platform & Infrastructure", span: "May 2017 — May 2019", loc: "London" },
+  { org: "Sky", role: "Lead DevOps Engineer", span: "Apr 2016 — May 2017", loc: "London" },
+  { org: "Casewise", role: "Lead Technical Architect", span: "Apr 2015 — Apr 2016", loc: "Mayfair" },
+  { org: "Microsoft", role: "Senior Software Engineer", span: "Oct 2013 — Apr 2015", loc: "Lionhead Studios" },
+  { org: "BSkyB", role: "Technical Lead, iOS / Mobile", span: "Apr 2011 — Oct 2013", loc: "Osterley" },
+  { org: "Grapple Mobile", role: "Frontend Developer", span: "Jul 2010 — Apr 2011", loc: "" },
+];
+
+const SKILLS = [
+  "Distributed Systems",
+  "Kubernetes",
+  "Systems Design",
+  "AI in Cloud",
+  "AWS",
+  "Observability",
+  "DevOps",
+  "Platform Engineering",
+  "Go",
+  "Rust",
+  "Linux",
+  "Open Source",
+  "Long-term Vision",
+  "Communication",
+];
+
 export default function CVPage() {
   return (
-    <main className="max-w-3xl mx-auto py-12 px-4">
-      <h1 className="text-4xl font-bold mb-2 text-hacker" style={{textShadow: '0 0 8px #39FF14'}}>Alex Jones</h1>
-      <div className="mb-6">
-        <span className="block text-lg font-bold">Principal Engineer @ AWS</span>
-        <span className="block text-sm">London, United Kingdom</span>
-        <div className="flex gap-4 mt-2">
-          <a href="mailto:alexsimonjones@gmail.com" className="hover:underline text-hacker">alexsimonjones@gmail.com</a>
-          <a href="https://github.com/AlexsJones" className="hover:underline text-hacker" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/jonesax/" className="hover:underline text-hacker" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="https://sessionize.com/jonesax/" className="hover:underline text-hacker" target="_blank" rel="noopener noreferrer">Sessionize</a>
+    <div className="grid-lines min-h-screen">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
+        <PageHeader
+          index="cv"
+          label="service record"
+          title="Curriculum"
+          accent="vitae."
+        />
+
+        <Reveal>
+          <div className="mb-14 grid sm:grid-cols-2 gap-4">
+            <div className="border border-surface-lighter bg-surface-light/40 p-5 rounded-[2px]">
+              <div className="label mb-3">[ current post ]</div>
+              <div className="font-display text-2xl text-bone">
+                Principal Engineer @ AWS
+              </div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash mt-2">
+                London, United Kingdom
+              </div>
+            </div>
+            <div className="border border-surface-lighter bg-surface-light/40 p-5 rounded-[2px]">
+              <div className="label mb-3">[ channels ]</div>
+              <div className="flex flex-col gap-1.5 font-mono text-[11px]">
+                <a href="mailto:alexsimonjones@gmail.com" className="text-bone-dark hover:text-ember transition-colors">
+                  alexsimonjones@gmail.com
+                </a>
+                <a href="https://github.com/AlexsJones" target="_blank" rel="noopener noreferrer" className="text-bone-dark hover:text-ember transition-colors">
+                  github.com/AlexsJones &#8599;
+                </a>
+                <a href="https://www.linkedin.com/in/jonesax/" target="_blank" rel="noopener noreferrer" className="text-bone-dark hover:text-ember transition-colors">
+                  linkedin.com/in/jonesax &#8599;
+                </a>
+                <a href="https://sessionize.com/jonesax/" target="_blank" rel="noopener noreferrer" className="text-bone-dark hover:text-ember transition-colors">
+                  sessionize.com/jonesax &#8599;
+                </a>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal>
+          <div className="label mb-4">[ summary ]</div>
+          <p className="text-sm text-bone-dark/85 leading-relaxed max-w-2xl mb-14">
+            Individual contributor. My work is mysterious and important.
+            Outside of work I contribute to open source. The things I know
+            about: distributed systems, Kubernetes (exotic compute), systems
+            design, and applications of artificial intelligence in cloud
+            environments.
+          </p>
+        </Reveal>
+
+        <div className="label mb-4">[ experience ]</div>
+        <div className="border-t border-surface-lighter mb-14">
+          {EXPERIENCE.map((e, i) => (
+            <Reveal key={`${e.org}-${e.role}`} delay={(i % 4) * 50}>
+              <div className="grid sm:grid-cols-[190px_1fr_auto] gap-x-6 items-baseline border-b border-surface-lighter py-4">
+                <span className="font-display text-lg text-bone">{e.org}</span>
+                <div>
+                  <span className="text-xs text-bone-dark/80">{e.role}</span>
+                  {e.detail && (
+                    <p className="text-[11px] text-ash leading-relaxed mt-1.5">
+                      {e.detail}
+                    </p>
+                  )}
+                </div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash whitespace-nowrap">
+                  {e.span}
+                </span>
+              </div>
+            </Reveal>
+          ))}
         </div>
-      </div>
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-2 text-hacker">Summary</h2>
-        <p className="text-hacker/90">I am an individual contributor. My work is mysterious and important. Outside of work I contribute to open-source. The things I know about are: Distributed systems, Kubernetes (Exotic compute), Systems Design, Applications of Artificial Intelligence in Cloud Environments.</p>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-2 text-hacker">Experience</h2>
-        <ul className="space-y-4">
-          <li><span className="font-bold">Amazon Web Services (AWS)</span> — Principal Engineer<br/><span className="text-sm">Aug 2023 - Present | London</span></li>
-          <li><span className="font-bold">k8sgpt.ai</span> — Founder (Opensource Project)<br/><span className="text-sm">Mar 2023 - Present</span></li>
-          <li><span className="font-bold">OpenFeature</span> — Governing Committee<br/><span className="text-sm">Jul 2023 - Feb 2024</span></li>
-          <li><span className="font-bold">CNCF [Cloud Native Computing Foundation]</span> — Tech Lead TAG App-Delivery<br/><span className="text-sm">Jun 2021 - Feb 2024</span></li>
-          <li><span className="font-bold">Keptn</span> — Advisory Board Member<br/><span className="text-sm">May 2021 - Sep 2023</span></li>
-          <li><span className="font-bold">Canonical</span> — Engineering Director, Kubernetes<br/><span className="text-sm">Jan 2022 - Aug 2023</span><br/>Leading the Kubernetes organisation at Canonical. Building out the product and engineering vision. Delivering new functional capabilities for MicroK8s and expanding the community ecosystem.</li>
-          <li><span className="font-bold">Ondat</span> — Advisor<br/><span className="text-sm">Jun 2022 - Mar 2023 | UK</span> Advisor until Akamai acquisition</li>
-          <li><span className="font-bold">Civo</span> — Principal SRE<br/><span className="text-sm">May 2021 - Jan 2022</span> Building out super-cluster capabilities, observability, recovery, backup and security systems.</li>
-          <li><span className="font-bold">JPMorgan Chase & Co.</span> — Vice President Site Reliability Engineering<br/><span className="text-sm">Dec 2020 - May 2021 | London</span></li>
-          <li><span className="font-bold">American Express</span> — Engineering Director (Site Reliability Engineering)<br/><span className="text-sm">May 2019 - Dec 2020 | London</span></li>
-          <li><span className="font-bold">Beamery</span> — Head of Platform & Infrastructure<br/><span className="text-sm">May 2017 - May 2019 | London</span></li>
-          <li><span className="font-bold">Beamery</span> — Director of DevOps<br/><span className="text-sm">May 2017 - Jun 2018 | London</span></li>
-          <li><span className="font-bold">Sky</span> — Lead DevOps Engineer<br/><span className="text-sm">Apr 2016 - May 2017 | London</span></li>
-          <li><span className="font-bold">Casewise</span> — Lead Technical Architect<br/><span className="text-sm">Oct 2015 - Apr 2016 | Mayfair</span></li>
-          <li><span className="font-bold">Casewise</span> — Technical Architect<br/><span className="text-sm">Apr 2015 - Oct 2015 | Mayfair</span></li>
-          <li><span className="font-bold">Microsoft</span> — Senior Software Engineer<br/><span className="text-sm">Oct 2014 - Apr 2015</span></li>
-          <li><span className="font-bold">Microsoft</span> — Software Development Engineer in Test II<br/><span className="text-sm">Oct 2013 - Oct 2014 | Lionhead Studios</span></li>
-          <li><span className="font-bold">Lightlance ltd</span> — Director<br/><span className="text-sm">Mar 2014 - Apr 2014</span></li>
-          <li><span className="font-bold">BSkyB</span> — Technical Lead (iOS / Mobile)<br/><span className="text-sm">Mar 2013 - Oct 2013 | Osterley</span></li>
-          <li><span className="font-bold">BSkyB</span> — Mobile Engineer<br/><span className="text-sm">Apr 2011 - Mar 2013 | Osterley</span></li>
-          <li><span className="font-bold">Grapple Mobile</span> — Frontend Developer<br/><span className="text-sm">Jul 2010 - Apr 2011</span></li>
-          <li><span className="font-bold">Freelance</span> — Frontend Developer<br/><span className="text-sm">2007 - 2010</span></li>
-        </ul>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-2 text-hacker">Certifications</h2>
-        <ul className="space-y-2">
-          <li>Speaker: KubeCon + CloudNativeCon North America 2021</li>
-          <li>Speaker: KubeCon + CloudNativeCon North America 2022</li>
-          <li>Speaker: KubeCon + CloudNativeCon Europe 2023</li>
-          <li>Speaker: KubeCon + CloudNativeCon Europe 2025</li>
-        </ul>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-2 text-hacker">Skills</h2>
-        <ul className="flex flex-wrap gap-4 text-hacker/90">
-          <li>Long-term Vision</li>
-          <li>Communication</li>
-          <li>Amazon Web Services (AWS)</li>
-          <li>Distributed Systems</li>
-          <li>Kubernetes</li>
-          <li>Systems Design</li>
-          <li>Artificial Intelligence in Cloud</li>
-          <li>DevOps</li>
-          <li>Observability</li>
-          <li>Go</li>
-          <li>Rust</li>
-          <li>Linux</li>
-          <li>Open Source</li>
-          <li>Platform Engineering</li>
-        </ul>
-      </section>
-      <section>
-        <h2 className="text-2xl font-bold mb-2 text-hacker">Education</h2>
-        <ul>
-          <li>Kingston University — First class BsC with Honors, Computer Science (2007 - 2010)</li>
-        </ul>
-      </section>
-    </main>
+
+        <Reveal>
+          <div className="label mb-4">[ skills ]</div>
+          <div className="flex flex-wrap gap-2 mb-14">
+            {SKILLS.map((s) => (
+              <span
+                key={s}
+                className="font-mono text-[10px] uppercase tracking-[0.1em] text-bone-dark border border-surface-lighter px-2.5 py-1.5 rounded-[2px] hover:border-ember hover:text-ember transition-colors"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <div className="label mb-4">[ selected stages ]</div>
+              <ul className="space-y-2 text-xs text-bone-dark/80">
+                <li>KubeCon + CloudNativeCon NA — 2021, 2022</li>
+                <li>KubeCon + CloudNativeCon EU — 2023, 2025</li>
+              </ul>
+            </div>
+            <div>
+              <div className="label mb-4">[ education ]</div>
+              <p className="text-xs text-bone-dark/80">
+                Kingston University — First-class BSc (Hons), Computer Science
+                (2007 — 2010)
+              </p>
+            </div>
+          </div>
+        </Reveal>
+      </main>
+    </div>
   );
-} 
+}
