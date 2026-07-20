@@ -78,13 +78,14 @@ export const PROJECTS: Project[] = [
     tags: ["agents", "automation"],
   },
   {
-    name: "prop-rep",
-    repo: "AlexsJones/prop-rep",
+    name: "k8sgpt-operator",
+    repo: "k8sgpt-ai/k8sgpt-operator",
     description:
-      "Find out which organisations are best represented in a repository.",
+      "Automatic SRE superpowers within your Kubernetes cluster — the operator for K8sGPT.",
     language: "Go",
-    stars: 16,
-    tags: ["OSS analytics"],
+    stars: 465,
+    role: "founder",
+    tags: ["Kubernetes", "AI", "operator"],
   },
   {
     name: "keychron-micro",
