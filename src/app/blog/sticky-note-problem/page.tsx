@@ -20,18 +20,19 @@ export const metadata = {
 
 export default function StickyNoteProblemPage() {
   return (
+    <div className="grid-lines min-h-screen">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
+        <div className="label mb-3">
           Research · Sticky-Note Problem
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-900">
+        <h1 className="font-display text-4xl sm:text-5xl text-bone leading-[1.02]">
           The Sticky-Note Problem
         </h1>
-        <p className="mt-3 text-lg text-slate-600">
+        <p className="mt-3 text-base text-bone-dark/80">
           Why Multi-Agent AI Is Broken at the Coordination Layer
         </p>
-        <div className="mt-4 text-sm text-slate-600 font-mono">
+        <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
           Alex Jones · May 2026
         </div>
       </div>
@@ -170,14 +171,14 @@ export default function StickyNoteProblemPage() {
         </p>
 
         <p>
-          The <strong>MAST study</strong> (Cemri et al., arXiv:2503.13657,
-          ICLR 2025) compiled 1,600+ annotated failure traces across 7
-          different frameworks. Three failure clusters emerged: system design,
+          The <strong>MAST study</strong> (Cemri et al., arXiv:2503.13657)
+          compiled 1,600+ annotated failure traces across 7 different
+          frameworks. Three failure clusters emerged: system design,
           inter-agent misalignment, and task verification. The inter-agent
           cluster is where the interesting numbers live:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
           <li>
             <strong>13.2%</strong> of failures were reasoning-action
             mismatches - agents reasoned about one thing and acted on another.
@@ -206,7 +207,7 @@ export default function StickyNoteProblemPage() {
           essential is lost in translation.
         </p>
 
-        <img src="/mast-failures.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="MAST study failure breakdown: 13.2% reasoning-action mismatch, 7.4% task derailment, 6.8% wrong-assumption, 1.9% ignoring agents, 0.85% information withholding" />
+        <img src="/mast-failures.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="MAST study failure breakdown: 13.2% reasoning-action mismatch, 7.4% task derailment, 6.8% wrong-assumption, 1.9% ignoring agents, 0.85% information withholding" />
 
         <p>This is the coordination gap, quantified.</p>
 
@@ -237,7 +238,7 @@ export default function StickyNoteProblemPage() {
 
         <H2>4. The Thesis</H2>
 
-        <blockquote className="border-l-4 border-emerald-600 pl-6 py-2 my-8 text-slate-800 italic text-lg">
+        <blockquote className="border-l-4 border-bone pl-6 py-2 my-8 text-bone-dark italic text-base">
           Structured, gated, persistent communication is a prerequisite, not an
           accelerant, for collective intelligence.
         </blockquote>
@@ -294,7 +295,7 @@ export default function StickyNoteProblemPage() {
           naturally: a shared, permeable boundary.
         </p>
 
-        <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Six-layer synthetic membrane architecture: Governance, Discovery, Permeability, Shared Medium, Coordination, and Immune layers between agents" />
+        <img src="/architecture.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Six-layer synthetic membrane architecture: Governance, Discovery, Permeability, Shared Medium, Coordination, and Immune layers between agents" />
 
         <p>Here&apos;s what each layer does, in plain terms:</p>
 
@@ -421,7 +422,7 @@ export default function StickyNoteProblemPage() {
           tracked in the shared medium.
         </p>
 
-        <img src="/ics-membrane-map.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Mapping from ICS/NIMS concepts to Synthetic Membrane layers: Shared Situational Awareness to L2, Structured Handoffs to L1, Role Boundaries to L0/L-1, Escalation to Governance/Immune, Incident Action Plans to L3" />
+        <img src="/ics-membrane-map.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Mapping from ICS/NIMS concepts to Synthetic Membrane layers: Shared Situational Awareness to L2, Structured Handoffs to L1, Role Boundaries to L0/L-1, Escalation to Governance/Immune, Incident Action Plans to L3" />
 
         <p>
           The parallel isn&apos;t coincidental. ICS and NIMS emerged from the
@@ -469,7 +470,7 @@ export default function StickyNoteProblemPage() {
           of composable primitives:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
           <li>
             A <strong>shared medium</strong> backed by an immutable event log
             with CRDT convergence
@@ -527,7 +528,7 @@ export default function StickyNoteProblemPage() {
 
         <p>The evidence converges from three directions:</p>
 
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
+        <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark">
           <li>
             <strong>Empirical:</strong> MAST measures coordination failures at
             scale - 1,600+ traces showing that inter-agent misalignment is a
@@ -551,7 +552,7 @@ export default function StickyNoteProblemPage() {
           circles but should be:
         </p>
 
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800" start={4}>
+        <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark" start={4}>
           <li>
             <strong>Operational:</strong> Human incident management
             (ICS/NIMS/SRE) has solved this exact problem for 50+ years, and the
@@ -574,7 +575,7 @@ export default function StickyNoteProblemPage() {
           happens and discover you needed it anyway.
         </p>
 
-        <p className="mt-8 text-sm text-slate-600 italic">
+        <p className="mt-8 text-sm text-ash italic">
           This article is the first in a series exploring the synthetic membrane
           architecture. The position paper is available via the links below. The
           Sympozium implementation is in early development.
@@ -582,14 +583,14 @@ export default function StickyNoteProblemPage() {
 
         <H2>References</H2>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-600 text-sm">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark/80 text-xs">
           <li>
-            Cemri et al., <em>Why Do Multi-Agent LLM Systems Fail? The MAST
-            Study</em>, arXiv:2503.13657 (ICLR 2025)
+            Cemri et al., <em>Why Do Multi-Agent LLM Systems
+            Fail?</em>, arXiv:2503.13657 (2025)
           </li>
           <li>
-            Shen &amp; Shen, <em>DOVA: Blackboard Transparency for Multi-Agent
-            Systems</em>, arXiv:2603.13327
+            Shen, <em>DOVA: Deliberation-First Multi-Agent Orchestration for
+            Autonomous Research Automation</em>, arXiv:2603.13327 (2026)
           </li>
           <li>
             arXiv:2510.01285, <em>LLM-Based Multi-Agent Blackboard System</em>{" "}
@@ -604,12 +605,14 @@ export default function StickyNoteProblemPage() {
             arXiv:2501.06322
           </li>
           <li>
-            Li et al., <em>The Superminds Test: Two Million Agents, Zero
-            Collective Intelligence</em> (2026)
+            Li et al., <em>Superminds Test: Actively Evaluating Collective
+            Intelligence of Agent Society via Probing Agents</em>,
+            arXiv:2604.22452 (2026)
           </li>
           <li>
-            Bai et al., <em>Agent Token Economics</em>, arXiv:2602.XXXXXX
-            (1000x token overhead)
+            Bai et al., <em>How Do AI Agents Spend Your Money? Analyzing and
+            Predicting Token Consumption in Agentic Coding Tasks</em>,
+            arXiv:2604.22750 (2026)
           </li>
           <li>
             CrewAI, <em>How to Build Agentic Systems: The Missing
@@ -626,59 +629,60 @@ export default function StickyNoteProblemPage() {
         </ul>
       </Prose>
 
-      <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
+      <div className="mt-16 border-t border-surface-lighter pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
         <a
           href="https://github.com/sympozium-ai/sympozium"
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
         >
-          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+          <div className="label mb-2">
             Implementation
           </div>
-          <div className="text-slate-200">
+          <div className="text-bone">
             sympozium-ai / sympozium
           </div>
-          <div className="text-slate-500 text-xs mt-1">github.com &rarr;</div>
+          <div className="text-ash text-xs mt-1">github.com &rarr;</div>
         </a>
         <a
           href="https://github.com/AlexsJones/research"
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
         >
-          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+          <div className="label mb-2">
             Research
           </div>
-          <div className="text-slate-200">
+          <div className="text-bone">
             AlexsJones / research
           </div>
-          <div className="text-slate-500 text-xs mt-1">github.com &rarr;</div>
+          <div className="text-ash text-xs mt-1">github.com &rarr;</div>
         </a>
         <Link
-          href="/research/synthetic-membrane"
-          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          href="/research/0001-synthetic-membrane-coordination-layer"
+          className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
         >
-          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+          <div className="label mb-2">
             Paper
           </div>
-          <div className="text-slate-200">Full paper, read on site</div>
-          <div className="text-slate-500 text-xs mt-1">axjns.dev &rarr;</div>
+          <div className="text-bone">Full paper (v2.1), read on site</div>
+          <div className="text-ash text-xs mt-1">axjns.dev &rarr;</div>
         </Link>
       </div>
 
-      <footer className="mt-12 text-center text-xs font-mono text-slate-600">
-        <Link href="/blog" className="hover:text-emerald-600 transition">
+      <footer className="mt-12 text-center text-xs font-mono text-ash">
+        <Link href="/blog" className="hover:text-bone transition">
           &larr; back to blog
         </Link>
       </footer>
     </article>
+    </div>
   );
 }
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-5 text-[17px] leading-[1.75] text-slate-800">
+    <div className="space-y-5 text-[15px] leading-[1.8] text-bone-dark">
       {children}
     </div>
   );
@@ -686,7 +690,7 @@ function Prose({ children }: { children: React.ReactNode }) {
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-12 mb-4">
+    <h2 className="font-display text-2xl sm:text-3xl text-bone mt-12 mb-4">
       {children}
     </h2>
   );

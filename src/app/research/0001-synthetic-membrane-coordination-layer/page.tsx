@@ -33,7 +33,7 @@ We draw on biological analogues (cell membranes, quorum sensing, distributed sit
 
 ## 1. Introduction
 
-In the three years since large language model agents became practically deployable, the dominant pattern for multi-agent work has been *orchestration*: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers - LangGraph, CrewAI, the Microsoft Agent Framework (the merger of AutoGen and Semantic Kernel) - have built rich vocabularies for this pattern. Anthropic's Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outward to tools. C4AI's A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outward to *another agent*.
+In the three years since large language model agents became practically deployable, the dominant pattern for multi-agent work has been *orchestration*: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers - LangGraph, CrewAI, the Microsoft Agent Framework (the merger of AutoGen and Semantic Kernel) - have built rich vocabularies for this pattern. Anthropic's Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outward to tools. Google's A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outward to *another agent*.
 
 What is conspicuously missing is the medium *between* agents. Each agent still inhabits its own context window. When two agents need to share understanding, they pass messages: strings of tokens that one party serialises and the other deserialises, with all the loss that implies. There is no shared cytoplasm. There is no place where a discovery made by Agent A becomes ambient knowledge for Agents B and C without an explicit hand-off. There is no mechanism for an agent to *sense* that other agents nearby are working on a related problem.
 
@@ -76,7 +76,7 @@ The academic literature on multi-agent LLM coordination has grown rapidly in 202
 More recent work includes:
 
 - **AgentSOC** [2026] (arXiv:2604.20134), a multi-layer agentic AI framework for security operations automation with ~506 ms end-to-end reasoning loops, designed for real-time SOC use.
-- **"LLMs in the SOC"** [2026] (arXiv:2508.18947), an empirical study of human-AI collaboration patterns in production security operations.
+- **"LLMs in the SOC"** [2025] (arXiv:2508.18947), an empirical study of human-AI collaboration patterns in production security operations.
 - **MDPI Survey on AI-Augmented SOC** [2025], reviewing 500+ papers and 100 selected sources mapping AI use across eight SOC functions, proposing a five-level Capability Maturity Model.
 - **MARS** [2025] (arXiv:2509.20502), efficient multi-agent collaboration for LLM reasoning.
 - **AgentsNet** [2025] (arXiv:2507.08616), coordination and collaborative reasoning in multi-agent LLMs.
@@ -84,7 +84,7 @@ More recent work includes:
 
 ### 2.3 Blackboard Architectures
 
-The blackboard architectural model originated in the early 1980s with the **Hearsay-II** speech recognition project at Carnegie Mellon University, Bell Labs, and NASA Ames. It was formalised by Erwin Kurz, Murray Hill, and others at Bell Labs in 1982, and later catalogued as a design pattern by Gamma, Helm, Johnson, and Vlissides (the "Gang of Four") in *Design Patterns* (1994).
+The blackboard architectural model originated in the 1970s with the **Hearsay-II** speech-understanding project at Carnegie Mellon University [Erman et al., 1980], was generalised through successors such as HASP/SIAP and BB1, and was later catalogued as an architectural pattern by Buschmann et al. in *Pattern-Oriented Software Architecture* (1996).
 
 Two papers in 2025 independently revived the blackboard architecture for LLM multi-agent systems:
 
@@ -93,7 +93,7 @@ Two papers in 2025 independently revived the blackboard architecture for LLM mul
 
 A third paper added "deliberation-first" orchestration with **blackboard transparency**:
 
-- **Shen & Shen [2026]** (arXiv:2603.13327, DOVA) introduces a three-phase hybrid approach with explicit meta-reasoning, blackboard transparency (storing not just contributions but the reasoning traces that produced them), and adaptive multi-tiered thinking.
+- **Shen [2026]** (arXiv:2603.13327, DOVA) introduces a three-phase hybrid approach with explicit meta-reasoning, blackboard transparency (storing not just contributions but the reasoning traces that produced them), and adaptive multi-tiered thinking.
 
 Blackboard architecture is the closest published prior art to the membrane thesis. It demonstrates that shared-medium coordination works. But the classical blackboard has a monolithic control component (scheduler) that reintroduces the orchestration anti-pattern. The membrane extends the blackboard from a single flat structure to a multi-layer permeable medium with governance, discovery, and immune layers.
 
@@ -153,7 +153,7 @@ The coordination gap is not an intuitive claim. It is measured, documented, and 
 
 ### 4.1 The MAST Study: Inter-Agent Misalignment Is a Primary Failure Cluster
 
-Cemri et al. [2026] built MAST (Multi-Agent System Test) from 1,600+ annotated failure traces across seven agent frameworks. Three failure clusters emerged:
+Cemri et al. [2025] built MAST (the Multi-Agent System failure Taxonomy) from 1,600+ annotated failure traces across seven agent frameworks. Three failure clusters emerged:
 
 - **System design failures** (configuration errors, framework misuse)
 - **Inter-agent misalignment** (the primary cluster)
@@ -292,7 +292,7 @@ This layer is modelled on the Common Operating Picture (COP) from incident manag
 - **Replayability** for new agents joining mid-session.
 - **A natural surface for failure attribution** (the event graph *is* the causal graph).
 - **Hypothesis lifecycle** (open -> testing -> confirmed/rejected) as first-class state transitions.
-- **Blackboard transparency** (storing not just contributions but the reasoning traces that produced them) [Shen & Shen, 2026].
+- **Blackboard transparency** (storing not just contributions but the reasoning traces that produced them) [Shen, 2026].
 
 ### 5.5 Layer 3: Coordination
 
@@ -615,6 +615,8 @@ Bai, L., Huang, Z., Wang, X., Sun, J., Mihalcea, R., Brynjolfsson, E., Pentland,
 
 Bering, A. et al. (2026). ZenBrain: A Neuroscience-Inspired 7-Layer Memory Architecture for Autonomous AI Systems. *arXiv:2604.23878*.
 
+Buschmann, F., Meunier, R., Rohnert, H., Sommerlad, P., & Stal, M. (1996). *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns*. Wiley.
+
 Cemri, M. et al. (2025). Why Do Multi-Agent LLM Systems Fail? *arXiv:2503.13657*.
 
 Chen, M., Wang, J., Mu, F., Wang, Y., Liu, Z., Feng, H., & Wang, Q. (2026). Seeing the Whole Elephant: A Benchmark for Failure Attribution in LLM-based Multi-Agent Systems (TraceElephant). *arXiv:2604.22708*.
@@ -623,7 +625,7 @@ Chu, M., Zhang, X.B., Lin, K.Q., Kong, L., Zhang, J. et al. (2026). Agentic Worl
 
 Ellawela, S. et al. (2026). Trust, Lies, and Long Memories: Emergent Social Dynamics and Reputation in Multi-Round Avalon with LLM Agents. *arXiv:2604.20582*.
 
-Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley.
+Erman, L.D., Hayes-Roth, F., Lesser, V.R., & Reddy, D.R. (1980). The Hearsay-II Speech-Understanding System: Integrating Knowledge to Resolve Uncertainty. *ACM Computing Surveys*, 12(2).
 
 Han, B. & Zhang, S. (2025). Exploring Advanced LLM Multi-Agent Systems Based on Blackboard Architecture. *arXiv:2507.01701*.
 
@@ -649,7 +651,7 @@ Roy, J. et al. (2026). AgentSOC: A Multi-Layer Agentic AI Framework for Security
 
 Salemi, A. et al. (2025). LLM-Based Multi-Agent Blackboard System for Information Discovery in Data Science. *arXiv:2510.01285*.
 
-Salmon, P.M., Stanton, N.A., & Jenkins, D.P. (2013). *Distributed Situation Awareness: Theory, Measurement, and Application to Dynamic Systems*. Routledge.
+Salmon, P.M., Stanton, N.A., Walker, G.H., & Jenkins, D.P. (2013). *Distributed Situation Awareness: Theory, Measurement, and Application to Dynamic Systems*. Routledge.
 
 Shapiro, M., Preguica, N., Baquero, C., & Zawirski, M. (2011). Conflict-Free Replicated Data Types. In *Proc. 13th Int. Symp. on Stabilization, Safety, and Security of Distributed Systems (SSS)*.
 
@@ -688,7 +690,7 @@ Zhang, X. et al. (2026). Experience Compression Spectrum: Unifying Memory, Skill
 | **IAP** (Incident Action Plan) | A written plan that drives operational coordination for each operational period. |
 | **MMP** (Mesh Memory Protocol) | A semantic infrastructure for cross-session cognitive collaboration among LLM agents. |
 | **MCP** (Model Context Protocol) | Anthropic's standard for agent-to-tool communication. |
-| **A2A** (Agent-to-Agent Protocol) | C4AI's standard for agent-to-agent message passing. |
+| **A2A** (Agent-to-Agent Protocol) | Google's standard for agent-to-agent message passing, donated to the Linux Foundation. |
 | **ANP** (Agent Network Protocol) | An emerging standard for agent-to-agent coordination. |
 
 ---
@@ -716,55 +718,55 @@ Three observations from this mapping:
 
 const components: Components = {
   h2: ({ children }) => (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-14 mb-4">
+    <h2 className="font-display text-2xl sm:text-3xl text-bone mt-14 mb-4">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-xl font-bold tracking-tight text-slate-900 mt-10 mb-3">
+    <h3 className="font-display text-lg sm:text-xl text-bone mt-10 mb-3">
       {children}
     </h3>
   ),
   p: ({ children }) => (
-    <p className="text-[17px] leading-[1.75] text-slate-800 mb-5">
+    <p className="text-[15px] leading-[1.8] text-bone-dark mb-5">
       {children}
     </p>
   ),
   strong: ({ children }) => (
-    <strong className="font-bold text-slate-900">{children}</strong>
+    <strong className="font-bold text-bone">{children}</strong>
   ),
-  em: ({ children }) => <em className="italic text-slate-800">{children}</em>,
+  em: ({ children }) => <em className="italic text-bone-dark">{children}</em>,
   a: ({ href, children }) => (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-emerald-700 hover:text-emerald-600 underline underline-offset-2"
+      className="text-bone underline underline-offset-2 decoration-bone/40 hover:bg-bone hover:text-cream transition-colors"
     >
       {children}
     </a>
   ),
   ul: ({ children }) => (
-    <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+    <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
+    <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark">
       {children}
     </ol>
   ),
   li: ({ children }) => (
-    <li className="text-[17px] leading-[1.75]">{children}</li>
+    <li className="text-[15px] leading-[1.8]">{children}</li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="border-l-2 border-emerald-600 pl-6 my-6 text-slate-800 italic">
+    <blockquote className="border-l-2 border-bone pl-6 my-6 text-bone-dark italic">
       {children}
     </blockquote>
   ),
-  hr: () => <hr className="border-slate-800 my-10" />,
+  hr: () => <hr className="border-surface-lighter my-10" />,
   pre: ({ children }) => (
-    <pre className="my-8 overflow-x-auto rounded-lg border border-slate-800 bg-[#010409] p-5 text-[11px] leading-tight text-emerald-300/90 font-mono">
+    <pre className="my-8 overflow-x-auto rounded-[2px] border border-bone bg-ink p-5 text-[11px] leading-tight text-cream/90 font-mono">
       {children}
     </pre>
   ),
@@ -773,46 +775,47 @@ const components: Components = {
       return <code>{children}</code>;
     }
     return (
-      <code className="bg-slate-800/60 text-emerald-300 px-1.5 py-0.5 rounded text-[15px]">
+      <code className="bg-bone text-cream px-1.5 py-0.5 rounded-[2px] text-[13px]">
         {children}
       </code>
     );
   },
   table: ({ children }) => (
-    <div className="overflow-x-auto my-8 rounded-lg border border-slate-800">
+    <div className="overflow-x-auto my-8 rounded-[2px] border border-surface-lighter">
       <table className="w-full text-sm font-mono">{children}</table>
     </div>
   ),
   thead: ({ children }) => (
-    <thead className="border-b border-slate-800 bg-slate-900/50">
+    <thead className="bg-bone">
       {children}
     </thead>
   ),
   th: ({ children }) => (
-    <th className="px-4 py-3 text-left text-emerald-400 text-xs uppercase tracking-widest">
+    <th className="px-4 py-3 text-left text-cream text-[10px] uppercase tracking-[0.15em]">
       {children}
     </th>
   ),
   tr: ({ children }) => (
-    <tr className="border-b border-slate-800/50">{children}</tr>
+    <tr className="border-b border-bone/15">{children}</tr>
   ),
   td: ({ children }) => (
-    <td className="px-4 py-3 text-slate-800">{children}</td>
+    <td className="px-4 py-3 text-bone-dark">{children}</td>
   ),
 };
 
 export default function PaperPage() {
   return (
+    <div className="grid-lines min-h-screen">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
+        <div className="label mb-3">
           Paper · Synthetic Membrane
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900">
+        <h1 className="font-display text-3xl sm:text-5xl text-bone leading-[1.05]">
           The Synthetic Membrane: A Coordination Layer for Multi-Agent AI
           Systems
         </h1>
-        <div className="mt-4 text-sm text-slate-600 font-mono">
+        <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
           Alex Jones · July 2026 · v2.1
         </div>
       </div>
@@ -821,10 +824,10 @@ export default function PaperPage() {
         {PAPER}
       </ReactMarkdown>
 
-      <footer className="mt-12 pt-8 border-t border-slate-800 flex justify-between text-xs font-mono text-slate-600">
+      <footer className="mt-12 pt-8 border-t border-surface-lighter flex justify-between text-xs font-mono text-ash">
         <Link
           href="/research"
-          className="hover:text-emerald-600 transition"
+          className="hover:text-bone transition"
         >
           &larr; research
         </Link>
@@ -832,11 +835,12 @@ export default function PaperPage() {
           href="https://github.com/AlexsJones/research/blob/main/papers/0001-synthetic-membrane-coordination-layer.md"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-emerald-600 transition"
+          className="hover:text-bone transition"
         >
           raw markdown &rarr;
         </a>
       </footer>
     </article>
+    </div>
   );
 }

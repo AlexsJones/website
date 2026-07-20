@@ -16,7 +16,7 @@ export const PROJECTS: Project[] = [
     description:
       "Hundreds of models & providers. One command to find what runs on your hardware.",
     language: "Rust",
-    stars: 29792,
+    stars: 29820,
     role: "creator",
     featured: true,
     tags: ["LLM", "CLI", "hardware"],

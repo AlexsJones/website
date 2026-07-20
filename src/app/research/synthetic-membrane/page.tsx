@@ -31,7 +31,7 @@ Multi-agent LLM systems have proliferated faster than the substrate that connect
 
 ## 1. Introduction
 
-In the three years since LLM agents became practical, the dominant pattern for multi-agent work has been *orchestration*: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers (LangGraph, AutoGen, CrewAI) have built rich vocabularies for this pattern. Anthropic's Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outwards to tools. C4AI's A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outwards to *another agent*.
+In the three years since LLM agents became practical, the dominant pattern for multi-agent work has been *orchestration*: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers (LangGraph, AutoGen, CrewAI) have built rich vocabularies for this pattern. Anthropic's Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outwards to tools. Google's A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outwards to *another agent*.
 
 What is conspicuously missing is the medium *between* agents. Each agent still inhabits its own context window. When two agents need to share understanding, they pass messages. Strings of tokens that one party serialises and the other deserialises, with all the loss that implies. There is no shared cytoplasm. There is no place where a discovery made by Agent A becomes ambient knowledge for Agents B and C without an explicit hand-off. There is no mechanism for an agent to *sense* that other agents nearby are working on a related problem.
 
@@ -270,9 +270,9 @@ We catalogue eighteen implementation paths, each evaluated on novelty, feasibili
 
 **Phase 1: Foundation, Discovery, Safety (Weeks 1-4).** Stand up the registry (Path 6, behavioural indexing), implement the membrane as an MCP server (Path 2) using MMP's primitives (Path 8), wire OpenTelemetry from day one (Path 11) with failure-attribution hooks (Path 16), constrain the wire format to a token budget (Path 14), and ship the safety net first: basic immune detection (Path 17) and governance circuit breakers (Path 18).
 
-**Phase 2: Shared State, Gating, Attribution (Weeks 5-10).** Layer CRDTs over the event log (Paths 1 + 10) with full provenance. Add gated permeability (Path 9) and reputation scoring (Path 6). Move to graph-structured memory with cognitive digestion (Path 7). Stand up multi-mode consensus with dissent surface (Path 20, derived from Path 18).
+**Phase 2: Shared State, Gating, Attribution (Weeks 5-10).** Layer CRDTs over the event log (Paths 1 + 10) with full provenance. Add gated permeability (Path 9) and reputation scoring (Path 6). Move to graph-structured memory with cognitive digestion (Path 7). Stand up multi-mode consensus with dissent surface (derived from Path 18).
 
-**Phase 3: Coordination, Adaptive Defence, Validation (Weeks 11-16).** Add quorum sensing (Path 4) and multi-mode coordination (Path 21, derived from DM3Nav). Build cross-framework adapters (Path 12). Expand immune defence to full co-evolving response (Path 17). Run the Superminds-derived validation harness (Path 13) end-to-end.
+**Phase 3: Coordination, Adaptive Defence, Validation (Weeks 11-16).** Add quorum sensing (Path 4) and multi-mode coordination (informed by DM³-Nav [Kashiri et al., 2026]). Build cross-framework adapters (Path 12). Expand immune defence to full co-evolving response (Path 17). Run the Superminds-derived validation harness (Path 13) end-to-end.
 
 **Phase 4: Research (Ongoing).** World-model-informed membrane (Path 15). Latent communication (Path 3). MESI-style synchronisation at scale (Path 5). Cross-provider value alignment.
 
@@ -351,55 +351,55 @@ Zhang, S., Yin, M., Zhang, J., Liu, J., Han, Z., Zhang, J., Li, B., Wang, C., Wa
 
 const components: Components = {
   h2: ({ children }) => (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-14 mb-4">
+    <h2 className="font-display text-2xl sm:text-3xl text-bone mt-14 mb-4">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-xl font-bold tracking-tight text-slate-900 mt-10 mb-3">
+    <h3 className="font-display text-lg sm:text-xl text-bone mt-10 mb-3">
       {children}
     </h3>
   ),
   p: ({ children }) => (
-    <p className="text-[17px] leading-[1.75] text-slate-800 mb-5">
+    <p className="text-[15px] leading-[1.8] text-bone-dark mb-5">
       {children}
     </p>
   ),
   strong: ({ children }) => (
-    <strong className="font-bold text-slate-900">{children}</strong>
+    <strong className="font-bold text-bone">{children}</strong>
   ),
-  em: ({ children }) => <em className="italic text-slate-800">{children}</em>,
+  em: ({ children }) => <em className="italic text-bone-dark">{children}</em>,
   a: ({ href, children }) => (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-emerald-700 hover:text-emerald-600 underline underline-offset-2"
+      className="text-bone underline underline-offset-2 decoration-bone/40 hover:bg-bone hover:text-cream transition-colors"
     >
       {children}
     </a>
   ),
   ul: ({ children }) => (
-    <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+    <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
+    <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark">
       {children}
     </ol>
   ),
   li: ({ children }) => (
-    <li className="text-[17px] leading-[1.75]">{children}</li>
+    <li className="text-[15px] leading-[1.8]">{children}</li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="border-l-2 border-emerald-600 pl-6 my-6 text-slate-800 italic">
+    <blockquote className="border-l-2 border-bone pl-6 my-6 text-bone-dark italic">
       {children}
     </blockquote>
   ),
-  hr: () => <hr className="border-slate-800 my-10" />,
+  hr: () => <hr className="border-surface-lighter my-10" />,
   pre: ({ children }) => (
-    <pre className="my-8 overflow-x-auto rounded-lg border border-slate-800 bg-[#010409] p-5 text-[11px] leading-tight text-emerald-300/90 font-mono">
+    <pre className="my-8 overflow-x-auto rounded-[2px] border border-bone bg-ink p-5 text-[11px] leading-tight text-cream/90 font-mono">
       {children}
     </pre>
   ),
@@ -408,46 +408,47 @@ const components: Components = {
       return <code>{children}</code>;
     }
     return (
-      <code className="bg-slate-800/60 text-emerald-300 px-1.5 py-0.5 rounded text-[15px]">
+      <code className="bg-bone text-cream px-1.5 py-0.5 rounded-[2px] text-[13px]">
         {children}
       </code>
     );
   },
   table: ({ children }) => (
-    <div className="overflow-x-auto my-8 rounded-lg border border-slate-800">
+    <div className="overflow-x-auto my-8 rounded-[2px] border border-surface-lighter">
       <table className="w-full text-sm font-mono">{children}</table>
     </div>
   ),
   thead: ({ children }) => (
-    <thead className="border-b border-slate-800 bg-slate-900/50">
+    <thead className="bg-bone">
       {children}
     </thead>
   ),
   th: ({ children }) => (
-    <th className="px-4 py-3 text-left text-emerald-400 text-xs uppercase tracking-widest">
+    <th className="px-4 py-3 text-left text-cream text-[10px] uppercase tracking-[0.15em]">
       {children}
     </th>
   ),
   tr: ({ children }) => (
-    <tr className="border-b border-slate-800/50">{children}</tr>
+    <tr className="border-b border-bone/15">{children}</tr>
   ),
   td: ({ children }) => (
-    <td className="px-4 py-3 text-slate-800">{children}</td>
+    <td className="px-4 py-3 text-bone-dark">{children}</td>
   ),
 };
 
 export default function PaperPage() {
   return (
+    <div className="grid-lines min-h-screen">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
+        <div className="label mb-3">
           Paper · Synthetic Membrane
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900">
+        <h1 className="font-display text-3xl sm:text-5xl text-bone leading-[1.05]">
           The Synthetic Membrane: A Shared Permeable Boundary for Multi-Agent AI
           Systems
         </h1>
-        <div className="mt-4 text-sm text-slate-600 font-mono">
+        <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
           Alex Jones · April 2026
         </div>
       </div>
@@ -456,10 +457,10 @@ export default function PaperPage() {
         {PAPER}
       </ReactMarkdown>
 
-      <footer className="mt-12 pt-8 border-t border-slate-800 flex justify-between text-xs font-mono text-slate-600">
+      <footer className="mt-12 pt-8 border-t border-surface-lighter flex justify-between text-xs font-mono text-ash">
         <Link
           href="/research"
-          className="hover:text-emerald-600 transition"
+          className="hover:text-bone transition"
         >
           ← research
         </Link>
@@ -467,11 +468,12 @@ export default function PaperPage() {
           href="https://github.com/AlexsJones/research/blob/main/paper/paper.md"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-emerald-600 transition"
+          className="hover:text-bone transition"
         >
           raw markdown →
         </a>
       </footer>
     </article>
+    </div>
   );
 }

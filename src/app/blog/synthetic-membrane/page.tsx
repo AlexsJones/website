@@ -152,23 +152,23 @@ const SCALING_DATA = [
 
 function BenchmarkTable() {
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-800">
+    <div className="overflow-x-auto rounded-[2px] border border-surface-lighter">
       <table className="w-full text-sm font-mono">
         <thead>
-          <tr className="border-b border-slate-800 bg-slate-900/50">
-            <th className="px-4 py-3 text-left text-emerald-400 text-xs uppercase tracking-widest">Agents</th>
-            <th className="px-4 py-3 text-right text-emerald-400 text-xs uppercase tracking-widest">Baseline Tokens</th>
-            <th className="px-4 py-3 text-right text-emerald-400 text-xs uppercase tracking-widest">Membrane Tokens</th>
-            <th className="px-4 py-3 text-right text-emerald-400 text-xs uppercase tracking-widest">Reduction</th>
+          <tr className="bg-bone">
+            <th className="px-4 py-3 text-left text-cream text-[10px] uppercase tracking-[0.15em]">Agents</th>
+            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Baseline Tokens</th>
+            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Membrane Tokens</th>
+            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Reduction</th>
           </tr>
         </thead>
         <tbody>
           {SCALING_DATA.map((row) => (
-            <tr key={row.agents} className="border-b border-slate-800/50 hover:bg-slate-900/30 transition">
-              <td className="px-4 py-3 text-slate-200">{row.agents}</td>
-              <td className="px-4 py-3 text-right text-slate-400">{row.baseline.toLocaleString()}</td>
-              <td className="px-4 py-3 text-right text-emerald-300">{row.membrane.toLocaleString()}</td>
-              <td className="px-4 py-3 text-right text-emerald-400 font-bold">{row.reduction}</td>
+            <tr key={row.agents} className="border-b border-bone/15 hover:bg-surface-light/60 transition">
+              <td className="px-4 py-3 text-bone">{row.agents}</td>
+              <td className="px-4 py-3 text-right text-bone-dark/70">{row.baseline.toLocaleString()}</td>
+              <td className="px-4 py-3 text-right text-bone">{row.membrane.toLocaleString()}</td>
+              <td className="px-4 py-3 text-right text-bone font-bold">{row.reduction}</td>
             </tr>
           ))}
         </tbody>
@@ -179,15 +179,16 @@ function BenchmarkTable() {
 
 export default function SyntheticMembranePage() {
   return (
+    <div className="grid-lines min-h-screen">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
+        <div className="label mb-3">
           Research · Synthetic Membrane
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-900">
+        <h1 className="font-display text-4xl sm:text-5xl text-bone leading-[1.02]">
           We&apos;ve been building AI agents wrong.
         </h1>
-        <div className="mt-4 text-sm text-slate-600 font-mono">
+        <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
           Alex Jones · April 2026
         </div>
       </div>
@@ -325,16 +326,16 @@ export default function SyntheticMembranePage() {
         <p>
           Let me try to be concrete. The thing I&apos;ve been calling a
           &quot;synthetic membrane&quot; is a shared, permeable substrate
-          between agents, with three layers. None of these layers are
+          between agents, with three core layers. None of these layers are
           individually new. That&apos;s actually the point. The interesting
           work is in the interface between them.
         </p>
 
-        <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram, layers 0-3 with immune layer" />
+        <img src="/architecture.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Membrane architecture diagram, layers 0-3 with immune layer" />
 
         <details className="my-4">
-          <summary className="text-sm text-slate-600 cursor-pointer hover:text-slate-800 transition">ASCII version</summary>
-          <pre className="mt-4 overflow-x-auto rounded-lg border border-slate-800 bg-[#010409] p-5 text-[11px] leading-tight text-emerald-300/90 font-mono">
+          <summary className="text-sm text-ash cursor-pointer hover:text-bone transition">ASCII version</summary>
+          <pre className="mt-4 overflow-x-auto rounded-[2px] border border-bone bg-ink p-5 text-[11px] leading-tight text-cream/90 font-mono">
             <code>{ARCHITECTURE_DIAGRAM}</code>
           </pre>
         </details>
@@ -432,7 +433,7 @@ export default function SyntheticMembranePage() {
           It means:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
           <li>Wire formats have to be compact. You cannot afford verbose JSON.</li>
           <li>
             Permeability has to be{" "}
@@ -451,7 +452,7 @@ export default function SyntheticMembranePage() {
           </li>
         </ul>
 
-        <img src="/scaling.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Scaling chart, token reduction from 42% at 3 agents to 72% at 20 agents" />
+        <img src="/scaling.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Scaling chart, token reduction from 42% at 3 agents to 72% at 20 agents" />
 
         <p>
           Five years ago you could argue about whether a shared-state layer
@@ -483,7 +484,7 @@ export default function SyntheticMembranePage() {
 
         <p>Specifically, four pieces of plumbing are missing:</p>
 
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
+        <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark">
           <li>
             <strong>No structured protocol.</strong> They communicate via
             raw text, so every interaction is shallow, ambiguous,
@@ -525,7 +526,7 @@ export default function SyntheticMembranePage() {
             href="https://github.com/sympozium-ai/sympozium"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-emerald-700 hover:text-emerald-600 underline underline-offset-2"
+            className="text-bone underline underline-offset-2 decoration-bone/40 hover:bg-bone hover:text-cream transition-colors"
           >
             Sympozium
           </a>
@@ -538,7 +539,7 @@ export default function SyntheticMembranePage() {
 
         <p>Concretely, what&apos;s landing:</p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
           <li>
             <strong>Permeability as CRD types.</strong> Every agent config
             declares its default visibility (public/trusted/private),
@@ -566,7 +567,7 @@ export default function SyntheticMembranePage() {
           </li>
         </ul>
 
-        <img src="/swarm_timeline.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Swarm lifecycle timeline: registration, trust, coordination, dissolution" />
+        <img src="/swarm_timeline.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Swarm lifecycle timeline: registration, trust, coordination, dissolution" />
 
         <p>
           The thing I most want feedback on right now is the protocol itself,
@@ -585,7 +586,7 @@ export default function SyntheticMembranePage() {
           people who are:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
           <li>
             <strong>Building multi-agent systems in production</strong> and
             feeling the pain of message-passing-only architectures. Your war
@@ -629,62 +630,62 @@ export default function SyntheticMembranePage() {
         </p>
       </Prose>
 
-      <div className="mt-16 border-t border-slate-800 pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
+      <div className="mt-16 border-t border-surface-lighter pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
         <a
           href="https://github.com/sympozium-ai/sympozium"
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
         >
-          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+          <div className="label mb-2">
             Implementation
           </div>
-          <div className="text-slate-200">
+          <div className="text-bone">
             sympozium-ai / sympozium
           </div>
-          <div className="text-slate-500 text-xs mt-1">github.com →</div>
+          <div className="text-ash text-xs mt-1">github.com →</div>
         </a>
         <a
           href="https://github.com/AlexsJones/research"
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
         >
-          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+          <div className="label mb-2">
             Research
           </div>
-          <div className="text-slate-200">
+          <div className="text-bone">
             AlexsJones / research
           </div>
-          <div className="text-slate-500 text-xs mt-1">github.com →</div>
+          <div className="text-ash text-xs mt-1">github.com →</div>
         </a>
         <Link
-          href="/research/synthetic-membrane"
-          className="block rounded-lg border border-slate-800 bg-slate-900/40 p-4 hover:border-emerald-500/50 hover:bg-slate-900 transition"
+          href="/research/0001-synthetic-membrane-coordination-layer"
+          className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
         >
-          <div className="text-xs uppercase tracking-widest text-emerald-400 mb-2">
+          <div className="label mb-2">
             Paper
           </div>
-          <div className="text-slate-200">Full paper, read on site</div>
-          <div className="text-slate-500 text-xs mt-1">axjns.dev →</div>
+          <div className="text-bone">Full paper (v2.1), read on site</div>
+          <div className="text-ash text-xs mt-1">axjns.dev →</div>
         </Link>
       </div>
 
       {/* === ADDITIONAL DIAGRAMS === */}
-      <section className="mt-20 border-t border-slate-800 pt-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-6">
+      <section className="mt-20 border-t border-surface-lighter pt-12">
+        <div className="label mb-6">
           Additional Visualizations
         </div>
 
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-8">
+        <h2 className="font-display text-2xl sm:text-3xl text-bone mb-8">
           State Graph
         </h2>
-        <img src="/state_graph.svg" className="w-full rounded-lg border border-slate-800" alt="State transition graph" />
+        <img src="/state_graph.svg" className="w-full rounded-[2px] border border-surface-lighter" alt="State transition graph" />
 
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-12 mb-8">
+        <h2 className="font-display text-2xl sm:text-3xl text-bone mt-12 mb-8">
           Baseline vs. Membrane Benchmark
         </h2>
-        <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+        <p className="text-sm text-bone-dark/80 mb-6 leading-relaxed">
           A note on what this is: an <strong>analytical communication-cost model</strong>, not a
           measurement of real LLM token bills. The message and consensus-step counts follow
           structurally from the interaction pattern (all-pairs point-to-point vs. expose-once /
@@ -694,38 +695,38 @@ export default function SyntheticMembranePage() {
           load-bearing result is the O(N²·F) vs. O(N·F) scaling of messages, which holds
           regardless of those constants.
         </p>
-        <img src="/benchmark.svg" className="w-full rounded-lg border border-slate-800" alt="Benchmark comparison chart" />
+        <img src="/benchmark.svg" className="w-full rounded-[2px] border border-surface-lighter" alt="Benchmark comparison chart" />
       </section>
 
       {/* === TERMINAL DEMO === */}
-      <section className="mt-20 border-t border-slate-800 pt-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-6">
+      <section className="mt-20 border-t border-surface-lighter pt-12">
+        <div className="label mb-6">
           Live Demo Output
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-8">
+        <h2 className="font-display text-2xl sm:text-3xl text-bone mb-8">
           Five-Agent Simulation
         </h2>
 
-        <div className="rounded-lg border border-slate-800 bg-[#010409] overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900/50">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-2 text-xs text-slate-500 font-mono">terminal · python -m demo</span>
+        <div className="rounded-[2px] border border-bone bg-ink overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-2 border-b border-cream/15">
+            <div className="w-3 h-3 rounded-full bg-cream/25" />
+            <div className="w-3 h-3 rounded-full bg-cream/45" />
+            <div className="w-3 h-3 rounded-full bg-cream/65" />
+            <span className="ml-2 text-xs text-cream/40 font-mono">terminal · python -m demo</span>
           </div>
-          <pre className="p-4 text-[11px] leading-tight text-emerald-300/90 font-mono overflow-x-auto whitespace-pre">{TERMINAL_OUTPUT}</pre>
+          <pre className="p-4 text-[11px] leading-tight text-cream/90 font-mono overflow-x-auto whitespace-pre">{TERMINAL_OUTPUT}</pre>
         </div>
       </section>
 
       {/* === BENCHMARK TABLE === */}
-      <section className="mt-20 border-t border-slate-800 pt-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-6">
+      <section className="mt-20 border-t border-surface-lighter pt-12">
+        <div className="label mb-6">
           Benchmark Data
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-8">
+        <h2 className="font-display text-2xl sm:text-3xl text-bone mb-8">
           Scaling: N agents × 5 facts each
         </h2>
-        <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+        <p className="text-sm text-bone-dark/80 mb-6 leading-relaxed">
           Token figures below are <strong>modelled</strong>, not measured (see the note above): they
           apply the fixed per-message cost model to the O(N²·F) vs. O(N·F) message counts. The
           reduction widens with scale because point-to-point exchange grows quadratically in agents
@@ -733,29 +734,30 @@ export default function SyntheticMembranePage() {
         </p>
         <BenchmarkTable />
 
-        <div className="mt-8 rounded-lg border border-slate-800 bg-[#010409] overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900/50">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-2 text-xs text-slate-500 font-mono">benchmark</span>
+        <div className="mt-8 rounded-[2px] border border-bone bg-ink overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-2 border-b border-cream/15">
+            <div className="w-3 h-3 rounded-full bg-cream/25" />
+            <div className="w-3 h-3 rounded-full bg-cream/45" />
+            <div className="w-3 h-3 rounded-full bg-cream/65" />
+            <span className="ml-2 text-xs text-cream/40 font-mono">benchmark</span>
           </div>
-          <pre className="p-4 text-[11px] leading-tight text-emerald-300/90 font-mono overflow-x-auto whitespace-pre">{BENCHMARK_TABLE_TEXT}</pre>
+          <pre className="p-4 text-[11px] leading-tight text-cream/90 font-mono overflow-x-auto whitespace-pre">{BENCHMARK_TABLE_TEXT}</pre>
         </div>
       </section>
 
-      <footer className="mt-12 text-center text-xs font-mono text-slate-600">
-        <Link href="/blog" className="hover:text-emerald-600 transition">
+      <footer className="mt-12 text-center text-xs font-mono text-ash">
+        <Link href="/blog" className="hover:text-bone transition">
           ← back to blog
         </Link>
       </footer>
     </article>
+    </div>
   );
 }
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-5 text-[17px] leading-[1.75] text-slate-800">
+    <div className="space-y-5 text-[15px] leading-[1.8] text-bone-dark">
       {children}
     </div>
   );
@@ -763,7 +765,7 @@ function Prose({ children }: { children: React.ReactNode }) {
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-12 mb-4">
+    <h2 className="font-display text-2xl sm:text-3xl text-bone mt-12 mb-4">
       {children}
     </h2>
   );

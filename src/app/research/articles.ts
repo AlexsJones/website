@@ -14,8 +14,8 @@ export const ARTICLES: Article[] = [
     title:
       "The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems",
     description:
-      "Expanded position paper (v2.0) proposing a six-layer synthetic membrane architecture, drawing on biological analogues, distributed systems theory, and incident management doctrine.",
-    date: "May 2026",
+      "Expanded position paper (v2.1) proposing a six-layer synthetic membrane architecture, drawing on biological analogues, distributed systems theory, and incident management doctrine.",
+    date: "July 2026",
     tag: "Synthetic Membrane",
     type: "paper",
     links: [
