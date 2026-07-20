@@ -256,7 +256,7 @@ function PageResearch() {
           The fix is not bigger models. It&apos;s <span style={{ color: "#ffff00" }}>structure</span> between them.
         </p>
         <div style={{ marginTop: "10px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          <a href="/research/synthetic-membrane" style={{ color: "#00ffff", fontWeight: "bold", border: "2px outset #00ffff", padding: "4px 12px", background: "rgba(0,255,255,0.1)" }}>
+          <a href="/research/0001-synthetic-membrane-coordination-layer" style={{ color: "#00ffff", fontWeight: "bold", border: "2px outset #00ffff", padding: "4px 12px", background: "rgba(0,255,255,0.1)" }}>
             📖 Read Paper
           </a>
           <a href="https://github.com/AlexsJones/research" target="_blank" rel="noopener noreferrer" style={{ color: "#00ff00", fontWeight: "bold", border: "2px outset #00ff00", padding: "4px 12px", background: "rgba(0,255,0,0.1)" }}>
