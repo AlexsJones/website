@@ -2,8 +2,7 @@ import { ImageResponse } from "next/og";
 import { StencilOgCard, OG_SIZE } from "../../../components/og-card";
 
 export const runtime = "edge";
-export const alt =
-  "The Synthetic Membrane: A Shared Permeable Boundary for Multi-Agent AI Systems | axjns.dev";
+export const alt = "The Sticky-Note Problem | axjns.dev";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
@@ -11,10 +10,10 @@ export default async function Image() {
   return new ImageResponse(
     (
       <StencilOgCard
-        label="PAPER / V1"
-        title="The Synthetic"
-        accent="Membrane"
-        subtitle="A shared permeable boundary for multi-agent AI systems — the original position paper."
+        label="FIELD NOTES / MULTI-AGENT"
+        title="The Sticky-Note"
+        accent="Problem"
+        subtitle="Why multi-agent AI is broken at the coordination layer, and what incident commanders figured out fifty years ago."
       />
     ),
     { ...size },
