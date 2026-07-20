@@ -64,7 +64,7 @@ function Card({
       target="_blank"
       rel="noopener noreferrer"
       onMouseMove={onMouseMove}
-      className={`spotlight-card group relative flex flex-col justify-between border border-surface-lighter bg-surface-light/60 rounded-[2px] transition-colors duration-300 hover:border-ember ${
+      className={`spotlight-card group relative flex h-full flex-col justify-between border border-surface-lighter bg-surface-light/60 rounded-[2px] transition-colors duration-300 hover:border-ember ${
         large ? "p-7 sm:p-9 min-h-[280px]" : "p-6 min-h-[220px]"
       }`}
     >
@@ -150,22 +150,72 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
   const featured = projects.filter((p) => p.featured);
   const rest = projects.filter((p) => !p.featured);
 
+  // An odd number of large featured cards leaves a lone card in the 2-col
+  // grid with an awkward empty space beside it. When that happens, pull two
+  // smaller projects up to sit stacked next to it (a tall-left / two-short
+  // bento), so the row reads as intentional instead of half-empty.
+  const hasGap = featured.length % 2 === 1;
+  const leadFeatured = hasGap ? featured.slice(0, -1) : featured;
+  const trailingFeatured = hasGap ? featured[featured.length - 1] : null;
+  const fillers = hasGap ? rest.slice(0, 2) : [];
+  const remaining = hasGap ? rest.slice(2) : rest;
+
+  // Pick a column count that divides the remaining cards evenly so the last
+  // row never leaves its own gap.
+  const remainingCols =
+    remaining.length === 4
+      ? "sm:grid-cols-2 lg:grid-cols-4"
+      : remaining.length === 2
+        ? "sm:grid-cols-2"
+        : remaining.length === 1
+          ? "grid-cols-1"
+          : "sm:grid-cols-2 lg:grid-cols-3";
+
+  let n = 0; // running card number across every section
+
   return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        {featured.map((p, i) => (
-          <Reveal key={p.name} delay={i * 90}>
-            <Card project={p} index={i} large />
+    <div className="space-y-4">
+      {leadFeatured.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {leadFeatured.map((p) => {
+            const i = n++;
+            return (
+              <Reveal key={p.name} delay={(i % 2) * 90}>
+                <Card project={p} index={i} large />
+              </Reveal>
+            );
+          })}
+        </div>
+      )}
+
+      {trailingFeatured && (
+        <div className="grid grid-cols-1 md:grid-cols-2 md:auto-rows-fr gap-4">
+          <Reveal key={trailingFeatured.name} className="md:row-span-2 h-full">
+            <Card project={trailingFeatured} index={n++} large />
           </Reveal>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {rest.map((p, i) => (
-          <Reveal key={p.name} delay={(i % 3) * 90}>
-            <Card project={p} index={featured.length + i} />
-          </Reveal>
-        ))}
-      </div>
+          {fillers.map((p) => {
+            const i = n++;
+            return (
+              <Reveal key={p.name} delay={90} className="h-full">
+                <Card project={p} index={i} />
+              </Reveal>
+            );
+          })}
+        </div>
+      )}
+
+      {remaining.length > 0 && (
+        <div className={`grid grid-cols-1 ${remainingCols} gap-4`}>
+          {remaining.map((p) => {
+            const i = n++;
+            return (
+              <Reveal key={p.name} delay={(i % 3) * 90}>
+                <Card project={p} index={i} />
+              </Reveal>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
