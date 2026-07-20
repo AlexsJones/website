@@ -83,7 +83,26 @@ export default async function Home() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative grid-pattern overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 corner-ticks">
+        {/* deco: fanned blade crown + ghosted turbine schematic */}
+        <img
+          src="/deco/fan-arc.svg"
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute left-1/2 -translate-x-1/2 -top-4 w-[640px] max-w-none opacity-[0.14]"
+        />
+        <img
+          src="/deco/blueprint-turbine.svg"
+          alt=""
+          aria-hidden
+          className="stamp-rotate pointer-events-none select-none absolute -right-40 -top-16 w-[560px] max-w-none opacity-[0.10] hidden lg:block"
+        />
+        <img
+          src="/deco/crosshair.svg"
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute right-8 bottom-10 w-12 opacity-30 hidden lg:block"
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 corner-ticks relative">
           <div className="flex items-start justify-between gap-12">
             <div className="max-w-3xl">
               <Reveal>
@@ -127,9 +146,24 @@ export default async function Home() {
             </Reveal>
           </div>
 
-          {/* spec strip */}
+          {/* deco: unit marks — reads as a production line */}
           <Reveal delay={200}>
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 border border-surface-lighter rounded-[2px] divide-y md:divide-y-0 md:divide-x divide-surface-lighter bg-surface-light/40">
+            <div className="mt-14 flex items-center gap-3" aria-hidden>
+              <img src="/deco/rotor-ring.svg" alt="" className="w-8 h-8 opacity-70" />
+              <img src="/deco/rotor-ring.svg" alt="" className="w-8 h-8 opacity-70" />
+              <img src="/deco/rotor-ring.svg" alt="" className="w-8 h-8 opacity-70" />
+              <span className="label ml-2">unit marks / built to aggregate</span>
+              <img
+                src="/deco/chevron-strip.svg"
+                alt=""
+                className="hidden sm:block h-2.5 ml-auto opacity-40"
+              />
+            </div>
+          </Reveal>
+
+          {/* spec strip */}
+          <Reveal delay={250}>
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 border border-surface-lighter rounded-[2px] divide-y md:divide-y-0 md:divide-x divide-surface-lighter bg-surface-light/40">
               {[
                 {
                   k: "github stars",
@@ -161,9 +195,17 @@ export default async function Home() {
             <h2 className="font-display text-4xl sm:text-6xl text-bone mb-3">
               Selected <span className="italic text-ember">works</span>
             </h2>
-            <p className="font-mono text-xs text-ash uppercase tracking-[0.08em] mb-12">
-              Live star counts &mdash; refreshed daily from GitHub
-            </p>
+            <div className="flex items-center gap-4 mb-12">
+              <p className="font-mono text-xs text-ash uppercase tracking-[0.08em]">
+                Live star counts &mdash; refreshed daily from GitHub
+              </p>
+              <img
+                src="/deco/chevron-strip.svg"
+                alt=""
+                aria-hidden
+                className="h-2.5 opacity-40 hidden sm:block"
+              />
+            </div>
           </Reveal>
           <ProjectsShowcase projects={projects} />
         </div>
@@ -172,8 +214,15 @@ export default async function Home() {
       {/* ── Research — cream panel ───────────────────────── */}
       <section
         data-label="research"
-        className="section-industrial section-cream grid-lines-dark"
+        className="section-industrial section-cream grid-lines-dark relative overflow-hidden"
       >
+        {/* deco: dotted aperture bloom watermark */}
+        <img
+          src="/deco/stencil-star.svg"
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute right-6 top-10 w-24 opacity-60 hidden sm:block"
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
           <Reveal>
             <div className="label mb-4">[ 003 / papers ]</div>
@@ -186,8 +235,15 @@ export default async function Home() {
               <Reveal key={a.slug} delay={i * 100}>
                 <Link
                   href={`/research/${a.slug}`}
-                  className="group block border border-ink/15 bg-white p-7 rounded-[2px] hover:border-ember transition-colors h-full"
+                  className="group relative block border border-ink/15 bg-white p-7 rounded-[2px] hover:border-ember transition-colors h-full"
                 >
+                  {/* deco: viewfinder brackets frame the card on hover */}
+                  <img
+                    src="/deco/frame-corners.svg"
+                    alt=""
+                    aria-hidden
+                    className="pointer-events-none absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] opacity-0 group-hover:opacity-40 transition-opacity"
+                  />
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white bg-ink px-1.5 py-0.5 rounded-[2px]">
                       {a.type}
@@ -209,6 +265,13 @@ export default async function Home() {
               </Reveal>
             ))}
           </div>
+          {/* deco: coupled rings — "systems, not machines" */}
+          <img
+            src="/deco/ring-chain.svg"
+            alt=""
+            aria-hidden
+            className="mt-12 w-72 max-w-full opacity-50 hidden sm:block"
+          />
         </div>
       </section>
 
@@ -218,6 +281,13 @@ export default async function Home() {
         className="section-industrial grid-lines"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+          {/* deco: hazard hatch divider */}
+          <img
+            src="/deco/hatch-band.svg"
+            alt=""
+            aria-hidden
+            className="w-40 mb-12 opacity-40"
+          />
           <div className="grid lg:grid-cols-2 gap-14">
             <div>
               <Reveal>

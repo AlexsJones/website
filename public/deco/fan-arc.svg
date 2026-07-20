@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" fill="none" stroke="#141414" stroke-width="1">
+  <!-- Fanned blade arc — outline blades radiating from an off-canvas hub, ref: hero crown -->
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(-32 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(-24 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(-16 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(-8 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(8 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(16 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(24 320 640)"/>
+  <rect x="298" y="-60" width="44" height="290" transform="rotate(32 320 640)"/>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" fill="#141414">
+  <!-- Data plate — barcode + checker strip, ref: spec sheet furniture -->
+  <rect x="0" y="0" width="3" height="40"/>
+  <rect x="6" y="0" width="1.5" height="40"/>
+  <rect x="11" y="0" width="6" height="40"/>
+  <rect x="20" y="0" width="1.5" height="40"/>
+  <rect x="25" y="0" width="3" height="40"/>
+  <rect x="31" y="0" width="1.5" height="40"/>
+  <rect x="35" y="0" width="8" height="40"/>
+  <rect x="46" y="0" width="1.5" height="40"/>
+  <rect x="51" y="0" width="3" height="40"/>
+  <rect x="58" y="0" width="6" height="40"/>
+  <rect x="67" y="0" width="1.5" height="40"/>
+  <rect x="72" y="0" width="3" height="40"/>
+  <rect x="78" y="0" width="1.5" height="40"/>
+  <rect x="83" y="0" width="8" height="40"/>
+  <rect x="94" y="0" width="3" height="40"/>
+  <rect x="100" y="0" width="1.5" height="40"/>
+  <rect x="105" y="0" width="6" height="40"/>
+  <rect x="114" y="0" width="1.5" height="40"/>
+  <rect x="119" y="0" width="3" height="40"/>
+  <rect x="126" y="0" width="1.5" height="40"/>
+  <rect x="130" y="0" width="8" height="40"/>
+  <rect x="141" y="0" width="1.5" height="40"/>
+  <rect x="146" y="0" width="3" height="40"/>
+  <rect x="152" y="0" width="6" height="40"/>
+  <rect x="161" y="0" width="1.5" height="40"/>
+  <rect x="166" y="0" width="3" height="40"/>
+  <rect x="172" y="0" width="1.5" height="40"/>
+  <rect x="177" y="0" width="8" height="40"/>
+  <rect x="188" y="0" width="1.5" height="40"/>
+  <rect x="193" y="0" width="3" height="40"/>
+  <rect x="199" y="0" width="6" height="40"/>
+  <rect x="208" y="0" width="1.5" height="40"/>
+  <rect x="213" y="0" width="3" height="40"/>
+  <rect x="219" y="0" width="1.5" height="40"/>
+  <rect x="224" y="0" width="8" height="40"/>
+  <rect x="235" y="0" width="1.5" height="40"/>
+  <rect x="238.5" y="0" width="1.5" height="40"/>
+  <!-- checker strip -->
+  <g>
+    <rect x="0" y="46" width="6" height="5"/>
+    <rect x="12" y="46" width="6" height="5"/>
+    <rect x="24" y="46" width="6" height="5"/>
+    <rect x="36" y="46" width="6" height="5"/>
+    <rect x="48" y="46" width="6" height="5"/>
+    <rect x="6" y="51" width="6" height="5"/>
+    <rect x="18" y="51" width="6" height="5"/>
+    <rect x="30" y="51" width="6" height="5"/>
+    <rect x="42" y="51" width="6" height="5"/>
+    <rect x="54" y="51" width="6" height="5"/>
+  </g>
+  <rect x="66" y="46" width="174" height="10"/>
+</svg>

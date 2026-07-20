@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 24" fill="#141414">
+  <!-- Flow chevrons — direction strip, ref: >>> band -->
+  <path d="M0 0h9l12 12L9 24H0l12-12z"/>
+  <path d="M28 0h9l12 12L37 24h-9l12-12z"/>
+  <path d="M56 0h9l12 12L65 24h-9l12-12z"/>
+  <path d="M84 0h9l12 12L93 24h-9l12-12z"/>
+  <path d="M112 0h9l12 12-12 12h-9l12-12z"/>
+  <path d="M140 0h9l12 12-12 12h-9l12-12z"/>
+  <path d="M168 0h9l12 12-12 12h-9l12-12z"/>
+  <path d="M196 0h9l12 12-12 12h-9l12-12z"/>
+</svg>

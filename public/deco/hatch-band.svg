@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 32" fill="#141414">
+  <!-- Hazard hatch — diagonal service stripe with solid cap -->
+  <defs>
+    <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect x="0" y="0" width="3" height="8"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="4" width="196" height="24" fill="url(#hatch)" stroke="#141414" stroke-width="1"/>
+  <rect x="204" y="4" width="36" height="24"/>
+</svg>

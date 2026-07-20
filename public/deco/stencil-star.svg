@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="#141414">
+  <!-- Aperture bloom — 12 dotted petals (halftone leaves), ref: LAB sheet flower + dot-matrix -->
+  <defs>
+    <g id="petal">
+      <circle cx="60" cy="44" r="1.6"/>
+      <circle cx="56.8" cy="37" r="1.9"/>
+      <circle cx="63.2" cy="37" r="1.9"/>
+      <circle cx="55.4" cy="30" r="2.2"/>
+      <circle cx="64.6" cy="30" r="2.2"/>
+      <circle cx="55.8" cy="23" r="2.1"/>
+      <circle cx="64.2" cy="23" r="2.1"/>
+      <circle cx="57.4" cy="17" r="1.7"/>
+      <circle cx="62.6" cy="17" r="1.7"/>
+      <circle cx="60" cy="12" r="1.4"/>
+    </g>
+  </defs>
+  <use href="#petal"/>
+  <use href="#petal" transform="rotate(30 60 60)"/>
+  <use href="#petal" transform="rotate(60 60 60)"/>
+  <use href="#petal" transform="rotate(90 60 60)"/>
+  <use href="#petal" transform="rotate(120 60 60)"/>
+  <use href="#petal" transform="rotate(150 60 60)"/>
+  <use href="#petal" transform="rotate(180 60 60)"/>
+  <use href="#petal" transform="rotate(210 60 60)"/>
+  <use href="#petal" transform="rotate(240 60 60)"/>
+  <use href="#petal" transform="rotate(270 60 60)"/>
+  <use href="#petal" transform="rotate(300 60 60)"/>
+  <use href="#petal" transform="rotate(330 60 60)"/>
+  <circle cx="60" cy="60" r="2.4"/>
+  <circle cx="60" cy="52" r="1.3"/>
+  <circle cx="60" cy="68" r="1.3"/>
+  <circle cx="52" cy="60" r="1.3"/>
+  <circle cx="68" cy="60" r="1.3"/>
+</svg>

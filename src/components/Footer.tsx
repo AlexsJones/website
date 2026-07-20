@@ -73,14 +73,27 @@ export default function Footer() {
           <span className="text-ash">Zero downtime blogging</span>
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-ash">
-            &copy; {new Date().getFullYear()} axjns.dev &mdash; built with an
-            ember
-          </span>
-          <span className="text-ember-dark text-[8px] tracking-[0.3em]">
-            &#9656;&#9656;&#9656;
-          </span>
+        <div className="mt-8 flex items-end justify-between gap-6">
+          <div>
+            {/* deco: data plate — barcode + checker strip */}
+            <img
+              src="/deco/barcode-plate.svg"
+              alt=""
+              aria-hidden
+              className="w-48 mb-3 opacity-80"
+            />
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-ash">
+              &copy; {new Date().getFullYear()} axjns.dev &mdash; built with an
+              ember
+            </span>
+          </div>
+          {/* deco: dot-matrix chevron — forward motion */}
+          <img
+            src="/deco/dot-matrix.svg"
+            alt=""
+            aria-hidden
+            className="w-10 opacity-60"
+          />
         </div>
       </div>
     </footer>

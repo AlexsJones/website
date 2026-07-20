@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" preserveAspectRatio="none" fill="none" stroke="#141414" stroke-width="3">
+  <!-- Viewfinder brackets — [ FWD ] style framing. Stretches to any box; stroke stays uniform. -->
+  <g vector-effect="non-scaling-stroke">
+    <path d="M28 3H3v20"/>
+    <path d="M172 3h25v20"/>
+    <path d="M28 117H3V97"/>
+    <path d="M172 117h25V97"/>
+  </g>
+</svg>
