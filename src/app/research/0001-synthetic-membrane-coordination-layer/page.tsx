@@ -716,41 +716,41 @@ Three observations from this mapping:
 
 const components: Components = {
   h2: ({ children }) => (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-14 mb-4">
+    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-14 mb-4">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-xl font-bold tracking-tight text-slate-100 mt-10 mb-3">
+    <h3 className="text-xl font-bold tracking-tight text-slate-900 mt-10 mb-3">
       {children}
     </h3>
   ),
   p: ({ children }) => (
-    <p className="text-[17px] leading-[1.75] text-slate-300 mb-5">
+    <p className="text-[17px] leading-[1.75] text-slate-800 mb-5">
       {children}
     </p>
   ),
   strong: ({ children }) => (
-    <strong className="font-bold text-slate-100">{children}</strong>
+    <strong className="font-bold text-slate-900">{children}</strong>
   ),
-  em: ({ children }) => <em className="italic text-slate-200">{children}</em>,
+  em: ({ children }) => <em className="italic text-slate-800">{children}</em>,
   a: ({ href, children }) => (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2"
+      className="text-emerald-700 hover:text-emerald-600 underline underline-offset-2"
     >
       {children}
     </a>
   ),
   ul: ({ children }) => (
-    <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
+    <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-300">
+    <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
       {children}
     </ol>
   ),
@@ -758,7 +758,7 @@ const components: Components = {
     <li className="text-[17px] leading-[1.75]">{children}</li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="border-l-2 border-emerald-400 pl-6 my-6 text-slate-200 italic">
+    <blockquote className="border-l-2 border-emerald-600 pl-6 my-6 text-slate-800 italic">
       {children}
     </blockquote>
   ),
@@ -797,23 +797,22 @@ const components: Components = {
     <tr className="border-b border-slate-800/50">{children}</tr>
   ),
   td: ({ children }) => (
-    <td className="px-4 py-3 text-slate-300">{children}</td>
+    <td className="px-4 py-3 text-slate-800">{children}</td>
   ),
 };
 
 export default function PaperPage() {
   return (
-    <div className="min-h-screen bg-slate-950">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">
+        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
           Paper · Synthetic Membrane
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-50">
+        <h1 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900">
           The Synthetic Membrane: A Coordination Layer for Multi-Agent AI
           Systems
         </h1>
-        <div className="mt-4 text-sm text-slate-400 font-mono">
+        <div className="mt-4 text-sm text-slate-600 font-mono">
           Alex Jones · July 2026 · v2.1
         </div>
       </div>
@@ -822,10 +821,10 @@ export default function PaperPage() {
         {PAPER}
       </ReactMarkdown>
 
-      <footer className="mt-12 pt-8 border-t border-slate-800 flex justify-between text-xs font-mono text-slate-500">
+      <footer className="mt-12 pt-8 border-t border-slate-800 flex justify-between text-xs font-mono text-slate-600">
         <Link
           href="/research"
-          className="hover:text-emerald-300 transition"
+          className="hover:text-emerald-600 transition"
         >
           &larr; research
         </Link>
@@ -833,12 +832,11 @@ export default function PaperPage() {
           href="https://github.com/AlexsJones/research/blob/main/papers/0001-synthetic-membrane-coordination-layer.md"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-emerald-300 transition"
+          className="hover:text-emerald-600 transition"
         >
           raw markdown &rarr;
         </a>
       </footer>
     </article>
-    </div>
   );
 }

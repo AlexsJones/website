@@ -32,6 +32,17 @@ export const PROJECTS: Project[] = [
     tags: ["Kubernetes", "AI", "CNCF"],
   },
   {
+    name: "sympozium",
+    repo: "sympozium-ai/sympozium",
+    description:
+      "The coordination layer for multi-agent AI — a Kubernetes-native synthetic membrane giving agents discovery, shared state, and governance as first-class primitives.",
+    language: "Go",
+    stars: 571,
+    role: "creator",
+    featured: true,
+    tags: ["agents", "Kubernetes", "AI"],
+  },
+  {
     name: "llmserve",
     repo: "AlexsJones/llmserve",
     description:

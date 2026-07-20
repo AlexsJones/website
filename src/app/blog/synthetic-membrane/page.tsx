@@ -179,16 +179,15 @@ function BenchmarkTable() {
 
 export default function SyntheticMembranePage() {
   return (
-    <div className="min-h-screen bg-slate-950">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">
+        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
           Research · Synthetic Membrane
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-50">
+        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-900">
           We&apos;ve been building AI agents wrong.
         </h1>
-        <div className="mt-4 text-sm text-slate-400 font-mono">
+        <div className="mt-4 text-sm text-slate-600 font-mono">
           Alex Jones · April 2026
         </div>
       </div>
@@ -334,7 +333,7 @@ export default function SyntheticMembranePage() {
         <img src="/architecture.svg" className="my-8 w-full rounded-lg border border-slate-800" alt="Membrane architecture diagram, layers 0-3 with immune layer" />
 
         <details className="my-4">
-          <summary className="text-sm text-slate-500 cursor-pointer hover:text-slate-300 transition">ASCII version</summary>
+          <summary className="text-sm text-slate-600 cursor-pointer hover:text-slate-800 transition">ASCII version</summary>
           <pre className="mt-4 overflow-x-auto rounded-lg border border-slate-800 bg-[#010409] p-5 text-[11px] leading-tight text-emerald-300/90 font-mono">
             <code>{ARCHITECTURE_DIAGRAM}</code>
           </pre>
@@ -433,7 +432,7 @@ export default function SyntheticMembranePage() {
           It means:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
           <li>Wire formats have to be compact. You cannot afford verbose JSON.</li>
           <li>
             Permeability has to be{" "}
@@ -484,7 +483,7 @@ export default function SyntheticMembranePage() {
 
         <p>Specifically, four pieces of plumbing are missing:</p>
 
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-300">
+        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
           <li>
             <strong>No structured protocol.</strong> They communicate via
             raw text, so every interaction is shallow, ambiguous,
@@ -526,7 +525,7 @@ export default function SyntheticMembranePage() {
             href="https://github.com/sympozium-ai/sympozium"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2"
+            className="text-emerald-700 hover:text-emerald-600 underline underline-offset-2"
           >
             Sympozium
           </a>
@@ -539,7 +538,7 @@ export default function SyntheticMembranePage() {
 
         <p>Concretely, what&apos;s landing:</p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
           <li>
             <strong>Permeability as CRD types.</strong> Every agent config
             declares its default visibility (public/trusted/private),
@@ -586,7 +585,7 @@ export default function SyntheticMembranePage() {
           people who are:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
           <li>
             <strong>Building multi-agent systems in production</strong> and
             feeling the pain of message-passing-only architectures. Your war
@@ -673,19 +672,19 @@ export default function SyntheticMembranePage() {
 
       {/* === ADDITIONAL DIAGRAMS === */}
       <section className="mt-20 border-t border-slate-800 pt-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
+        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-6">
           Additional Visualizations
         </div>
 
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-8">
           State Graph
         </h2>
         <img src="/state_graph.svg" className="w-full rounded-lg border border-slate-800" alt="State transition graph" />
 
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-8">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-12 mb-8">
           Baseline vs. Membrane Benchmark
         </h2>
-        <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+        <p className="text-sm text-slate-600 mb-6 leading-relaxed">
           A note on what this is: an <strong>analytical communication-cost model</strong>, not a
           measurement of real LLM token bills. The message and consensus-step counts follow
           structurally from the interaction pattern (all-pairs point-to-point vs. expose-once /
@@ -700,10 +699,10 @@ export default function SyntheticMembranePage() {
 
       {/* === TERMINAL DEMO === */}
       <section className="mt-20 border-t border-slate-800 pt-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
+        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-6">
           Live Demo Output
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-8">
           Five-Agent Simulation
         </h2>
 
@@ -720,13 +719,13 @@ export default function SyntheticMembranePage() {
 
       {/* === BENCHMARK TABLE === */}
       <section className="mt-20 border-t border-slate-800 pt-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-6">
+        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-6">
           Benchmark Data
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-100 mb-8">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-8">
           Scaling: N agents × 5 facts each
         </h2>
-        <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+        <p className="text-sm text-slate-600 mb-6 leading-relaxed">
           Token figures below are <strong>modelled</strong>, not measured (see the note above): they
           apply the fixed per-message cost model to the O(N²·F) vs. O(N·F) message counts. The
           reduction widens with scale because point-to-point exchange grows quadratically in agents
@@ -745,19 +744,18 @@ export default function SyntheticMembranePage() {
         </div>
       </section>
 
-      <footer className="mt-12 text-center text-xs font-mono text-slate-500">
-        <Link href="/blog" className="hover:text-emerald-300 transition">
+      <footer className="mt-12 text-center text-xs font-mono text-slate-600">
+        <Link href="/blog" className="hover:text-emerald-600 transition">
           ← back to blog
         </Link>
       </footer>
     </article>
-    </div>
   );
 }
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-5 text-[17px] leading-[1.75] text-slate-300">
+    <div className="space-y-5 text-[17px] leading-[1.75] text-slate-800">
       {children}
     </div>
   );
@@ -765,7 +763,7 @@ function Prose({ children }: { children: React.ReactNode }) {
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-4">
+    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-12 mb-4">
       {children}
     </h2>
   );

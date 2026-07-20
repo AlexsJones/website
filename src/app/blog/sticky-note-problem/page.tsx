@@ -20,19 +20,18 @@ export const metadata = {
 
 export default function StickyNoteProblemPage() {
   return (
-    <div className="min-h-screen bg-slate-950">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
-        <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">
+        <div className="text-xs uppercase tracking-widest text-emerald-700 font-mono mb-3">
           Research · Sticky-Note Problem
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-50">
+        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight text-slate-900">
           The Sticky-Note Problem
         </h1>
-        <p className="mt-3 text-lg text-slate-400">
+        <p className="mt-3 text-lg text-slate-600">
           Why Multi-Agent AI Is Broken at the Coordination Layer
         </p>
-        <div className="mt-4 text-sm text-slate-400 font-mono">
+        <div className="mt-4 text-sm text-slate-600 font-mono">
           Alex Jones · May 2026
         </div>
       </div>
@@ -178,7 +177,7 @@ export default function StickyNoteProblemPage() {
           cluster is where the interesting numbers live:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
           <li>
             <strong>13.2%</strong> of failures were reasoning-action
             mismatches - agents reasoned about one thing and acted on another.
@@ -238,7 +237,7 @@ export default function StickyNoteProblemPage() {
 
         <H2>4. The Thesis</H2>
 
-        <blockquote className="border-l-4 border-emerald-500/50 pl-6 py-2 my-8 text-slate-200 italic text-lg">
+        <blockquote className="border-l-4 border-emerald-600 pl-6 py-2 my-8 text-slate-800 italic text-lg">
           Structured, gated, persistent communication is a prerequisite, not an
           accelerant, for collective intelligence.
         </blockquote>
@@ -470,7 +469,7 @@ export default function StickyNoteProblemPage() {
           of composable primitives:
         </p>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-300">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-800">
           <li>
             A <strong>shared medium</strong> backed by an immutable event log
             with CRDT convergence
@@ -528,7 +527,7 @@ export default function StickyNoteProblemPage() {
 
         <p>The evidence converges from three directions:</p>
 
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-300">
+        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800">
           <li>
             <strong>Empirical:</strong> MAST measures coordination failures at
             scale - 1,600+ traces showing that inter-agent misalignment is a
@@ -552,7 +551,7 @@ export default function StickyNoteProblemPage() {
           circles but should be:
         </p>
 
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-300" start={4}>
+        <ol className="list-decimal pl-6 space-y-2 my-5 text-slate-800" start={4}>
           <li>
             <strong>Operational:</strong> Human incident management
             (ICS/NIMS/SRE) has solved this exact problem for 50+ years, and the
@@ -575,7 +574,7 @@ export default function StickyNoteProblemPage() {
           happens and discover you needed it anyway.
         </p>
 
-        <p className="mt-8 text-sm text-slate-500 italic">
+        <p className="mt-8 text-sm text-slate-600 italic">
           This article is the first in a series exploring the synthetic membrane
           architecture. The position paper is available via the links below. The
           Sympozium implementation is in early development.
@@ -583,7 +582,7 @@ export default function StickyNoteProblemPage() {
 
         <H2>References</H2>
 
-        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-400 text-sm">
+        <ul className="list-disc pl-6 space-y-2 my-5 text-slate-600 text-sm">
           <li>
             Cemri et al., <em>Why Do Multi-Agent LLM Systems Fail? The MAST
             Study</em>, arXiv:2503.13657 (ICLR 2025)
@@ -668,19 +667,18 @@ export default function StickyNoteProblemPage() {
         </Link>
       </div>
 
-      <footer className="mt-12 text-center text-xs font-mono text-slate-500">
-        <Link href="/blog" className="hover:text-emerald-300 transition">
+      <footer className="mt-12 text-center text-xs font-mono text-slate-600">
+        <Link href="/blog" className="hover:text-emerald-600 transition">
           &larr; back to blog
         </Link>
       </footer>
     </article>
-    </div>
   );
 }
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-5 text-[17px] leading-[1.75] text-slate-300">
+    <div className="space-y-5 text-[17px] leading-[1.75] text-slate-800">
       {children}
     </div>
   );
@@ -688,7 +686,7 @@ function Prose({ children }: { children: React.ReactNode }) {
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl font-bold tracking-tight text-slate-100 mt-12 mb-4">
+    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-12 mb-4">
       {children}
     </h2>
   );
