@@ -1,65 +1,18 @@
 import PageHeader from "../../components/PageHeader";
 import Reveal from "../../components/Reveal";
+import { EXPERIENCE, SKILLS } from "./data";
 
 export const metadata = {
   title: "CV — axjns.dev",
   description: "Curriculum vitae of Alex Jones.",
 };
 
-const EXPERIENCE = [
-  { org: "Amazon Web Services", role: "Principal Engineer", span: "Aug 2023 — present", loc: "London" },
-  { org: "k8sgpt.ai", role: "Founder (open-source project)", span: "Mar 2023 — present", loc: "" },
-  { org: "OpenFeature", role: "Governing Committee", span: "Jul 2023 — Feb 2024", loc: "" },
-  { org: "CNCF", role: "Tech Lead, TAG App-Delivery", span: "Jun 2021 — Feb 2024", loc: "" },
-  { org: "Keptn", role: "Advisory Board Member", span: "May 2021 — Sep 2023", loc: "" },
-  {
-    org: "Canonical",
-    role: "Engineering Director, Kubernetes",
-    span: "Jan 2022 — Aug 2023",
-    loc: "",
-    detail:
-      "Led the Kubernetes organisation: product and engineering vision, new MicroK8s capabilities, community ecosystem growth.",
-  },
-  { org: "Ondat", role: "Advisor (until Akamai acquisition)", span: "Jun 2022 — Mar 2023", loc: "UK" },
-  {
-    org: "Civo",
-    role: "Principal SRE",
-    span: "May 2021 — Jan 2022",
-    loc: "",
-    detail:
-      "Built super-cluster capabilities, observability, recovery, backup and security systems.",
-  },
-  { org: "JPMorgan Chase & Co.", role: "VP, Site Reliability Engineering", span: "Dec 2020 — May 2021", loc: "London" },
-  { org: "American Express", role: "Engineering Director, SRE", span: "May 2019 — Dec 2020", loc: "London" },
-  { org: "Beamery", role: "Head of Platform & Infrastructure", span: "May 2017 — May 2019", loc: "London" },
-  { org: "Sky", role: "Lead DevOps Engineer", span: "Apr 2016 — May 2017", loc: "London" },
-  { org: "Casewise", role: "Lead Technical Architect", span: "Apr 2015 — Apr 2016", loc: "Mayfair" },
-  { org: "Microsoft", role: "Senior Software Engineer", span: "Oct 2013 — Apr 2015", loc: "Lionhead Studios" },
-  { org: "BSkyB", role: "Technical Lead, iOS / Mobile", span: "Apr 2011 — Oct 2013", loc: "Osterley" },
-  { org: "Grapple Mobile", role: "Frontend Developer", span: "Jul 2010 — Apr 2011", loc: "" },
-];
-
-const SKILLS = [
-  "Distributed Systems",
-  "Kubernetes",
-  "Systems Design",
-  "AI in Cloud",
-  "AWS",
-  "Observability",
-  "DevOps",
-  "Platform Engineering",
-  "Go",
-  "Rust",
-  "Linux",
-  "Open Source",
-  "Long-term Vision",
-  "Communication",
-];
-
 export default function CVPage() {
   return (
     <div className="grid-lines min-h-screen">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
+      <main className="relative max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
+        {/* dossier punch holes down the left margin */}
+        <div className="punch-rail -left-10 hidden lg:block" aria-hidden />
         <PageHeader
           index="cv"
           label="service record"
@@ -67,17 +20,63 @@ export default function CVPage() {
           accent="vitae."
         />
 
+        {/* personnel file plate */}
         <Reveal>
-          <div className="mb-14 grid sm:grid-cols-2 gap-4">
-            <div className="border border-surface-lighter bg-surface-light/40 p-5 rounded-[2px]">
-              <div className="label mb-3">[ current post ]</div>
-              <div className="font-display text-2xl text-bone">
-                Principal Engineer @ AWS
+          <div className="inline-block border border-surface-lighter border-b-0 bg-surface-light/60 px-4 pt-2 pb-3 -mb-px rounded-t-[3px] font-mono text-[10px] uppercase tracking-[0.15em] text-bone-dark">
+            Personnel file N&ordm; AJ-0001
+          </div>
+          <div className="relative border border-surface-lighter bg-surface-light/40 rounded-[2px] rounded-tl-none p-6 mb-4">
+            <span className="stamp right-10 top-8 hidden md:block">
+              Active service
+            </span>
+            <div className="flex flex-col sm:flex-row gap-6">
+              {/* photo frame with corner mounts */}
+              <div className="shrink-0">
+                <div className="relative w-28 h-28 border border-surface-lighter bg-surface p-1.5">
+                  <span className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-bone" />
+                  <span className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-bone" />
+                  <span className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-bone" />
+                  <span className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-bone" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/cv-portrait.jpg"
+                    alt="File photo — an illustration of Arkady from Foundation, not the subject"
+                    className="w-full h-full object-cover rounded-[1px]"
+                  />
+                </div>
+                <div className="mt-1.5 w-28 font-mono text-[8px] uppercase tracking-[0.08em] text-ash leading-snug">
+                  Photo substituted: Arkady &mdash; Foundation
+                </div>
               </div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash mt-2">
-                London, United Kingdom
+              {/* file fields */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-4 font-mono text-[11px] uppercase tracking-[0.1em] self-center">
+                <div>
+                  <div className="label mb-1">Name</div>
+                  <div className="text-bone">Jones, A.</div>
+                </div>
+                <div>
+                  <div className="label mb-1">File opened</div>
+                  <div className="text-bone">Jul 2010</div>
+                </div>
+                <div>
+                  <div className="label mb-1">Station</div>
+                  <div className="text-bone">London, UK</div>
+                </div>
+                <div>
+                  <div className="label mb-1">Assignment</div>
+                  <div className="text-bone">Principal Engineer @ AWS</div>
+                </div>
+                <div>
+                  <div className="label mb-1">Status</div>
+                  <div className="text-bone">Operational</div>
+                </div>
               </div>
             </div>
+          </div>
+        </Reveal>
+
+        <Reveal>
+          <div className="mb-14 grid sm:grid-cols-2 gap-4">
             <div className="border border-surface-lighter bg-surface-light/40 p-5 rounded-[2px]">
               <div className="label mb-3">[ channels ]</div>
               <div className="flex flex-col gap-1.5 font-mono text-[11px]">
@@ -95,21 +94,20 @@ export default function CVPage() {
                 </a>
               </div>
             </div>
+            <div className="border border-surface-lighter bg-surface-light/40 p-5 rounded-[2px]">
+              <div className="label mb-3">[ field summary ]</div>
+              <p className="text-xs text-bone-dark/85 leading-relaxed">
+                Individual contributor. My work is mysterious and important.
+                Outside of work I contribute to open source. The things I know
+                about: distributed systems, Kubernetes (exotic compute),
+                systems design, and applications of artificial intelligence in
+                cloud environments.
+              </p>
+            </div>
           </div>
         </Reveal>
 
-        <Reveal>
-          <div className="label mb-4">[ summary ]</div>
-          <p className="text-sm text-bone-dark/85 leading-relaxed max-w-2xl mb-14">
-            Individual contributor. My work is mysterious and important.
-            Outside of work I contribute to open source. The things I know
-            about: distributed systems, Kubernetes (exotic compute), systems
-            design, and applications of artificial intelligence in cloud
-            environments.
-          </p>
-        </Reveal>
-
-        <div className="label mb-4">[ experience ]</div>
+        <div className="label mb-4">[ service record ]</div>
         <div className="border-t border-surface-lighter mb-14">
           {EXPERIENCE.map((e, i) => (
             <Reveal key={`${e.org}-${e.role}`} delay={(i % 4) * 50}>

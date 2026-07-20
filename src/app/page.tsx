@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PROJECTS, Project } from "../data/projects";
 import ProjectsShowcase from "../components/ProjectsShowcase";
 import Reveal from "../components/Reveal";
+import MembraneField from "../components/MembraneField";
 import { ARTICLES } from "./research/articles";
 import { speakingEvents } from "./speaking/events";
 
@@ -221,6 +222,8 @@ export default async function Home() {
         data-label="research"
         className="section-industrial section-cream grid-lines-dark relative overflow-hidden"
       >
+        {/* membrane figure: bilayer + gates + signal crossings */}
+        <MembraneField />
         {/* deco: dotted aperture bloom watermark */}
         <img
           src="/deco/stencil-star.svg"
@@ -228,7 +231,7 @@ export default async function Home() {
           aria-hidden
           className="pointer-events-none select-none absolute right-6 top-10 w-24 opacity-60 hidden sm:block"
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
           <Reveal>
             <div className="label mb-4">[ 003 / papers ]</div>
             <h2 className="font-display text-4xl sm:text-6xl text-ink mb-12">
@@ -274,7 +277,7 @@ export default async function Home() {
             <Reveal delay={100}>
               <Link
                 href="/research"
-                className="group flex h-full flex-col justify-between border border-dashed border-ink/30 bg-white/40 p-7 rounded-[2px] hover:border-ember transition-colors"
+                className="group flex h-full flex-col justify-between border border-dashed border-ink/30 bg-white/85 p-7 rounded-[2px] hover:border-ember transition-colors"
               >
                 <div>
                   <div className="label mb-5">[ lineage &middot; one evolving paper ]</div>

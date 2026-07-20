@@ -32,6 +32,38 @@ const POSTS = [
   },
 ];
 
+/** Punch-tape strip — dots deterministically encoding the dispatch title. */
+function PunchTape({ seed }: { seed: string }) {
+  const dots = Array.from({ length: 34 }, (_, i) => {
+    const c = seed.charCodeAt(i % seed.length) + i * 7;
+    return c % 3 !== 0; // punched or not
+  });
+  return (
+    <div aria-hidden className="mt-4 flex items-center gap-[5px]">
+      {dots.map((punched, i) => (
+        <span
+          key={i}
+          className={`inline-block w-[5px] h-[5px] rounded-full ${
+            punched
+              ? "bg-bone/50 group-hover:bg-ember"
+              : "border border-bone/40"
+          } transition-colors`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function TearLine() {
+  return (
+    <div aria-hidden className="relative border-t border-dashed border-bone/40">
+      <span className="absolute -top-[9px] left-10 bg-surface px-1.5 font-mono text-[11px] text-ash leading-none">
+        &#9986;
+      </span>
+    </div>
+  );
+}
+
 export default function BlogPage() {
   return (
     <div className="grid-lines min-h-screen">
@@ -44,34 +76,52 @@ export default function BlogPage() {
           intro="Essays on AI agents, distributed systems, and the things that break."
         />
 
-        <div className="space-y-4">
-          {POSTS.map((post, i) => (
-            <Reveal key={post.slug} delay={i * 90}>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="group block border border-surface-lighter bg-surface-light/60 p-7 rounded-[2px] hover:border-ember transition-colors"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-ash group-hover:text-ember transition-colors">
-                    {String(i + 1).padStart(2, "0")} /
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash">
-                    {post.date}
-                  </span>
-                </div>
-                <h2 className="font-display text-2xl sm:text-3xl text-bone group-hover:text-ember transition-colors mb-3 leading-snug">
-                  {post.title}
-                </h2>
-                <p className="text-xs text-bone-dark/70 leading-relaxed max-w-2xl">
-                  {post.description}
-                </p>
-                <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
-                  Read &#8599;
-                </div>
-              </Link>
-            </Reveal>
-          ))}
+        {/* wire-service masthead */}
+        <Reveal>
+          <div className="masthead-rule py-2.5 text-center font-mono text-[11px] uppercase tracking-[0.3em] text-bone">
+            Axjns Wire &mdash; Field Dispatch Service
+          </div>
+          <div className="flex justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-ash mt-2 mb-12">
+            <span>London relay &middot; all channels</span>
+            <span>{POSTS.length} dispatches on file</span>
+          </div>
+        </Reveal>
+
+        <div>
+          {POSTS.map((post, i) => {
+            const n = POSTS.length - i;
+            return (
+              <Reveal key={post.slug} delay={(i % 3) * 80}>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="group block py-9 px-2 -mx-2 hover:bg-surface-light/40 transition-colors"
+                >
+                  <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-ash mb-3">
+                    Dispatch N&ordm; {String(n).padStart(3, "0")} &mdash;
+                    London &middot; {post.date}
+                  </div>
+                  <h2 className="font-display text-2xl sm:text-3xl text-bone group-hover:text-ember transition-colors mb-3 leading-snug max-w-3xl">
+                    {post.title}
+                  </h2>
+                  <p className="text-xs text-bone-dark/70 leading-relaxed max-w-2xl">
+                    {post.description}
+                  </p>
+                  <PunchTape seed={post.title} />
+                  <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
+                    Read dispatch &#8599;
+                  </div>
+                </Link>
+                {i < POSTS.length - 1 && <TearLine />}
+              </Reveal>
+            );
+          })}
         </div>
+
+        <Reveal>
+          <div className="mt-12 text-center font-mono text-[10px] tracking-[0.4em] text-ash uppercase">
+            &middot;&middot;&middot; EOM &middot;&middot;&middot;
+          </div>
+        </Reveal>
       </main>
     </div>
   );

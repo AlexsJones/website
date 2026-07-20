@@ -7,6 +7,8 @@ export interface Article {
   type: "paper" | "article";
   version?: string;
   status?: "current" | "superseded";
+  /** Revision withdrawn from the site — shown on the rail but not linked. */
+  unpublished?: boolean;
   /** What this revision added over the previous one (shown on the lineage rail). */
   changes?: string[];
   links?: { label: string; href: string }[];
@@ -50,6 +52,7 @@ export const ARTICLES: Article[] = [
     type: "paper",
     version: "v1",
     status: "superseded",
+    unpublished: true,
     links: [
       { label: "github", href: "https://github.com/AlexsJones/research" },
     ],

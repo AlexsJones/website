@@ -10,15 +10,8 @@ export const metadata = {
 
 function NodeCard({ article }: { article: Article }) {
   const superseded = article.status === "superseded";
-  return (
-    <Link
-      href={`/research/${article.slug}`}
-      className={`group block border rounded-[2px] transition-colors ${
-        superseded
-          ? "border-surface-lighter/60 bg-surface-light/30 p-5 opacity-70 hover:opacity-100 hover:border-ember"
-          : "border-surface-lighter bg-surface-light/60 p-7 hover:border-ember"
-      }`}
-    >
+  const inner = (
+    <>
       <div className="flex items-center justify-between mb-4">
         <span
           className={`font-mono text-[9px] uppercase tracking-[0.15em] px-1.5 py-0.5 rounded-[2px] ${
@@ -35,6 +28,9 @@ function NodeCard({ article }: { article: Article }) {
           {article.date}
         </span>
       </div>
+      {superseded && (
+        <span className="stamp right-8 top-9 hidden sm:block">Superseded</span>
+      )}
       <h2
         className={`font-display text-bone group-hover:text-ember transition-colors mb-3 leading-snug ${
           superseded ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl"
@@ -45,9 +41,35 @@ function NodeCard({ article }: { article: Article }) {
       <p className="text-xs text-bone-dark/70 leading-relaxed max-w-2xl">
         {article.description}
       </p>
-      <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
-        {superseded ? "Read original ↗" : "Read paper ↗"}
+      {article.unpublished ? (
+        <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ash">
+          Archived &mdash; superseded by current revision
+        </div>
+      ) : (
+        <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
+          {superseded ? "Read original ↗" : "Read paper ↗"}
+        </div>
+      )}
+    </>
+  );
+
+  if (article.unpublished) {
+    return (
+      <div className="relative border rounded-[2px] border-surface-lighter/60 bg-surface-light/30 p-5 opacity-70">
+        {inner}
       </div>
+    );
+  }
+  return (
+    <Link
+      href={`/research/${article.slug}`}
+      className={`group relative block border rounded-[2px] transition-colors ${
+        superseded
+          ? "border-surface-lighter/60 bg-surface-light/30 p-5 opacity-70 hover:opacity-100 hover:border-ember"
+          : "border-surface-lighter bg-surface-light/60 p-7 hover:border-ember"
+      }`}
+    >
+      {inner}
     </Link>
   );
 }
@@ -62,7 +84,9 @@ export default function ResearchIndex() {
 
   return (
     <div className="grid-lines min-h-screen">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
+      <main className="relative max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
+        {/* dossier punch holes down the left margin */}
+        <div className="punch-rail -left-10 hidden lg:block" aria-hidden />
         <PageHeader
           index="003"
           label="papers"
@@ -71,19 +95,30 @@ export default function ResearchIndex() {
           intro="Long-form technical writing on things I'm actively building. Papers evolve; each research line shows its revisions."
         />
 
+        <Reveal>
+          <div className="mb-10 border-y border-surface-lighter py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-ash flex flex-wrap gap-x-6 gap-y-1">
+            <span>
+              File 0001 &middot; Subject:{" "}
+              <span className="redact">agent coordination</span> substrate
+            </span>
+            <span>Status: active research</span>
+          </div>
+        </Reveal>
+
         <div className="space-y-14">
           {[...lines.entries()].map(([tag, articles], lineIdx) => {
             const chronological = [...articles].reverse(); // oldest first
             return (
               <section key={tag}>
                 <Reveal>
-                  <div className="label mb-6">
-                    [ research line {String(lineIdx + 1).padStart(4, "0")}{" "}
-                    &middot; {tag} ]
+                  {/* folder tab */}
+                  <div className="inline-block border border-surface-lighter border-b-0 bg-surface-light/60 px-4 pt-2 pb-3 -mb-px rounded-t-[3px] font-mono text-[10px] uppercase tracking-[0.15em] text-bone-dark">
+                    File {String(lineIdx + 1).padStart(4, "0")} &middot; {tag}
                   </div>
+                  <div className="border-t border-surface-lighter" />
                 </Reveal>
 
-                <ol className="relative border-l-2 border-bone/30 ml-[5px] pl-6 sm:pl-10 space-y-0">
+                <ol className="relative border-l-2 border-bone/30 ml-[5px] mt-8 pl-6 sm:pl-10 space-y-0">
                   {chronological.map((article, i) => {
                     const isCurrent = article.status !== "superseded";
                     const next = chronological[i + 1];
