@@ -440,6 +440,18 @@ export default function PaperPage() {
   return (
     <div className="grid-lines min-h-screen">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
+      <div className="mb-10 flex flex-wrap items-center gap-x-3 gap-y-2 border border-bone rounded-[2px] p-3 bg-surface-light/60 font-mono text-[11px] uppercase tracking-[0.12em]">
+        <span className="bg-bone text-cream px-1.5 py-0.5 rounded-[2px] text-[9px] tracking-[0.15em]">
+          Rev 1.0 &mdash; superseded
+        </span>
+        <span className="text-ash">This paper has been revised.</span>
+        <Link
+          href="/research/0001-synthetic-membrane-coordination-layer"
+          className="text-bone underline underline-offset-2 decoration-bone/40 hover:bg-bone hover:text-cream transition-colors"
+        >
+          Read v2.1 (July 2026) &rarr;
+        </Link>
+      </div>
       <div className="mb-12">
         <div className="label mb-3">
           Paper · Synthetic Membrane

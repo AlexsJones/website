@@ -5,9 +5,18 @@ export interface Article {
   date: string;
   tag: string;
   type: "paper" | "article";
+  version?: string;
+  status?: "current" | "superseded";
+  /** What this revision added over the previous one (shown on the lineage rail). */
+  changes?: string[];
   links?: { label: string; href: string }[];
 }
 
+/**
+ * Articles in a research line share a `tag`; the index renders them as an
+ * evolution timeline (oldest → current). Order here: current revision first
+ * (used by the homepage grid), older revisions after.
+ */
 export const ARTICLES: Article[] = [
   {
     slug: "0001-synthetic-membrane-coordination-layer",
@@ -18,6 +27,14 @@ export const ARTICLES: Article[] = [
     date: "July 2026",
     tag: "Synthetic Membrane",
     type: "paper",
+    version: "v2.1",
+    status: "current",
+    changes: [
+      "ICS/NIMS incident doctrine mapping",
+      "security incident-response case study",
+      "related-work survey & MAST evidence",
+      "falsifiable acceptance criteria",
+    ],
     links: [
       { label: "github", href: "https://github.com/AlexsJones/research" },
     ],
@@ -31,6 +48,8 @@ export const ARTICLES: Article[] = [
     date: "April 2026",
     tag: "Synthetic Membrane",
     type: "paper",
+    version: "v1",
+    status: "superseded",
     links: [
       { label: "github", href: "https://github.com/AlexsJones/research" },
     ],

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ARTICLES } from "./articles";
+import { ARTICLES, Article } from "./articles";
 import PageHeader from "../../components/PageHeader";
 import Reveal from "../../components/Reveal";
 
@@ -8,7 +8,58 @@ export const metadata = {
   description: "Research papers by Alex Jones.",
 };
 
+function NodeCard({ article }: { article: Article }) {
+  const superseded = article.status === "superseded";
+  return (
+    <Link
+      href={`/research/${article.slug}`}
+      className={`group block border rounded-[2px] transition-colors ${
+        superseded
+          ? "border-surface-lighter/60 bg-surface-light/30 p-5 opacity-70 hover:opacity-100 hover:border-ember"
+          : "border-surface-lighter bg-surface-light/60 p-7 hover:border-ember"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <span
+          className={`font-mono text-[9px] uppercase tracking-[0.15em] px-1.5 py-0.5 rounded-[2px] ${
+            superseded
+              ? "text-ash border border-ash/50"
+              : "text-surface bg-bone"
+          }`}
+        >
+          {superseded
+            ? `${article.version} · superseded`
+            : `current · ${article.version}`}
+        </span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash">
+          {article.date}
+        </span>
+      </div>
+      <h2
+        className={`font-display text-bone group-hover:text-ember transition-colors mb-3 leading-snug ${
+          superseded ? "text-lg sm:text-xl" : "text-2xl sm:text-3xl"
+        }`}
+      >
+        {article.title}
+      </h2>
+      <p className="text-xs text-bone-dark/70 leading-relaxed max-w-2xl">
+        {article.description}
+      </p>
+      <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
+        {superseded ? "Read original ↗" : "Read paper ↗"}
+      </div>
+    </Link>
+  );
+}
+
 export default function ResearchIndex() {
+  // Group articles into research lines by tag; render each line as an
+  // evolution timeline, oldest revision first, current revision emphasised.
+  const lines = new Map<string, Article[]>();
+  for (const a of ARTICLES) {
+    lines.set(a.tag, [...(lines.get(a.tag) ?? []), a]);
+  }
+
   return (
     <div className="grid-lines min-h-screen">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
@@ -17,36 +68,63 @@ export default function ResearchIndex() {
           label="papers"
           title="Research"
           accent="dossier."
-          intro="Long-form technical writing on things I'm actively building."
+          intro="Long-form technical writing on things I'm actively building. Papers evolve; each research line shows its revisions."
         />
 
-        <div className="space-y-4">
-          {ARTICLES.map((article, i) => (
-            <Reveal key={article.slug} delay={i * 90}>
-              <Link
-                href={`/research/${article.slug}`}
-                className="group block border border-surface-lighter bg-surface-light/60 p-7 rounded-[2px] hover:border-ember transition-colors"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-surface bg-bone px-1.5 py-0.5 rounded-[2px]">
-                    {article.tag} &middot; {article.type}
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash">
-                    {article.date}
-                  </span>
-                </div>
-                <h2 className="font-display text-2xl sm:text-3xl text-bone group-hover:text-ember transition-colors mb-3 leading-snug">
-                  {article.title}
-                </h2>
-                <p className="text-xs text-bone-dark/70 leading-relaxed max-w-2xl">
-                  {article.description}
-                </p>
-                <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
-                  Read paper &#8599;
-                </div>
-              </Link>
-            </Reveal>
-          ))}
+        <div className="space-y-14">
+          {[...lines.entries()].map(([tag, articles], lineIdx) => {
+            const chronological = [...articles].reverse(); // oldest first
+            return (
+              <section key={tag}>
+                <Reveal>
+                  <div className="label mb-6">
+                    [ research line {String(lineIdx + 1).padStart(4, "0")}{" "}
+                    &middot; {tag} ]
+                  </div>
+                </Reveal>
+
+                <ol className="relative border-l-2 border-bone/30 ml-[5px] pl-6 sm:pl-10 space-y-0">
+                  {chronological.map((article, i) => {
+                    const isCurrent = article.status !== "superseded";
+                    const next = chronological[i + 1];
+                    return (
+                      <li key={article.slug} className="relative pb-2">
+                        {/* node marker on the rail */}
+                        <span
+                          aria-hidden
+                          className={`absolute -left-[31px] sm:-left-[47px] top-7 w-3 h-3 ${
+                            isCurrent
+                              ? "bg-bone"
+                              : "bg-surface border-2 border-bone/60 rounded-full"
+                          }`}
+                        />
+                        <Reveal delay={i * 90}>
+                          <NodeCard article={article} />
+                        </Reveal>
+
+                        {/* delta between this revision and the next */}
+                        {next?.changes && next.changes.length > 0 && (
+                          <Reveal delay={i * 90 + 60}>
+                            <div className="py-4 pl-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ash leading-relaxed">
+                              {next.changes.map((c) => (
+                                <span
+                                  key={c}
+                                  className="inline-block mr-4"
+                                >
+                                  + {c}
+                                </span>
+                              ))}
+                              <span className="text-ember">&#9660;</span>
+                            </div>
+                          </Reveal>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            );
+          })}
         </div>
 
         <Reveal delay={150}>

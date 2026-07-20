@@ -171,7 +171,12 @@ export default async function Home() {
                 },
                 { k: "flagship", v: "llmfit" },
                 { k: "cncf project", v: "k8sgpt" },
-                { k: "position papers", v: String(ARTICLES.length) },
+                {
+                  k: "membrane paper",
+                  v:
+                    ARTICLES.find((a) => a.status !== "superseded")?.version ??
+                    "v1",
+                },
               ].map((s) => (
                 <div key={s.k} className="px-5 py-4">
                   <div className="font-display text-3xl text-bone">{s.v}</div>
@@ -231,7 +236,7 @@ export default async function Home() {
             </h2>
           </Reveal>
           <div className="grid md:grid-cols-2 gap-4">
-            {ARTICLES.map((a, i) => (
+            {ARTICLES.filter((a) => a.status !== "superseded").map((a, i) => (
               <Reveal key={a.slug} delay={i * 100}>
                 <Link
                   href={`/research/${a.slug}`}
@@ -264,6 +269,59 @@ export default async function Home() {
                 </Link>
               </Reveal>
             ))}
+
+            {/* lineage panel — one evolving paper, not many papers */}
+            <Reveal delay={100}>
+              <Link
+                href="/research"
+                className="group flex h-full flex-col justify-between border border-dashed border-ink/30 bg-white/40 p-7 rounded-[2px] hover:border-ember transition-colors"
+              >
+                <div>
+                  <div className="label mb-5">[ lineage &middot; one evolving paper ]</div>
+                  <div className="font-mono text-[11px] uppercase tracking-[0.1em] space-y-3">
+                    {(() => {
+                      const v1 = ARTICLES.find(
+                        (a) => a.status === "superseded"
+                      );
+                      const cur = ARTICLES.find(
+                        (a) => a.status !== "superseded"
+                      );
+                      return (
+                        <>
+                          <div className="flex items-center gap-2 text-[#8a8880]">
+                            <span className="inline-block w-2.5 h-2.5 rounded-full border-2 border-[#8a8880]" />
+                            <span>
+                              {v1?.version} &middot; {v1?.date} &middot;
+                              superseded
+                            </span>
+                          </div>
+                          <div className="pl-1 text-[10px] text-[#8a8880] leading-relaxed">
+                            {cur?.changes?.slice(0, 3).map((c) => (
+                              <span key={c} className="inline-block mr-3">
+                                + {c}
+                              </span>
+                            ))}
+                            <span className="text-ember">&#9660;</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-ink">
+                            <span className="inline-block w-2.5 h-2.5 bg-ink" />
+                            <span>
+                              <span className="bg-ink text-white px-1 py-0.5 rounded-[2px]">
+                                {cur?.version}
+                              </span>{" "}
+                              &middot; {cur?.date} &middot; current
+                            </span>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </div>
+                <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.2em] text-ember">
+                  View research line &#8599;
+                </div>
+              </Link>
+            </Reveal>
           </div>
           {/* deco: coupled rings — "systems, not machines" */}
           <img
