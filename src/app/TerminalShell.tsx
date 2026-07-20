@@ -598,7 +598,7 @@ export default function TerminalShell() {
         ...h,
         prompt(cwd) + " " + cmd,
         "Available commands:",
-        "  Navigation:  home, about, speaking, blog, cv, research, membrane",
+        "  Navigation:  home, speaking, blog, cv, research, membrane",
         "  Files:       ls, cd, pwd, cat, tree",
         "  System:      neofetch, whoami, uname, hostname, uptime, top, htop, ps, free, df, du",
         "  Network:     ping, curl, wget, ssh",

@@ -2,7 +2,6 @@ import { FS } from '../filesystem';
 
 export const COMMANDS: Record<string, string | null> = {
   home: "/",
-  about: "/about",
   speaking: "/speaking",
   blog: "/blog",
   cv: "/cv",
