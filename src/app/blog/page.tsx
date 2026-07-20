@@ -9,6 +9,13 @@ export const metadata = {
 
 const POSTS = [
   {
+    slug: "post-kubernetes-genai",
+    title: "Post-Kubernetes Infrastructure for GenAI Workloads",
+    description:
+      "Field notes on Modal's million-sandbox announcement, what it says about Kubernetes' assumptions, and the coming decoupling of coordination from execution.",
+    date: "July 2026",
+  },
+  {
     slug: "sticky-note-problem",
     title:
       "The Sticky-Note Problem: Why Multi-Agent AI Is Broken at the Coordination Layer",
