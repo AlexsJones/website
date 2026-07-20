@@ -179,6 +179,7 @@ function BenchmarkTable() {
 
 export default function SyntheticMembranePage() {
   return (
+    <div className="min-h-screen bg-slate-950">
     <article className="max-w-3xl mx-auto px-6 py-16 font-sans">
       <div className="mb-12">
         <div className="text-xs uppercase tracking-widest text-emerald-400 font-mono mb-3">
@@ -750,6 +751,7 @@ export default function SyntheticMembranePage() {
         </Link>
       </footer>
     </article>
+    </div>
   );
 }
 
