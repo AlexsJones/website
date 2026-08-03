@@ -216,6 +216,11 @@ export default function CellnExecutionPlanePage() {
         </Prose>
 
         <footer className="mt-12 text-center text-xs font-mono text-ash">
+          <div className="mb-5 space-x-4">
+            <A href="https://github.com/sympozium-ai/celln">Celln on GitHub</A>
+            <A href="https://github.com/sympozium-ai/sympozium">Sympozium</A>
+            <Link href="/blog/post-kubernetes-genai" className="text-bone underline underline-offset-2 decoration-bone/40 hover:bg-bone hover:text-cream transition-colors">Post-Kubernetes notes</Link>
+          </div>
           <Link href="/blog" className="hover:text-bone transition">
             &larr; back to blog
           </Link>

@@ -11,6 +11,17 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    name: "celln",
+    repo: "sympozium-ai/celln",
+    description:
+      "An execution plane for agents: sealed cells borrow verified tools instead of rebuilding Linux environments.",
+    language: "Rust",
+    stars: 0,
+    role: "creator · active",
+    featured: true,
+    tags: ["agents", "security", "execution"],
+  },
+  {
     name: "llmfit",
     repo: "AlexsJones/llmfit",
     description:
