@@ -9,6 +9,13 @@ export const metadata = {
 
 const POSTS = [
   {
+    slug: "celln-execution-plane",
+    title: "The Agent Environment Should Be a Lease",
+    description:
+      "Why I built Celln: an execution plane where agents borrow verified tools instead of assembling machines, and why it may become Sympozium's default substrate.",
+    date: "August 2026",
+  },
+  {
     slug: "post-kubernetes-genai",
     title: "Post-Kubernetes Infrastructure for GenAI Workloads",
     description:
