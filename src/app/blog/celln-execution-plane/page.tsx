@@ -188,6 +188,44 @@ export default function CellnExecutionPlanePage() {
             default.
           </p>
 
+          <H2>The questions I am still trying to answer</H2>
+
+          <p>
+            This is a direction, not a claim that the hard parts have all
+            been solved. One-shot work is the natural first shape for a cell.
+            A persistent API is different: it needs a stable identity, a
+            lifecycle, a state story, and a way to upgrade without making the
+            capability boundary meaningless. I think that deserves its own
+            primitive rather than pretending a short-lived task and a service
+            are the same thing.
+          </p>
+
+          <p>
+            Dependencies are the other unavoidable test. Many useful tools
+            expect glibc, shared libraries, language runtimes, or a large
+            package graph. The useful version of this idea cannot require
+            every workload to be rewritten in a particular language. The
+            question is how to package and attest those dependency closures
+            once, then lend them safely and efficiently to cells.
+          </p>
+
+          <p>
+            I also want to make revocation concrete rather than rhetorical.
+            What is the host-side store? What is signed? What happens to a
+            long-running cell when a tool hash is withdrawn? What does an
+            operator see? Those are protocol and product questions, not just
+            virtual-memory tricks.
+          </p>
+
+          <p>
+            Finally, integration should earn its place through a small,
+            comprehensible seam. I expect Sympozium to request an execution
+            capability set and receive a result, provenance, and verdict back.
+            Whether Kubernetes sees that as a CRD, a runtime class, or a
+            separate service is an implementation choice to test, not an
+            ideology to settle in advance.
+          </p>
+
           <H2>What I hope to prove</H2>
 
           <p>
@@ -199,19 +237,19 @@ export default function CellnExecutionPlanePage() {
           </p>
 
           <p>
-            Second, that performance and security need not be a trade. The
-            strongest version of this idea is not a VM fleet that happens to
-            start quickly. It is a cache of verified capabilities that the
-            host can lend to many cells, reclaim, and revoke with one control
-            point.
+            Second, that the benefits are measurable. The strongest version
+            of this idea is not a VM fleet that happens to start quickly. It
+            is a cache of verified capabilities that the host can lend to many
+            cells, reclaim, and revoke with one control point. That needs to
+            show up in startup time, page sharing, supply-chain surface, and
+            operator control against the container and snapshot alternatives.
           </p>
 
           <p>
             And finally, that the right seam is useful beyond one project.
-            Celln is early and the persistent-service shape is unresolved. But
             I think agent infrastructure needs an execution plane with clearer
-            primitives than image, shell, network, and hope. This is my attempt
-            to build one.
+            primitives than image, shell, network, and hope. Celln is my
+            attempt to find out whether that seam holds.
           </p>
         </Prose>
 
