@@ -45,6 +45,22 @@ export default function Nav() {
               );
             })}
             <a
+              href="/feed.xml"
+              className="text-bone-dark hover:text-ember transition-colors"
+              aria-label="RSS feed"
+              title="RSS feed"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="h-4 w-4 fill-current"
+              >
+                <circle cx="5" cy="19" r="2.25" />
+                <path d="M3 10.5v3.25A7.25 7.25 0 0 1 10.25 21H13.5C13.5 15.2 8.8 10.5 3 10.5Z" />
+                <path d="M3 3v3.25C11.85 6.25 18.75 13.15 18.75 22H22C22 11.35 13.65 3 3 3Z" />
+              </svg>
+            </a>
+            <a
               href="https://github.com/AlexsJones"
               target="_blank"
               rel="noopener noreferrer"
@@ -83,6 +99,12 @@ export default function Nav() {
             className="font-mono text-[11px] uppercase tracking-[0.12em] text-ash"
           >
             GitHub &#8599;
+          </a>
+          <a
+            href="/feed.xml"
+            className="font-mono text-[11px] uppercase tracking-[0.12em] text-ash hover:text-ember transition-colors"
+          >
+            RSS feed
           </a>
         </div>
       )}
