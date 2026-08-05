@@ -1,4 +1,5 @@
 const posts = [
+  ["The Cell Cannot Break", "celln-deepseek-benchmark", "2026-08-05", "We asked five DeepSeek agents to escape their sealed hardware-isolated cells. At every layer — build, kernel, filesystem, seccomp — the cell held."],
   ["The Agent Environment Should Be a Lease", "celln-execution-plane", "2026-08-03", "Why I built Celln, and why agent infrastructure should lend verified capabilities rather than hand every agent a mutable machine."],
   ["Post-Kubernetes Infrastructure for GenAI Workloads", "post-kubernetes-genai", "2026-07-01", "Field notes on the coming decoupling of coordination from execution."],
   ["The Sticky-Note Problem", "sticky-note-problem", "2026-05-01", "Why multi-agent systems need shared coordination infrastructure."],

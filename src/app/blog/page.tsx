@@ -9,6 +9,13 @@ export const metadata = {
 
 const POSTS = [
   {
+    slug: "celln-deepseek-benchmark",
+    title: "The Cell Cannot Break",
+    description:
+      "We asked five DeepSeek agents to escape their sealed hardware-isolated cells. At every layer — build, kernel, filesystem, seccomp — the cell held.",
+    date: "August 2026",
+  },
+  {
     slug: "celln-execution-plane",
     title: "The Agent Environment Should Be a Lease",
     description:
