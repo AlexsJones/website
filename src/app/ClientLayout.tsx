@@ -1,6 +1,5 @@
 "use client";
 import { usePathname } from "next/navigation";
-import Ticker from "../components/Ticker";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import TerminalShell from "./TerminalShell";
@@ -22,9 +21,8 @@ export default function ClientLayout({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Ticker />
       <Nav />
-      <main className="flex-1 pt-[84px]">{children}</main>
+      <main className="flex-1 pt-14">{children}</main>
       <Footer />
     </div>
   );

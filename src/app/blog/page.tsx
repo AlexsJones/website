@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PageHeader from "../../components/PageHeader";
 import Reveal from "../../components/Reveal";
+import { ARTICLES } from "../research/articles";
 
 export const metadata = {
   title: "Writing — axjns.dev",
@@ -46,28 +47,6 @@ const POSTS = [
   },
 ];
 
-/** Punch-tape strip — dots deterministically encoding the dispatch title. */
-function PunchTape({ seed }: { seed: string }) {
-  const dots = Array.from({ length: 34 }, (_, i) => {
-    const c = seed.charCodeAt(i % seed.length) + i * 7;
-    return c % 3 !== 0; // punched or not
-  });
-  return (
-    <div aria-hidden className="mt-4 flex items-center gap-[5px]">
-      {dots.map((punched, i) => (
-        <span
-          key={i}
-          className={`inline-block w-[5px] h-[5px] rounded-full ${
-            punched
-              ? "bg-bone/50 group-hover:bg-ember"
-              : "border border-bone/40"
-          } transition-colors`}
-        />
-      ))}
-    </div>
-  );
-}
-
 function TearLine() {
   return (
     <div aria-hidden className="relative border-t border-dashed border-bone/40">
@@ -84,22 +63,38 @@ export default function BlogPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20 corner-ticks">
         <PageHeader
           index="005"
-          label="on record"
-          title="Field"
-          accent="notes."
-          intro="Essays on AI agents, distributed systems, and the things that break."
+          label="Writing"
+          title="Writing"
+          intro="Field notes and research on AI agents, distributed systems, and the things that break."
         />
 
-        {/* wire-service masthead */}
-        <Reveal>
-          <div className="masthead-rule py-2.5 text-center font-mono text-[11px] uppercase tracking-[0.3em] text-bone">
-            Axjns Wire &mdash; Field Dispatch Service
-          </div>
-          <div className="flex justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-ash mt-2 mb-12">
-            <span>London relay &middot; all channels</span>
-            <span>{POSTS.length} dispatches on file</span>
-          </div>
-        </Reveal>
+        <nav
+          aria-label="Writing sections"
+          className="mb-14 flex border-y border-bone/30"
+        >
+          <a
+            href="#field-notes"
+            className="group flex flex-1 items-center justify-between gap-4 border-r border-bone/30 px-1 py-4 pr-5 text-bone hover:text-ember transition-colors"
+          >
+            <span className="font-display text-lg sm:text-xl">Field notes</span>
+            <span className="font-mono text-[10px] text-ash group-hover:text-ember">
+              {POSTS.length}
+            </span>
+          </a>
+          <a
+            href="#research"
+            className="group flex flex-1 items-center justify-between gap-4 px-5 py-4 text-bone hover:text-ember transition-colors"
+          >
+            <span className="font-display text-lg sm:text-xl">Research</span>
+            <span className="font-mono text-[10px] text-ash group-hover:text-ember">
+              {ARTICLES.filter((article) => article.status !== "superseded").length}
+            </span>
+          </a>
+        </nav>
+
+        <section id="field-notes" className="scroll-mt-24">
+        <h2 className="font-display text-2xl text-bone mb-2">Field notes</h2>
+        <p className="text-xs text-ash mb-8">Notes from work in progress, written when there is something useful to say.</p>
 
         <div>
           {POSTS.map((post, i) => {
@@ -120,9 +115,8 @@ export default function BlogPage() {
                   <p className="text-xs text-bone-dark/70 leading-relaxed max-w-2xl">
                     {post.description}
                   </p>
-                  <PunchTape seed={post.title} />
                   <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
-                    Read dispatch &#8599;
+                    Read essay &#8599;
                   </div>
                 </Link>
                 {i < POSTS.length - 1 && <TearLine />}
@@ -130,11 +124,24 @@ export default function BlogPage() {
             );
           })}
         </div>
+        </section>
 
         <Reveal>
-          <div className="mt-12 text-center font-mono text-[10px] tracking-[0.4em] text-ash uppercase">
-            &middot;&middot;&middot; EOM &middot;&middot;&middot;
-          </div>
+          <section id="research" className="mt-20 scroll-mt-24 border-t border-bone/30 pt-10">
+            <h2 className="font-display text-2xl text-bone mb-2">Research papers</h2>
+            <p className="text-xs text-ash mb-8">Longer technical work. Papers may be revised as the implementation develops.</p>
+            <div className="space-y-2">
+              {ARTICLES.filter((article) => article.status !== "superseded").map((article) => (
+                <Link key={article.slug} href={`/research/${article.slug}`} className="group block border-t border-bone/30 py-6">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash mb-2">
+                    {article.type} · {article.version} · {article.date}
+                  </div>
+                  <h3 className="font-display normal-case text-2xl text-bone group-hover:text-ember transition-colors">{article.title}</h3>
+                  <p className="mt-2 max-w-2xl text-xs leading-relaxed text-bone-dark/70">{article.description}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
         </Reveal>
       </main>
     </div>

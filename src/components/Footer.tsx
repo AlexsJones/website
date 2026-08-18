@@ -58,42 +58,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* specimen badge row — ref: LAB sticker sheet */}
-        <div className="mt-10 pt-6 border-t border-surface-lighter flex flex-wrap items-center gap-3 font-mono text-[9px] uppercase tracking-[0.18em]">
-          <span className="checker inline-block w-16 h-4" aria-hidden />
-          <span className="inline-flex items-center gap-2 border border-bone/60 text-bone px-2 py-1 rounded-[2px]">
-            Made in the U.K. <span className="text-ember">&#9656;&#9656;&#9656;</span>
-          </span>
-          <span className="border border-bone/60 text-bone px-1.5 py-1 rounded-[2px]">
-            R
-          </span>
-          <span className="bg-bone text-surface px-2 py-1 rounded-[2px] font-semibold">
-            Field Tested
-          </span>
-          <span className="text-ash">Zero downtime blogging</span>
-        </div>
-
-        <div className="mt-8 flex items-end justify-between gap-6">
+        <div className="mt-10 border-t border-surface-lighter pt-6">
           <div>
-            {/* deco: data plate — barcode + checker strip */}
-            <img
-              src="/deco/barcode-plate.svg"
-              alt=""
-              aria-hidden
-              className="w-48 mb-3 opacity-80"
-            />
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-ash">
-              &copy; {new Date().getFullYear()} axjns.dev &mdash; built with an
-              ember
+              &copy; {new Date().getFullYear()} Alex Jones
             </span>
           </div>
-          {/* deco: dot-matrix chevron — forward motion */}
-          <img
-            src="/deco/dot-matrix.svg"
-            alt=""
-            aria-hidden
-            className="w-10 opacity-60"
-          />
         </div>
       </div>
     </footer>

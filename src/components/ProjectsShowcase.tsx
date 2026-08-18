@@ -40,11 +40,9 @@ function StarCount({ value }: { value: number }) {
 
 function Card({
   project,
-  index,
   large = false,
 }: {
   project: Project;
-  index: number;
   large?: boolean;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
@@ -68,25 +66,9 @@ function Card({
         large ? "p-7 sm:p-9 min-h-[280px]" : "p-6 min-h-[220px]"
       }`}
     >
-      {/* corner ticks — ignite on hover */}
-      <span className="absolute top-1.5 left-2 font-mono text-[10px] text-ember opacity-0 group-hover:opacity-70 transition-opacity">
-        +
-      </span>
-      <span className="absolute top-1.5 right-2 font-mono text-[10px] text-ember opacity-0 group-hover:opacity-70 transition-opacity">
-        +
-      </span>
-      <span className="absolute bottom-1.5 left-2 font-mono text-[10px] text-ember opacity-0 group-hover:opacity-70 transition-opacity">
-        +
-      </span>
-      <span className="absolute bottom-1.5 right-2 font-mono text-[10px] text-ember opacity-0 group-hover:opacity-70 transition-opacity">
-        +
-      </span>
-
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-4">
-          <span className="font-mono text-[10px] tracking-[0.2em] text-ash group-hover:text-ember transition-colors">
-            {String(index + 1).padStart(2, "0")} /
-          </span>
+          <span className="font-mono text-[10px] text-ash">{project.language}</span>
           <div className="flex items-center gap-2">
             {project.role && (
               <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white bg-ember px-1.5 py-0.5 rounded-[2px]">
@@ -181,7 +163,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
             const i = n++;
             return (
               <Reveal key={p.name} delay={(i % 2) * 90}>
-                <Card project={p} index={i} large />
+                <Card project={p} large />
               </Reveal>
             );
           })}
@@ -191,13 +173,12 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
       {trailingFeatured && (
         <div className="grid grid-cols-1 md:grid-cols-2 md:auto-rows-fr gap-4">
           <Reveal key={trailingFeatured.name} className="md:row-span-2 h-full">
-            <Card project={trailingFeatured} index={n++} large />
+            <Card project={trailingFeatured} large />
           </Reveal>
           {fillers.map((p) => {
-            const i = n++;
             return (
               <Reveal key={p.name} delay={90} className="h-full">
-                <Card project={p} index={i} />
+                <Card project={p} />
               </Reveal>
             );
           })}
@@ -210,7 +191,7 @@ export default function ProjectsShowcase({ projects }: { projects: Project[] }) 
             const i = n++;
             return (
               <Reveal key={p.name} delay={(i % 3) * 90}>
-                <Card project={p} index={i} />
+                <Card project={p} />
               </Reveal>
             );
           })}

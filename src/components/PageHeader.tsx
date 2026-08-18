@@ -1,25 +1,18 @@
 import Reveal from "./Reveal";
 
 /** Standard inner-page masthead: bracket label + big serif title. */
-export default function PageHeader({
-  index,
-  label,
-  title,
-  accent,
-  intro,
-}: {
+export default function PageHeader(props: {
   index: string;
   label: string;
   title: string;
   accent?: string;
   intro?: string;
 }) {
+  const { label, title, accent, intro } = props;
   return (
     <Reveal>
       <div className="mb-14">
-        <div className="label mb-4">
-          [ {index} / {label} ]
-        </div>
+        <div className="label mb-4">{label}</div>
         <h1 className="font-display text-5xl sm:text-7xl text-bone leading-[0.95]">
           {title}{" "}
           {accent && <span className="italic text-ember">{accent}</span>}

@@ -105,7 +105,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--color-ash);
-  z-index: 1;
+  display: none;
 }
 
 .section-industrial::after {
@@ -118,7 +118,7 @@ body {
   letter-spacing: 0.3em;
   color: var(--color-ember);
   opacity: 0.5;
-  z-index: 2;
+  display: none;
   transform: translateY(50%);
   background: var(--color-surface);
   padding: 0 8px;
@@ -151,7 +151,7 @@ body {
   font-size: 10px;
   color: var(--color-ember);
   opacity: 0.35;
-  line-height: 1;
+  display: none;
 }
 .corner-ticks::before {
   left: -8px;
@@ -183,16 +183,13 @@ body {
   }
 }
 .stamp-rotate {
-  animation: stamp-rotate 120s linear infinite;
+  animation: none;
 }
 
 /* ── Scroll reveal ── */
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.7s cubic-bezier(0.2, 0.6, 0.2, 1),
-    transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+  opacity: 1;
+  transform: none;
 }
 .reveal.is-visible {
   opacity: 1;
