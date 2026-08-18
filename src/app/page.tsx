@@ -37,15 +37,15 @@ export default async function Home() {
               <Reveal>
                 <div className="label mb-6">Principal Engineer at AWS · Creator of K8sGPT</div>
                 <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl text-bone leading-[0.95] mb-6">
-                  I build open-source systems for Kubernetes and AI.
+                  Alex Jones builds{" "}
+                  <span className="text-ember italic">in the open.</span>
                 </h1>
               </Reveal>
               <Reveal delay={150}>
                 <p className="text-sm sm:text-base text-bone-dark/80 leading-relaxed max-w-xl mb-8">
-                  I&rsquo;m Alex Jones. My work focuses on infrastructure for AI
-                  workloads, distributed systems, and multi-agent coordination.
-                  This is where I share the projects, papers, and lessons from
-                  that work.
+                  Engineer, speaker, and open-source contributor. Everything
+                  below is field tested and in production somewhere it probably
+                  shouldn&rsquo;t be.
                 </p>
                 <div className="flex flex-wrap items-center gap-4">
                   <a
