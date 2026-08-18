@@ -160,19 +160,6 @@ body {
   right: -8px;
 }
 
-/* ── Ticker bar ── */
-@keyframes ticker-scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-.ticker-scroll {
-  animation: ticker-scroll 40s linear infinite;
-}
-
 /* ── Rotating stamp ── */
 @keyframes stamp-rotate {
   from {
@@ -202,7 +189,6 @@ body {
     transform: none;
     transition: none;
   }
-  .ticker-scroll,
   .stamp-rotate {
     animation: none;
   }

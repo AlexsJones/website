@@ -1,51 +1,13 @@
 import Link from "next/link";
 import PageHeader from "../../components/PageHeader";
 import Reveal from "../../components/Reveal";
+import { POSTS } from "../../data/posts";
 import { ARTICLES } from "../research/articles";
 
 export const metadata = {
   title: "Writing — axjns.dev",
   description: "Blog posts by Alex Jones.",
 };
-
-const POSTS = [
-  {
-    slug: "celln-deepseek-benchmark",
-    title: "The Cell Cannot Break",
-    description:
-      "We asked five DeepSeek agents to escape their sealed hardware-isolated cells. At every layer — build, kernel, filesystem, seccomp — the cell held.",
-    date: "August 2026",
-  },
-  {
-    slug: "celln-execution-plane",
-    title: "The Agent Environment Should Be a Lease",
-    description:
-      "Why I built Celln: an execution plane where agents borrow verified tools instead of assembling machines, and why it may become Sympozium's default substrate.",
-    date: "August 2026",
-  },
-  {
-    slug: "post-kubernetes-genai",
-    title: "Post-Kubernetes Infrastructure for GenAI Workloads",
-    description:
-      "Field notes on Modal's million-sandbox announcement, what it says about Kubernetes' assumptions, and the coming decoupling of coordination from execution.",
-    date: "July 2026",
-  },
-  {
-    slug: "sticky-note-problem",
-    title:
-      "The Sticky-Note Problem: Why Multi-Agent AI Is Broken at the Coordination Layer",
-    description:
-      "Why every multi-agent system built today is passing sticky notes between people in different rooms, and what the MAST study tells us about fixing it.",
-    date: "May 2026",
-  },
-  {
-    slug: "synthetic-membrane",
-    title: "We've been building AI agents wrong.",
-    description:
-      "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
-    date: "April 2026",
-  },
-];
 
 function TearLine() {
   return (

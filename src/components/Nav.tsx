@@ -52,10 +52,10 @@ export default function Nav() {
               );
             })}
             <a
-              href="/feed.xml"
+              href="/feed"
               className="text-bone-dark hover:text-ember transition-colors"
-              aria-label="RSS feed"
-              title="RSS feed"
+              aria-label="Feed"
+              title="Feed — dispatches & field status"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -119,10 +119,10 @@ export default function Nav() {
             GitHub &#8599;
           </a>
           <a
-            href="/feed.xml"
+            href="/feed"
             className="font-mono text-[11px] uppercase tracking-[0.12em] text-ash hover:text-ember transition-colors"
           >
-            RSS feed
+            Feed &#8599;
           </a>
         </div>
       )}
