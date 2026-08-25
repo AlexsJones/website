@@ -1,6 +1,6 @@
 import PageHeader from "../../components/PageHeader";
 import Reveal from "../../components/Reveal";
-import { EXPERIENCE, SKILLS } from "./data";
+import { COMMUNITY_WORK, EMPLOYMENT, SKILLS } from "./data";
 
 export const metadata = {
   title: "CV — axjns.dev",
@@ -107,26 +107,104 @@ export default function CVPage() {
           </div>
         </Reveal>
 
-        <div className="label mb-4">[ service record ]</div>
-        <div className="border-t border-surface-lighter mb-14">
-          {EXPERIENCE.map((e, i) => (
-            <Reveal key={`${e.org}-${e.role}`} delay={(i % 4) * 50}>
-              <div className="grid sm:grid-cols-[190px_1fr_auto] gap-x-6 items-baseline border-b border-surface-lighter py-4">
-                <span className="font-display text-lg text-bone">{e.org}</span>
-                <div>
-                  <span className="text-xs text-bone-dark/80">{e.role}</span>
-                  {e.detail && (
-                    <p className="text-[11px] text-ash leading-relaxed mt-1.5">
-                      {e.detail}
-                    </p>
-                  )}
-                </div>
-                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ash whitespace-nowrap">
-                  {e.span}
-                </span>
+        <div className="mb-14">
+          <div className="mb-5 flex flex-col gap-3 border-y border-surface-lighter py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="label mb-1">[ record classification ]</div>
+              <p className="text-[11px] text-bone-dark/80">
+                Roles are separated by engagement type, including concurrent service.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-[9px] uppercase tracking-[0.12em] text-ash">
+              <span className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 bg-bone" aria-hidden />
+                Paid employment
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 border border-dashed border-bone" aria-hidden />
+                Community / advisory
+              </span>
+            </div>
+          </div>
+
+          <section aria-labelledby="employment-heading" className="mb-10">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <div className="label mb-1">[ 01 / primary service record ]</div>
+                <h2 id="employment-heading" className="font-display text-2xl text-bone">
+                  Paid employment
+                </h2>
               </div>
-            </Reveal>
-          ))}
+              <span className="hidden font-mono text-[9px] uppercase tracking-[0.14em] text-ash sm:block">
+                Contracted posts · chronological
+              </span>
+            </div>
+            <div className="relative border-y border-surface-lighter pl-5 before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-bone">
+              {EMPLOYMENT.map((e, i) => (
+                <Reveal key={`${e.org}-${e.role}`} delay={(i % 4) * 50}>
+                  <div className="grid gap-x-6 border-b border-surface-lighter py-4 last:border-b-0 sm:grid-cols-[30px_180px_1fr_auto] sm:items-baseline">
+                    <span className="mb-1 font-mono text-[9px] text-ash sm:mb-0">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="font-display text-lg text-bone">{e.org}</span>
+                    <div>
+                      <span className="text-xs text-bone-dark/80">{e.role}</span>
+                      {e.detail && (
+                        <p className="mt-1.5 text-[11px] leading-relaxed text-ash">
+                          {e.detail}
+                        </p>
+                      )}
+                    </div>
+                    <span className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-ash whitespace-nowrap sm:mt-0">
+                      {e.span}
+                    </span>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          <section aria-labelledby="community-heading">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <div className="label mb-1">[ 02 / parallel service register ]</div>
+                <h2 id="community-heading" className="font-display text-2xl text-bone">
+                  Open source, governance &amp; advisory
+                </h2>
+              </div>
+              <span className="hidden font-mono text-[9px] uppercase tracking-[0.14em] text-ash sm:block">
+                Non-employment activities
+              </span>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {COMMUNITY_WORK.map((e, i) => (
+                <Reveal key={`${e.org}-${e.role}`} delay={(i % 4) * 50}>
+                  <article className="relative h-full border border-dashed border-surface-lighter bg-surface-light/30 p-4 pl-5">
+                    <span className="absolute -left-px top-3 bg-bone px-1.5 py-1 font-mono text-[8px] font-bold tracking-[0.12em] text-surface">
+                      {e.code}
+                    </span>
+                    <div className="ml-8 flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="font-display text-lg text-bone">{e.org}</h3>
+                        <p className="mt-1 text-[11px] leading-relaxed text-bone-dark/80">
+                          {e.role}{e.detail ? ` · ${e.detail}` : ""}
+                        </p>
+                      </div>
+                      <span className="font-mono text-[9px] text-ash">{String(i + 1).padStart(2, "0")}</span>
+                    </div>
+                    <div className="ml-8 mt-4 border-t border-dashed border-surface-lighter pt-2 font-mono text-[9px] uppercase tracking-[0.1em] text-ash">
+                      {e.span}
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+            <div className="mt-3 flex gap-4 font-mono text-[8px] uppercase tracking-[0.12em] text-ash">
+              <span>OSS / open source</span>
+              <span>GOV / governance</span>
+              <span>ADV / advisory</span>
+            </div>
+          </section>
         </div>
 
         <Reveal>

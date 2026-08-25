@@ -4,14 +4,11 @@ export type Experience = {
   span: string;
   loc: string;
   detail?: string;
+  code?: "OSS" | "GOV" | "ADV";
 };
 
-export const EXPERIENCE: Experience[] = [
+export const EMPLOYMENT: Experience[] = [
   { org: "Amazon Web Services", role: "Principal Engineer", span: "Aug 2023 — present", loc: "London" },
-  { org: "k8sgpt.ai", role: "Founder (open-source project)", span: "Mar 2023 — present", loc: "" },
-  { org: "OpenFeature", role: "Governing Committee", span: "Jul 2023 — Feb 2024", loc: "" },
-  { org: "CNCF", role: "Tech Lead, TAG App-Delivery", span: "Jun 2021 — Feb 2024", loc: "" },
-  { org: "Keptn", role: "Advisory Board Member", span: "May 2021 — Sep 2023", loc: "" },
   {
     org: "Canonical",
     role: "Engineering Director, Kubernetes",
@@ -20,7 +17,6 @@ export const EXPERIENCE: Experience[] = [
     detail:
       "Led the Kubernetes organisation: product and engineering vision, new MicroK8s capabilities, community ecosystem growth.",
   },
-  { org: "Ondat", role: "Advisor (until Akamai acquisition)", span: "Jun 2022 — Mar 2023", loc: "UK" },
   {
     org: "Civo",
     role: "Principal SRE",
@@ -37,6 +33,45 @@ export const EXPERIENCE: Experience[] = [
   { org: "Microsoft", role: "Senior Software Engineer", span: "Oct 2013 — Apr 2015", loc: "Lionhead Studios" },
   { org: "BSkyB", role: "Technical Lead, iOS / Mobile", span: "Apr 2011 — Oct 2013", loc: "Osterley" },
   { org: "Grapple Mobile", role: "Frontend Developer", span: "Jul 2010 — Apr 2011", loc: "" },
+];
+
+export const COMMUNITY_WORK: Experience[] = [
+  {
+    org: "k8sgpt.ai",
+    role: "Founder",
+    span: "Mar 2023 — present",
+    loc: "",
+    code: "OSS",
+    detail: "Open-source project.",
+  },
+  {
+    org: "OpenFeature",
+    role: "Governing Committee",
+    span: "Jul 2023 — Feb 2024",
+    loc: "",
+    code: "GOV",
+  },
+  {
+    org: "CNCF",
+    role: "Tech Lead, TAG App-Delivery",
+    span: "Jun 2021 — Feb 2024",
+    loc: "",
+    code: "GOV",
+  },
+  {
+    org: "Keptn",
+    role: "Advisory Board Member",
+    span: "May 2021 — Sep 2023",
+    loc: "",
+    code: "ADV",
+  },
+  {
+    org: "Ondat",
+    role: "Advisor (until Akamai acquisition)",
+    span: "Jun 2022 — Mar 2023",
+    loc: "UK",
+    code: "ADV",
+  },
 ];
 
 export const SKILLS = [
