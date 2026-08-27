@@ -47,14 +47,16 @@ export default function CinematicTitle() {
   const title = TITLES[titleIndex ?? 0];
 
   return (
-    <span
-      key={titleIndex ?? "pending"}
-      className={`cinematic-title cinematic-title--${title.size} italic ${
-        titleIndex === null ? "" : "cinematic-title--ready"
-      }`}
-      data-title={title.text}
-    >
-      <span className="cinematic-title__text">{title.text}</span>
+    <span className="cinematic-title-slot">
+      <span
+        key={titleIndex ?? "pending"}
+        className={`cinematic-title cinematic-title--${title.size} italic ${
+          titleIndex === null ? "" : "cinematic-title--ready"
+        }`}
+        data-title={title.text}
+      >
+        <span className="cinematic-title__text">{title.text}</span>
+      </span>
     </span>
   );
 }

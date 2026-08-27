@@ -38,7 +38,7 @@ export default async function Home() {
               <Reveal>
                 <div className="label mb-6">Creator of K8sGPT · Open-source engineer</div>
                 <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl text-bone leading-[0.95] mb-6">
-                  Alex Jones builds{" "}
+                  Alex Jones builds
                   <CinematicTitle />
                 </h1>
               </Reveal>
