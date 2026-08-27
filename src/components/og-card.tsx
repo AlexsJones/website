@@ -115,7 +115,7 @@ export function StencilOgCard({
           textTransform: "uppercase",
         }}
       >
-        <span>Alex Jones &mdash; Principal Engineer @ AWS</span>
+        <span>Alex Jones &mdash; Creator of K8sGPT</span>
         <span style={{ color: "#4c4c4a" }}>&gt;&gt;&gt;</span>
       </div>
     </div>

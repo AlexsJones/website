@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PROJECTS, Project } from "../data/projects";
 import ProjectsShowcase from "../components/ProjectsShowcase";
 import Reveal from "../components/Reveal";
+import CinematicTitle from "../components/CinematicTitle";
 import { ARTICLES } from "./research/articles";
 import { speakingEvents } from "./speaking/events";
 
@@ -35,10 +36,10 @@ export default async function Home() {
           <div className="flex items-start justify-between gap-12">
             <div className="max-w-3xl">
               <Reveal>
-                <div className="label mb-6">Principal Engineer at AWS · Creator of K8sGPT</div>
+                <div className="label mb-6">Creator of K8sGPT · Open-source engineer</div>
                 <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl text-bone leading-[0.95] mb-6">
                   Alex Jones builds{" "}
-                  <span className="text-ember italic">in the open.</span>
+                  <CinematicTitle />
                 </h1>
               </Reveal>
               <Reveal delay={150}>

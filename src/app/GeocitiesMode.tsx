@@ -22,8 +22,8 @@ function PageHome({ onNavigate }: { onNavigate: (p: GeoPage) => void }) {
       <p style={{ color: "#ffffff", fontSize: "16px", lineHeight: "1.8" }}>
         <span className="geo-blink" style={{ color: "#ff0000", fontWeight: "bold" }}>★ NEW! ★</span>{" "}
         Hey there!!! Welcome to my homepage!!! My name is <span style={{ color: "#ffff00" }}>Alex Jones</span> and
-        I am a <span style={{ color: "#00ffff" }}>Principal Engineer</span> at{" "}
-        <span className="geo-rainbow" style={{ fontWeight: "bold" }}>AWS</span>!!!
+        I&apos;m the <span style={{ color: "#00ffff" }}>creator of K8sGPT</span> and an{" "}
+        <span className="geo-rainbow" style={{ fontWeight: "bold" }}>open-source engineer</span>!!!
       </p>
 
       <p style={{ color: "#ffffff", fontSize: "14px", lineHeight: "1.8", marginTop: "12px" }}>
@@ -90,7 +90,7 @@ function PageAbout() {
       </div>
       <p>
         <span style={{ color: "#ffff00", fontSize: "18px" }}>Alex Jones</span><br />
-        <span style={{ color: "#00ffff" }}>Principal Engineer @ AWS</span><br />
+        <span style={{ color: "#00ffff" }}>Creator of K8sGPT</span><br />
         <span style={{ color: "#00ff00" }}>Cloud Native Advocate, Speaker, Open Source Contributor</span><br />
         <span style={{ color: "#ff8000" }}>📍 London, United Kingdom</span>
       </p>

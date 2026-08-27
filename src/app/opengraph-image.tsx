@@ -89,7 +89,7 @@ export default async function Image() {
             textTransform: "uppercase",
           }}
         >
-          <span>Principal Engineer @ AWS &mdash; Founder, K8sGPT</span>
+          <span>Open-source engineer &mdash; Creator of K8sGPT</span>
           <span style={{ color: "#4c4c4a" }}>&gt;&gt;&gt;</span>
         </div>
       </div>

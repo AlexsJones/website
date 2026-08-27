@@ -51,6 +51,173 @@ body {
   padding: 0 0.14em;
 }
 
+/* ── Hero title: cinematic rack-focus / optical fuzz ── */
+.cinematic-title {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  white-space: pre-line;
+  line-height: 0.92;
+  transform-origin: left center;
+  vertical-align: baseline;
+}
+
+.cinematic-title--medium {
+  font-size: 0.86em;
+  letter-spacing: 0.005em;
+}
+
+.cinematic-title--long {
+  font-size: 0.66em;
+  letter-spacing: 0.01em;
+}
+
+.cinematic-title__text {
+  display: inline-block;
+  opacity: 0;
+}
+
+.cinematic-title--ready .cinematic-title__text {
+  animation: title-focus-pull 1.8s cubic-bezier(0.16, 0.84, 0.24, 1) 0.18s both;
+}
+
+.cinematic-title::before,
+.cinematic-title::after {
+  content: attr(data-title);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-bone);
+  color: var(--color-surface);
+  padding: 0 0.14em;
+  margin-inline: -0.14em;
+  opacity: 0;
+}
+
+.cinematic-title::before {
+  text-shadow:
+    -0.035em 0 color-mix(in srgb, var(--color-surface) 55%, transparent),
+    0.045em 0 color-mix(in srgb, white 28%, transparent);
+}
+
+.cinematic-title::after {
+  text-shadow:
+    0.045em 0 color-mix(in srgb, var(--color-surface) 55%, transparent),
+    -0.035em 0 color-mix(in srgb, white 24%, transparent);
+}
+
+.cinematic-title--ready::before {
+  animation: title-fuzz-upper 1.55s steps(2, jump-none) 0.24s both;
+}
+
+.cinematic-title--ready::after {
+  animation: title-fuzz-lower 1.65s steps(2, jump-none) 0.28s both;
+}
+
+@keyframes title-focus-pull {
+  0% {
+    opacity: 0;
+    filter: blur(0.28em);
+    transform: scaleX(1.08) scaleY(0.92);
+    letter-spacing: 0.075em;
+  }
+  22% {
+    opacity: 0.72;
+    filter: blur(0.12em);
+  }
+  38% {
+    opacity: 0.38;
+    filter: blur(0.2em);
+    transform: scaleX(1.035) scaleY(0.97);
+  }
+  58% {
+    opacity: 0.92;
+    filter: blur(0.035em);
+  }
+  72% {
+    opacity: 0.68;
+    filter: blur(0.075em);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+    letter-spacing: inherit;
+  }
+}
+
+@keyframes title-fuzz-upper {
+  0%, 12% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translate(0, 0);
+    filter: blur(0.12em);
+  }
+  18% {
+    opacity: 0.65;
+    clip-path: inset(8% 0 58% 0);
+    transform: translate(-0.07em, -0.025em) skewX(-3deg);
+  }
+  29% {
+    opacity: 0.28;
+    clip-path: inset(46% 0 31% 0);
+    transform: translate(0.09em, 0.015em);
+  }
+  43% {
+    opacity: 0.72;
+    clip-path: inset(19% 0 64% 0);
+    transform: translate(-0.035em, 0);
+  }
+  61% {
+    opacity: 0.22;
+    clip-path: inset(4% 0 81% 0);
+    transform: translate(0.025em, 0);
+  }
+  78%, 100% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translate(0, 0);
+    filter: blur(0);
+  }
+}
+
+@keyframes title-fuzz-lower {
+  0%, 17% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transform: translate(0, 0);
+    filter: blur(0.16em);
+  }
+  24% {
+    opacity: 0.58;
+    clip-path: inset(62% 0 7% 0);
+    transform: translate(0.075em, 0.035em) skewX(2deg);
+  }
+  36% {
+    opacity: 0.34;
+    clip-path: inset(31% 0 48% 0);
+    transform: translate(-0.055em, 0);
+  }
+  52% {
+    opacity: 0.68;
+    clip-path: inset(73% 0 10% 0);
+    transform: translate(0.04em, -0.01em);
+  }
+  68% {
+    opacity: 0.18;
+    clip-path: inset(51% 0 36% 0);
+    transform: translate(-0.02em, 0);
+  }
+  82%, 100% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transform: translate(0, 0);
+    filter: blur(0);
+  }
+}
+
 .label {
   font-family: var(--font-mono);
   text-transform: uppercase;
@@ -189,6 +356,18 @@ body {
     transform: none;
     transition: none;
   }
+  .cinematic-title__text,
+  .cinematic-title::before,
+  .cinematic-title::after {
+    animation: none;
+  }
+  .cinematic-title--ready .cinematic-title__text {
+    opacity: 1;
+  }
+  .cinematic-title::before,
+  .cinematic-title::after {
+    display: none;
+  }
   .stamp-rotate {
     animation: none;
   }
@@ -316,6 +495,40 @@ body {
   color: transparent;
   user-select: none;
   border-radius: 1px;
+}
+
+/* Early CV records: a recoverable, time-worn archive fragment */
+.archive-record > summary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image: repeating-linear-gradient(
+    -12deg,
+    transparent 0 7px,
+    var(--color-bone) 7px 8px
+  );
+  mask-image: linear-gradient(90deg, transparent 18%, black 48%, transparent 92%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 18%, black 48%, transparent 92%);
+}
+
+.archive-record__contents {
+  opacity: 0.78;
+  background-image: linear-gradient(
+    color-mix(in srgb, var(--color-bone) 4%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 100% 4px;
+}
+
+.archive-record[open] .archive-record__toggle::before {
+  content: "Reseal archive";
+  font-size: inherit;
+}
+
+.archive-record[open] .archive-record__toggle {
+  font-size: 0;
 }
 
 /* ── Wire service (writing page) ── */

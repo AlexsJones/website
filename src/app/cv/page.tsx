@@ -7,6 +7,9 @@ export const metadata = {
   description: "Curriculum vitae of Alex Jones.",
 };
 
+const ACTIVE_RECORDS = EMPLOYMENT.slice(0, -2);
+const ARCHIVED_RECORDS = EMPLOYMENT.slice(-2);
+
 export default function CVPage() {
   return (
     <div className="grid-lines min-h-screen">
@@ -64,7 +67,7 @@ export default function CVPage() {
                 </div>
                 <div>
                   <div className="label mb-1">Assignment</div>
-                  <div className="text-bone">Principal Engineer @ AWS</div>
+                  <div className="text-bone">Open-source Engineer · Creator of K8sGPT</div>
                 </div>
                 <div>
                   <div className="label mb-1">Status</div>
@@ -140,7 +143,7 @@ export default function CVPage() {
               </span>
             </div>
             <div className="relative border-y border-surface-lighter pl-5 before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-bone">
-              {EMPLOYMENT.map((e, i) => (
+              {ACTIVE_RECORDS.map((e, i) => (
                 <Reveal key={`${e.org}-${e.role}`} delay={(i % 4) * 50}>
                   <div className="grid gap-x-6 border-b border-surface-lighter py-4 last:border-b-0 sm:grid-cols-[30px_180px_1fr_auto] sm:items-baseline">
                     <span className="mb-1 font-mono text-[9px] text-ash sm:mb-0">
@@ -161,6 +164,44 @@ export default function CVPage() {
                   </div>
                 </Reveal>
               ))}
+              <Reveal delay={50}>
+                <details className="archive-record group border-b border-surface-lighter last:border-b-0">
+                  <summary className="relative grid cursor-pointer list-none gap-x-6 overflow-hidden py-5 pr-3 sm:grid-cols-[54px_180px_1fr_auto] sm:items-center [&::-webkit-details-marker]:hidden">
+                    <span className="font-mono text-[9px] text-ash">10&ndash;11</span>
+                    <span className="font-display text-lg text-bone/65">
+                      Early career archive
+                    </span>
+                    <div className="relative z-10 mt-1 sm:mt-0">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-ash">
+                        Signal degraded · two records recovered
+                      </span>
+                      <div className="mt-2 flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.14em] text-bone-dark/60">
+                        <span className="archive-record__toggle">Unseal archive</span>
+                        <span className="transition-transform duration-300 group-open:rotate-180" aria-hidden>
+                          &#9662;
+                        </span>
+                      </div>
+                    </div>
+                    <span className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-ash whitespace-nowrap sm:mt-0">
+                      2010 &mdash; 2013
+                    </span>
+                  </summary>
+                  <div className="archive-record__contents ml-0 border-t border-dashed border-surface-lighter/70 py-2 sm:ml-[54px]">
+                    {ARCHIVED_RECORDS.map((e, i) => (
+                      <div
+                        key={`${e.org}-${e.role}`}
+                        className="grid gap-x-5 border-b border-dashed border-surface-lighter/50 px-3 py-3 last:border-b-0 sm:grid-cols-[160px_1fr_auto] sm:items-baseline"
+                      >
+                        <span className="font-display text-base text-bone/55">{e.org}</span>
+                        <span className="text-[11px] text-bone-dark/55">{e.role}</span>
+                        <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.08em] text-ash/80 whitespace-nowrap sm:mt-0">
+                          record {String(10 + i).padStart(2, "0")} · {e.span}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              </Reveal>
             </div>
           </section>
 

@@ -19,11 +19,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://axjns.dev"),
   title: "Alex Jones — axjns.dev",
   description:
-    "Alex Jones — engineer, speaker, and open-source contributor. Principal Engineer at AWS and founder of K8sGPT.",
+    "Alex Jones — engineer, speaker, open-source contributor, and creator of K8sGPT.",
   openGraph: {
     title: "Alex Jones — axjns.dev",
     description:
-      "Engineer, speaker, and open-source contributor. Principal Engineer at AWS and founder of K8sGPT.",
+      "Engineer, speaker, open-source contributor, and creator of K8sGPT.",
     url: "https://axjns.dev",
     siteName: "axjns.dev",
     type: "website",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Alex Jones — axjns.dev",
     description:
-      "Engineer, speaker, and open-source contributor. Principal Engineer at AWS and founder of K8sGPT.",
+      "Engineer, speaker, open-source contributor, and creator of K8sGPT.",
   },
 };
 

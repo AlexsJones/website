@@ -11,7 +11,7 @@ export default function Footer() {
               Alex Jones
             </div>
             <p className="font-mono text-xs text-ash uppercase tracking-[0.08em]">
-              Principal Engineer @ AWS &mdash; London, UK
+              Open-source engineer &mdash; London, UK
             </p>
           </div>
 
