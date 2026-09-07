@@ -25,17 +25,17 @@ export const ARTICLES: Article[] = [
     title:
       "The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems",
     description:
-      "Expanded position paper (v2.1) proposing a six-layer synthetic membrane architecture, drawing on biological analogues, distributed systems theory, and incident management doctrine.",
-    date: "July 2026",
+      "Revised position paper defining a coordination contract for shared evidence, selective access, and action ownership, with explicit limits and an evaluation plan.",
+    date: "September 2026",
     tag: "Synthetic Membrane",
     type: "paper",
-    version: "v2.1",
+    version: "v2.2",
     status: "current",
     changes: [
-      "ICS/NIMS incident doctrine mapping",
-      "security incident-response case study",
-      "related-work survey & MAST evidence",
-      "falsifiable acceptance criteria",
+      "bounded hypothesis and prior-art comparison",
+      "authority and consistency contract",
+      "worked incident scenario with explicit limits",
+      "matched baselines and mechanism ablations",
     ],
     links: [
       { label: "github", href: "https://github.com/AlexsJones/research" },

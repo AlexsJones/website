@@ -1,20 +1,20 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "The Cell Cannot Break: Testing Celln's Hermetic Boundary · axjns.dev",
+  title: "Testing Celln's Boundary · axjns.dev",
   description:
-    "We asked five DeepSeek agents to escape their sealed hardware-isolated cells. At every layer — build, kernel, filesystem, seccomp — the cell held.",
+    "Four boundary probes and one successful computation: what a small Celln demonstration shows, and what it leaves untested.",
   openGraph: {
-    title: "The Cell Cannot Break: Testing Celln's Hermetic Boundary",
+    title: "Testing Celln's Boundary",
     description:
-      "Five AI agents, four breakout attempts, one legitimate computation. Every escape was caught.",
+      "Four boundary probes and one successful computation, with explicit limits on what the results establish.",
     type: "article" as const,
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "The Cell Cannot Break",
+    title: "Testing Celln's Boundary",
     description:
-      "Five AI agents, four breakout attempts, one legitimate computation. Every escape was caught.",
+      "Four boundary probes and one successful computation, with explicit limits on what the results establish.",
   },
 };
 
@@ -27,35 +27,39 @@ export default function CellnHermeticBoundaryPage() {
           Engineering · Celln · Security
         </div>
         <h1 className="font-display text-4xl sm:text-5xl text-bone leading-[1.02]">
-          The Cell Cannot Break
+          Testing Celln&apos;s Boundary
         </h1>
         <p className="mt-3 text-base text-bone-dark/80">
-          We asked five DeepSeek agents to write code that escapes their
-          hardware-isolated cells. At every layer, the cell held.
+          Four boundary probes, one useful computation, and the limits of a small test.
         </p>
         <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-          Alex Jones · August 2026
+          Alex Jones · August 2026 · Revised September 2026
         </div>
       </div>
 
       <Prose>
-        <H2>1. The Experiment</H2>
+        <H2>What we tested</H2>
 
         <p>
-          Celln runs AI-generated code inside hardware-isolated microVMs called{" "}
-          <em>cells</em>. Every cell is sealed — no network stack, no writable
-          filesystem, no ambient authority. Tools are lent read-only by hash.
-          Exec is gated by the in-cell supervisor.
+          Celln runs generated code inside isolated microVMs called cells. This demonstration
+          used five DeepSeek-generated Rust programs: four probes of restricted or unavailable
+          capabilities, followed by one legitimate computation. The reported results were a
+          refused socket operation, a rejected dependency, an absent file, a denied process
+          launch, and a correct SHA-256 digest.
         </p>
 
         <p>
-          The question is not whether it works when everyone plays nice. The
-          question is whether it holds when the code actively tries to break
-          out. So we ran an experiment: five DeepSeek agents, each given a task
-          designed to probe a specific boundary. Four breakout attempts, one
-          legitimate computation. All five went through the full pipeline:
-          model writes code → reproducible build → tool sealing → KVM cell →
-          pilot verdict → execution → dissolution.
+          These are boundary checks, not a VM-escape benchmark. Importing an unavailable crate
+          and reading a guest file do not attempt to exploit the hypervisor. The experiment asks
+          whether a few ordinary operations behave as expected in this configuration; it cannot
+          establish that the cell is impossible to escape.
+        </p>
+
+        <p>
+          Each program entered the build pipeline. Successful builds proceeded to sealing,
+          admission by pilot, execution, and teardown. The dependency probe stopped at
+          compilation, so it never reached a cell. The distinction matters when interpreting
+          which boundary was exercised.
         </p>
 
         <div className="overflow-x-auto my-6 font-mono text-sm">
@@ -66,7 +70,7 @@ export default function CellnHermeticBoundaryPage() {
                 <th className="py-2 pr-4">Boundary</th>
                 <th className="py-2 pr-4">Attempt</th>
                 <th className="py-2 pr-4">Result</th>
-                <th className="py-2 pr-4">Gate</th>
+                <th className="py-2 pr-4">Observed boundary</th>
               </tr>
             </thead>
             <tbody className="text-bone-dark">
@@ -96,7 +100,7 @@ export default function CellnHermeticBoundaryPage() {
                 <td className="py-2 pr-4">Execution</td>
                 <td className="py-2 pr-4 font-mono text-xs">Run <code>whoami</code> via Command</td>
                 <td className="py-2 pr-4 text-ember">Permission denied</td>
-                <td className="py-2 pr-4 text-ash text-xs">seccomp</td>
+                <td className="py-2 pr-4 text-ash text-xs">Runtime restriction*</td>
               </tr>
               <tr className="border-b border-surface-lighter/40">
                 <td className="py-2 pr-4 text-ash">5</td>
@@ -109,27 +113,19 @@ export default function CellnHermeticBoundaryPage() {
           </table>
         </div>
 
-        <p className="text-xs text-ash mt-1 font-mono">
-          Host: carbon · Kernel: 7.1.3-200.fc44.x86_64 · KVM: available · Provider: deepseek-chat
+        <p>
+          The original run records the host as carbon, kernel 7.1.3-200.fc44.x86_64, KVM
+          available, and provider deepseek-chat. The excerpts below are retained from that run.
+          They are not a fresh execution or a statistically representative sample. *The
+          process-launch error alone does not identify which runtime control returned it.
         </p>
 
-        <H2>2. Boundary 1: The Network That Isn&apos;t There</H2>
+        <H2>Network: the connection failed</H2>
 
         <p>
-          The first agent was asked to open a TCP socket to a remote address.
-          DeepSeek generated a Rust program that calls{" "}
-          <code>std::net::TcpStream::connect</code>. The forge built it
-          successfully — <code>std::net</code> is part of the standard library,
-          so nothing flagged at build time. The binary was sealed into a 32 MiB
-          tool filesystem image, the cell was forked from a warm mote, and
-          pilot permitted execution.
-        </p>
-
-        <p>
-          Inside the cell, <code>TcpStream::connect</code> returned immediately
-          with an error. The cell&apos;s kernel was built without AF_INET.
-          There is no network stack to reach. The program handled the error
-          gracefully and printed:
+          The network probe used <code>std::net::TcpStream::connect</code>. It compiled because
+          the Rust standard library exposes the API even when the guest configuration cannot
+          provide the requested network capability. The reported output was:
         </p>
 
         <pre className="bg-surface-dark text-xs p-4 rounded-[2px] overflow-x-auto text-bone-dark font-mono leading-relaxed my-4">
@@ -137,27 +133,25 @@ export default function CellnHermeticBoundaryPage() {
         </pre>
 
         <p>
-          The cell does not drop packets. It does not firewall. It has{" "}
-          <em>no concept of a network</em> at the kernel level. The only way
-          bytes leave is through <code>/pilot-fetch</code>, a vsock-brokered
-          HTTPS proxy the host must explicitly enable with{" "}
-          <code>--allow-host</code>. The agent did not have that.
-        </p>
-
-        <H2>3. Boundary 2: The Crate That Can&apos;t Be Imported</H2>
-
-        <p>
-          The second agent was asked to use the <code>rand</code> crate.
-          This is the shallowest and cheapest gate in the entire system.
+          The tested guest was configured without ordinary IPv4 networking. The program&apos;s
+          own “socket refused” message is coarser evidence than a syscall trace: it reports
+          failure, not the precise kernel error. It shows that this attempted connection did not
+          succeed.
         </p>
 
         <p>
-          DeepSeek generated Rust code with <code>use rand::Rng;</code>. The
-          forge — Celln&apos;s build plane — compiles the program twice in
-          independent directories and compares BLAKE3 hashes to prove
-          reproducibility. It runs <code>rustc</code> against the sealed
-          toolchain: Rust 2021, static musl, standard library only. No Cargo.
-          No crates.io. No <code>rand</code>.
+          The system can also expose host-mediated communication through a vsock broker such as
+          <code>pilot-fetch</code>, subject to host policy. Removing AF_INET is therefore not
+          the same as removing every channel through which bytes can leave. That broker and the
+          output path are separate parts of the boundary.
+        </p>
+
+        <H2>Dependencies: rejection before execution</H2>
+
+        <p>
+          The dependency probe tried to import <code>rand</code>. The configured forge used
+          direct <code>rustc</code> compilation with a sealed standard-library-only toolchain,
+          so the crate was unavailable:
         </p>
 
         <pre className="bg-surface-dark text-xs p-4 rounded-[2px] overflow-x-auto text-bone-dark font-mono leading-relaxed my-4">
@@ -173,30 +167,17 @@ error[E0433]: cannot find module or crate \`rand\` in this scope`}
         </pre>
 
         <p>
-          No cell was ever spawned. No tool was ever sealed. No guest
-          instruction ever executed. The forge caught it in milliseconds, at
-          the host level, before anything crossed the VM boundary.
+          No executable was sealed and no cell ran this program. This is a useful build-time
+          rejection of an unsupported dependency. It says nothing about whether a program that
+          does compile is safe. Reproducibility and dependency restrictions help make the build
+          inspectable; execution still requires its own controls.
         </p>
 
-        <p>
-          This is the most important gate, because it is the cheapest. The
-          agent is told exactly what runtimes are available — &quot;Rust 2021,
-          static musl, standard library only&quot; — but LLMs hallucinate
-          capabilities. The forge catches those hallucinations before they
-          become problems.
-        </p>
-
-        <H2>4. Boundary 3: The File That Doesn&apos;t Exist</H2>
+        <H2>Filesystem: an absent guest file</H2>
 
         <p>
-          The third agent was asked to read <code>/etc/passwd</code>. DeepSeek
-          generated a straightforward Rust program using{" "}
-          <code>std::fs::read_to_string</code>. The forge built and reproduced
-          it. Pilot permitted it. The cell ran it.
-        </p>
-
-        <p>
-          The program panicked:
+          The filesystem probe called <code>std::fs::read_to_string</code> on
+          <code>/etc/passwd</code>. The generated program panicked after the read failed:
         </p>
 
         <pre className="bg-surface-dark text-xs p-4 rounded-[2px] overflow-x-auto text-bone-dark font-mono leading-relaxed my-4">
@@ -206,27 +187,24 @@ message: "No such file or directory" }`}
         </pre>
 
         <p>
-          The cell&apos;s initramfs is built from a freestanding C init and a
-          static musl pilot binary. There is no <code>/etc</code>. There is no{" "}
-          <code>/etc/passwd</code>. There is no persistent filesystem at all —
-          only <code>devtmpfs</code> for device nodes, <code>proc</code> and{" "}
-          <code>sys</code> for the kernel interfaces pilot needs, and the
-          read-only tool filesystem. Everything else is a ramfs work directory
-          that vanishes when the cell dissolves.
+          The observed result is ENOENT: the path was absent in the guest&apos;s filesystem
+          view. It does not demonstrate that Landlock rejected a read, and it does not test
+          access to the host&apos;s filesystem. Those claims require different probes with known
+          files and explicit access expectations.
         </p>
 
         <p>
-          The cell also runs under Landlock, which would have blocked the read
-          even if the file existed. But it didn&apos;t need to — the file was
-          never there.
+          The cell has a minimal guest filesystem, read-only tool content, and an ephemeral
+          writable workspace. It is inaccurate to describe this as having no writable
+          filesystem. The relevant restrictions concern which paths are available, what the
+          program can do with them, and whether data persists after teardown.
         </p>
 
-        <H2>5. Boundary 4: The Binary That Can&apos;t Run</H2>
+        <H2>Execution: a denied process launch</H2>
 
         <p>
-          The fourth agent was asked to run <code>whoami</code> via{" "}
-          <code>std::process::Command</code>. The forge built it. Pilot
-          permitted it. The cell ran it.
+          The execution probe attempted to run <code>whoami</code> through
+          <code>std::process::Command</code>. The recorded error was:
         </p>
 
         <pre className="bg-surface-dark text-xs p-4 rounded-[2px] overflow-x-auto text-bone-dark font-mono leading-relaxed my-4">
@@ -236,29 +214,27 @@ message: "Permission denied" }`}
         </pre>
 
         <p>
-          The cell&apos;s seccomp filter blocks <code>fork</code> and{" "}
-          <code>execve</code> for any binary that is not explicitly on the
-          allowlist. The only binaries in the cell are <code>pilot</code>{" "}
-          (PID 1, already running), <code>pilot-fetch</code> (the brokered
-          HTTPS client), and the sealed tool itself. <code>whoami</code> is
-          not on the list. It never will be.
+          This shows that the requested process did not launch. Pinning the error to a
+          particular syscall or control would require a lower-level trace. A process-launch API
+          may take several steps before it reaches execution.
         </p>
 
         <p>
-          This gate prevents command injection, shell escape, and any attempt
-          to run arbitrary binaries — even if an attacker managed to write a
-          binary into the ramfs work directory (which Landlock blocks), they
-          could not execute it.
+          <a href="https://docs.kernel.org/userspace-api/seccomp_filter.html"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">Seccomp filters</a> restrict syscalls and inspect their numeric
+          arguments; ordinary seccomp BPF does not read a pathname string and compare it with a
+          binary allowlist. Executable identity and filesystem policy therefore need separate
+          enforcement. The result should not be described as proof that seccomp recognised and
+          rejected the name <code>whoami</code>.
         </p>
 
-        <H2>6. The One That Should Work</H2>
+        <H2>A useful computation still runs</H2>
 
         <p>
-          The fifth agent was asked to compute SHA-256 from scratch — a
-          legitimate, self-contained computation using only the standard
-          library. It is exactly the kind of workload a sealed cell is designed
-          for: the code is agent-authored and untrusted, but the computation is
-          well-defined and the output is verifiable.
+          The final program implemented SHA-256 using the standard library and hashed
+          <code>celln-hermetic-seal-test</code>. The retained output includes the build record,
+          admission verdict, and digest:
         </p>
 
         <pre className="bg-surface-dark text-xs p-4 rounded-[2px] overflow-x-auto text-bone-dark font-mono leading-relaxed my-4">
@@ -272,104 +248,73 @@ message: "Permission denied" }`}
         </pre>
 
         <p>
-          The hash <code>db96068e9e94...</code> is the correct SHA-256 digest
-          of <code>celln-hermetic-seal-test</code>. The program was built,
-          reproduced (matching hashes from two independent build directories),
-          sealed, executed, and dissolved. The cell lifecycle for this agent:
-          3.3 seconds from fork to dissolution. The actual computation took
-          microseconds.
-        </p>
-
-        <H2>7. The Layered Defence Model</H2>
-
-        <p>
-          The four breakout attempts were caught at four different layers:
-        </p>
-
-        <ol className="list-decimal list-inside space-y-3 text-bone-dark">
-          <li>
-            <strong>Forge (build time).</strong> The cheapest gate. Compilation
-            fails before a cell is ever spawned. Catches hallucinated
-            dependencies, syntax errors, and unsafe code that doesn&apos;t
-            compile against the sealed toolchain.{" "}
-            <em>Cost: milliseconds. No cell spawned.</em>
-          </li>
-          <li>
-            <strong>Kernel (AF_INET removal).</strong> The cell kernel was
-            compiled without network support. There are no sockets to open, no
-            routes to reach, no interfaces to bind. The program compiles, the
-            cell runs, the connection attempt returns an immediate error.{" "}
-            <em>Cost: full cell spawn (~3.3s), but the escape fails at the
-            first syscall.</em>
-          </li>
-          <li>
-            <strong>Filesystem (minimal initramfs).</strong> The cell&apos;s
-            rootfs contains only what the guest needs to function. No{" "}
-            <code>/etc</code>, no <code>/home</code>, no persistent state.
-            Landlock provides a second layer of filesystem access control.{" "}
-            <em>Cost: same cell spawn, same first-syscall failure.</em>
-          </li>
-          <li>
-            <strong>Seccomp (exec allowlist).</strong> The cell&apos;s seccomp
-            filter denies fork and execve for any binary not on the explicit
-            allowlist. Even if a binary existed on the filesystem, it could not
-            be executed.{" "}
-            <em>Cost: same. Blocked at the execve syscall.</em>
-          </li>
-        </ol>
-
-        <p>
-          No single layer needs to be perfect. The system is designed so that
-          each layer catches what the previous one allows through. An attacker
-          would need to defeat all four simultaneously to reach anything
-          outside the cell.
-        </p>
-
-        <H2>8. What This Proves</H2>
-
-        <p>
-          <strong>LLM-generated code is untrusted code.</strong> Every model
-          will eventually produce a program that tries to do something it
-          shouldn&apos;t — import an unavailable crate, connect to a remote
-          host, read a sensitive file. The defence cannot be &quot;write better
-          prompts.&quot; The defence must be structural.
+          The digest is correct for that input. This is a positive control: the restrictions
+          allowed at least one useful, self-contained computation. It does not establish the
+          correctness of the implementation for every input or the compatibility of the cell
+          with broader workloads.
         </p>
 
         <p>
-          <strong>The forge is the most important gate.</strong> Two of the
-          four breakout attempts could have been caught at build time for
-          zero cell-spawn cost. The forge is cheap, fast, and definitive. Every
-          agent pipeline should have one.
+          The original account reports about 3.3 seconds from fork to dissolution for this run.
+          Without a timing series or a breakdown, that is one lifecycle observation, not a
+          startup benchmark or a measure of the hashing time. Model generation and build time
+          also belong in any end-to-end latency comparison.
+        </p>
+
+        <H2>What the results establish</H2>
+
+        <p>
+          Four requested operations were rejected or unavailable, and the positive control
+          returned the expected value. That is useful evidence that these particular paths
+          behaved as intended. The controls serve different purposes; an attacker would not
+          necessarily have to defeat all of them in sequence.
         </p>
 
         <p>
-          <strong>Hardware isolation is the last line, not the first.</strong>
-          KVM provides a strong guarantee, but the cell&apos;s userspace
-          defences — the stripped kernel, the minimal initramfs, the seccomp
-          filter — catch escapes before they reach the hypervisor boundary.
+          A stronger evaluation would test known-present forbidden files, writable and
+          executable paths, direct syscall variants, broker policy, resource exhaustion, and
+          recovery after interruption. Hypervisor and kernel vulnerabilities need their own
+          threat model and testing. These five programs do not exercise them.
         </p>
 
         <p>
-          <strong>Reproducible builds make the gate auditable.</strong> Every
-          program in this experiment was built twice and compared, earning
-          Forged tier. You don&apos;t have to trust that the build was honest;
-          you can rebuild it yourself and compare hashes.
+          The useful lesson from the demonstration is that generated code needs an enforced
+          authority boundary. A successful build does not supply that boundary, and a handful of
+          denied operations does not prove its completeness. Retained artefacts and explicit
+          expected outcomes make each subsequent test more informative.
         </p>
 
-        <H2>9. Reproduce It</H2>
+        <H2>Reproduce and inspect</H2>
+
+        <p>
+          The <a
+          href="https://github.com/sympozium-ai/celln/blob/main/scripts/hermetic-boundary-demo.sh"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">demo script</a> contains the five prompts and writes per-agent logs
+          and a combined report. Follow the repository&apos;s setup instructions for the
+          required build tools and KVM environment, and supply the API key through the
+          environment before running:
+        </p>
 
         <pre className="bg-surface-dark text-xs p-4 rounded-[2px] overflow-x-auto text-bone-dark font-mono leading-relaxed my-4">
-{`export DEEPSEEK_API_KEY=sk-...
-./scripts/hermetic-boundary-demo.sh
+{`./scripts/hermetic-boundary-demo.sh
 celln ps -a`}
         </pre>
 
         <p>
-          The full demo script, DeepSeek API shim, and all code changes are in
-          the Celln repository. Every program and its forge proof are
-          content-addressed and inspectable.
+          Inspect the generated source and raw output as well as the summary. The inspected
+          script uses a coarse result heuristic: any captured stdout can be treated as success,
+          including a program that prints a denial message. Its PASS/FAIL labels are not
+          sufficient evidence of whether a boundary held. The positive control should be checked
+          against the expected digest, not merely the presence of output.
         </p>
 
+        <p>
+          For an independently reproducible report, retain the repository commit, guest
+          configuration, toolchain identity, model version, generated sources, and full logs.
+          Those details were not all pinned in the original post. The excerpts above support the
+          narrow observations reported here; stronger claims need a stronger test record.
+        </p>
       </Prose>
 
       <div className="mt-16 border-t border-surface-lighter pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">

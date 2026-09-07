@@ -13,7 +13,7 @@ export default async function Image() {
         label="FIELD NOTES / MULTI-AGENT"
         title="The Sticky-Note"
         accent="Problem"
-        subtitle="Why multi-agent AI is broken at the coordination layer, and what incident commanders figured out fifty years ago."
+        subtitle="Why agent handoffs lose context, and what shared evidence, explicit ownership, and incident-management practice can improve."
       />
     ),
     { ...size },

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" aria-label="Baseline vs Membrane benchmark" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace">
   <title>Baseline vs Membrane benchmark</title>
   <rect width="1200" height="540" fill="#e9e9e7"/>
-  <text x="32" y="44" fill="#141414" font-size="22" font-weight="700">Baseline vs. Synthetic Membrane</text>
-  <text x="32" y="68" fill="#4c4c4a" font-size="13">3 agents · 5 facts each · lower is better — each metric uses its own linear scale</text>
+  <text x="32" y="44" fill="#141414" font-size="22" font-weight="700">Illustrative baseline vs. membrane simulation</text>
+  <text x="32" y="68" fill="#4c4c4a" font-size="13">3 agents · 5 facts each · stipulated token costs, not API measurements · separate metric scales</text>
   <rect x="40.0" y="110" width="346.6666666666667" height="320"     rx="8" fill="#dfdfdd" stroke="#9a9a98" stroke-width="1"/>
   <text x="213.33333333333334" y="136" fill="#141414"     font-size="14" font-weight="700" text-anchor="middle">messages</text>
   <text x="213.33333333333334" y="156" fill="#4c4c4a"     font-size="11" text-anchor="middle">wire messages</text>

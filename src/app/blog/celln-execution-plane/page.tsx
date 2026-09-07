@@ -44,214 +44,162 @@ export default function CellnExecutionPlanePage() {
             Why I built Celln, and where I hope it fits beneath Sympozium
           </p>
           <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-            Alex Jones · August 2026
+            Alex Jones · August 2026 · Revised September 2026
           </div>
         </div>
 
         <Prose>
-          <p>
-            The default way we run an agent is upside down. We give it a Linux
-            image, let it install a package manager&apos;s worth of software, let
-            it fetch whatever else it thinks it needs, and call the resulting
-            machine a sandbox. Then we repeat that work for every agent in the
-            fleet.
-          </p>
+        <p>
+          An agent often starts work by assembling a machine: finding tools, downloading
+          packages, resolving dependencies, and discovering which permissions it has. Even when
+          the sandbox starts quickly, preparing the environment can dominate a short task.
+        </p>
 
-          <p>
-            Boot is no longer the expensive part. Snapshot forks and microVMs
-            can create a hardware-isolated machine very quickly. The cost just
-            moved: the agent now spends its first seconds materialising an
-            environment. Downloading the same tools. Rebuilding the same
-            dependencies. Expanding the same supply chain. Giving every new
-            sandbox another copy of authority it did not need.
-          </p>
+        <p>
+          Prebuilt images and caches already reduce that work. I built <a
+          href="https://github.com/sympozium-ai/celln" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">Celln</a> to explore a more
+          explicit boundary: the host lends a task the tools it is permitted to run, with
+          recorded identity and provenance, for the lifetime of the execution. The environment
+          becomes a lease on capabilities.
+        </p>
 
-          <p>
-            I built <A href="https://github.com/sympozium-ai/celln">Celln</A>{" "}
-            to try the inversion. A cell starts with almost nothing. The host
-            lends it the verified tools required for one task as read-only
-            memory. The agent experiences a normal enough execution
-            environment; underneath, the toolchain belongs to the host and
-            the authority is temporary.
-          </p>
+        <H2>What the host lends</H2>
 
-          <H2>Not another sandbox</H2>
+        <p>
+          In Celln&apos;s terminology, a <strong>mote</strong> is a warm substrate at rest; a
+          <strong>cell</strong> is a live execution environment with a particular set of tools.
+          The host identifies those tools by content, supplies them read-only, and records what
+          the cell received. The aim is to reuse prepared capabilities across runs while keeping
+          each task&apos;s authority narrow.
+        </p>
 
-          <p>
-            Containers, jails, VMs and sandboxes are useful precedents. This
-            is not a claim that isolation, read-only filesystems, or copy on
-            write are new ideas. They are not. Celln is interested in a
-            different boundary: making the thing an agent is allowed to run a
-            first-class, measured, revocable capability.
-          </p>
+        <p>
+          Isolation, immutable filesystems, and copy on write are established ideas.
+          Celln&apos;s design question is how to make the permitted executable and its
+          dependencies the unit an operator can inspect, lend, and withdraw. A path is
+          convenient for finding a program; the content and policy behind it determine what the
+          host is authorising.
+        </p>
 
-          <p>
-            In Celln, a <strong>mote</strong> is a warm substrate at rest. A
-            <strong> cell</strong> is a live, sealed mote with specific tools
-            loaned into it. The host verifies bytes, records their provenance,
-            maps them read-only, and keeps the ability to revoke them. The
-            guest does not get to decide that a file path means executable
-            authority; execution is gated by the content hash it actually
-            sees.
-          </p>
+        <p>
+          That boundary should make the common case easier to explain: this task received these
+          tools, could write here, had these external permissions, and produced this result. It
+          also creates obligations. The host must verify the supplied bytes, enforce the
+          execution policy, and make failures visible.
+        </p>
 
-          <p>
-            That gives us a few properties which are much harder to recover
-            after handing out a general machine: tools can be shared rather
-            than rebuilt, agent-authored code can be placed in a deliberately
-            narrower lane, and a compromised tool can be removed from running
-            cells rather than merely excluded from the next image build.
-          </p>
+        <H2>Reproducible does not mean trusted</H2>
 
-          <H2>The important distinction</H2>
+        <p>
+          A model-written program remains untrusted after a successful build. Matching outputs
+          from repeated builds provide evidence about reproducibility under that toolchain and
+          environment. They do not prove that the source is benign, that the compiler is
+          trustworthy, or that the program should inherit the permissions of a host-provided
+          tool.
+        </p>
 
-          <p>
-            I do not think the answer is to pretend all code is trusted because
-            it compiled successfully. A model-written program remains
-            agent-authored. Celln can attest the bytes it built and reproduce
-            the build, but that does not promote the program into the same
-            authority lane as a host-provided tool.
-          </p>
+        <p>
+          The generated-code path described here uses a sealed KVM cell with a writable
+          workspace and restricted filesystem and network access. That workspace matters: useful
+          programs often need somewhere to write. The boundary is the scope of that authority,
+          not a claim that the guest has no writable memory or files at all.
+        </p>
 
-          <p>
-            Today, generated programs run in an agent lane inside a sealed KVM
-            cell: their executable and a writable workspace are loaned; other
-            filesystem access and ambient network access are denied. A host
-            that cannot provide the hardware boundary should say so. A weaker
-            fallback must not wear the same security label.
-          </p>
+        <p>
+          The <a href="/blog/celln-deepseek-benchmark" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">boundary demonstration</a>
+          exercises a few restrictions and a legitimate computation. It is a small engineering
+          check, not a complete security evaluation. The authority distinction has to survive
+          adversarial code and implementation defects, not just cooperative examples.
+        </p>
 
-          <H2>Why this matters for Sympozium</H2>
+        <H2>The seam beneath Sympozium</H2>
 
-          <p>
-            <A href="https://github.com/sympozium-ai/sympozium">Sympozium</A>{" "}
-            is a coordination plane. It decides how agents share context,
-            hand off work, govern access, and form a system rather than a bag
-            of isolated prompts. Kubernetes has been a sensible substrate for
-            that work because it is very good at describing desired state,
-            policy, and durable control loops.
-          </p>
+        <p>
+          <a href="https://github.com/sympozium-ai/sympozium" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">Sympozium</a> is where I am
+          exploring coordination: how agents share evidence, hand off work, and act under
+          policy. Kubernetes provides useful control-plane machinery for that work. Its
+          desired-state model and reconciliation loops are valuable independently of the
+          execution unit beneath them.
+        </p>
 
-          <p>
-            But a Kubernetes pod is a coarse execution primitive for a large
-            fraction of agent work. It is a full image, a mutable environment,
-            and a lifecycle designed around services that live much longer
-            than a short piece of generated work. I do not want to throw away
-            Kubernetes&apos; coordination semantics. I want to decouple them from
-            the execution mechanism beneath them.
-          </p>
+        <p>
+          A pod remains a reasonable choice for many workloads, including services and jobs. It
+          can also use a read-only root filesystem; mutability is not an unavoidable property of
+          Kubernetes. My concern is narrower: for bursts of small, generated tasks, creating and
+          managing a separate pod may be more machinery than the execution needs.
+        </p>
 
-          <p>
-            The proposal is modest: a Sympozium run could resolve to a Celln
-            execution request rather than always becoming a pod. Sympozium
-            would still own the workflow, identity, policy and observability.
-            Celln would own the short-lived execution boundary: the mote, the
-            verified tool set, the cell lifecycle, bounded egress, outputs and
-            the verdict. The control plane asks for a capability set; the
-            execution plane returns a result and a record of what actually ran.
-          </p>
+        <p>
+          The proposed integration is a small contract. Sympozium submits an authorised
+          execution request with a capability set, limits, and an output destination. Celln runs
+          it and returns the outcome, provenance, and enforcement verdict. Sympozium owns the
+          workflow; the executor validates the authority it is given and enforces it locally.
+        </p>
 
-          <H2>My bet: split the control plane from execution</H2>
+        <p>
+          That split would let the coordination system remain durable while execution is
+          short-lived. It is the same direction I discuss in the <a
+          href="/blog/post-kubernetes-genai" className="text-bone underline underline-offset-2
+          decoration-bone/40 hover:text-ember">post-Kubernetes field notes</a>, with Celln as an
+          implementation to test rather than an assumption that every workload should move.
+        </p>
 
-          <p>
-            I do not think Kubernetes disappears. It is an excellent control
-            plane for declaring intent, reconciling durable state, applying
-            policy, and giving operators a coherent view of a system. Those
-            are hard-won ideas, and agent systems need more of them, not less.
-          </p>
+        <H2>Where the lease gets difficult</H2>
 
-          <p>
-            But the execution plane is changing underneath it. A task that
-            exists for a few seconds should not necessarily inherit the
-            lifecycle, image model, scheduler path, and mutable machine shape
-            of a service that exists for months. Agent workloads make that
-            mismatch painfully visible: they fan out quickly, run untrusted or
-            semi-trusted code, need very particular capabilities, and then
-            disappear.
-          </p>
+        <p>
+          Revocation is the first hard question. Removing a tool from a catalogue prevents
+          future grants. Stopping a running cell from using authority it already holds is a
+          different guarantee. The design has to specify when withdrawal takes effect, what
+          happens to in-flight work, and what evidence an operator receives. It cannot undo an
+          external effect that has already happened.
+        </p>
 
-          <p>
-            My bet is that the future stack splits cleanly. Kubernetes, or a
-            Kubernetes-shaped system, remains the control plane: it says who
-            may run, what policy applies, what work belongs together, and what
-            happened. A specialised execution plane handles the physics of the
-            run itself: fast isolation, capability delivery, page sharing,
-            bounded egress, revocation, and disposal. The control plane should
-            not need to know how a tool reached memory; the execution plane
-            should not need to decide an organisation&apos;s workflow.
-          </p>
+        <p>
+          Dependencies are another test. Useful software often expects shared libraries,
+          language runtimes, and a large package graph. A capability should cover a verified
+          dependency closure, not force every workload into one language. Preparing that closure
+          once is attractive, but compatibility, patching, and storage costs still need
+          accounting.
+        </p>
 
-          <p>
-            That is the boundary I want Celln to test. Not &ldquo;replace
-            Kubernetes,&rdquo; but make the execution primitive behind an AgentRun
-            substantially smaller, faster, and more governable than a pod by
-            default.
-          </p>
+        <p>
+          Long-lived services stretch the idea further. They need stable identity, state,
+          upgrades, and an availability model. A short-lived cell is a natural place to begin;
+          supporting a persistent API requires an explicit lifecycle rather than simply
+          extending a timeout.
+        </p>
 
-          <H2>The questions I am still trying to answer</H2>
+        <p>
+          The integration also needs to define retries. If an execution request times out, the
+          control plane must learn whether the work ran before resubmitting it. A retained
+          receipt and an idempotency contract are as important as a fast start.
+        </p>
 
-          <p>
-            This is a direction, not a claim that the hard parts have all
-            been solved. One-shot work is the natural first shape for a cell.
-            A persistent API is different: it needs a stable identity, a
-            lifecycle, a state story, and a way to upgrade without making the
-            capability boundary meaningless. I think that deserves its own
-            primitive rather than pretending a short-lived task and a service
-            are the same thing.
-          </p>
+        <H2>What would make this worthwhile</H2>
 
-          <p>
-            Dependencies are the other unavoidable test. Many useful tools
-            expect glibc, shared libraries, language runtimes, or a large
-            package graph. The useful version of this idea cannot require
-            every workload to be rewritten in a particular language. The
-            question is how to package and attest those dependency closures
-            once, then lend them safely and efficiently to cells.
-          </p>
+        <p>
+          I want the user experience to stay small: request work through the agent interface,
+          see it execute within a clear boundary, and inspect the retained result. The operator
+          should be able to answer what ran and why it was permitted without reconstructing an
+          environment from logs.
+        </p>
 
-          <p>
-            I also want to make revocation concrete rather than rhetorical.
-            What is the host-side store? What is signed? What happens to a
-            long-running cell when a tool hash is withdrawn? What does an
-            operator see? Those are protocol and product questions, not just
-            virtual-memory tricks.
-          </p>
+        <p>
+          Then the design has to earn its performance claims. Compare cold and warm startup,
+          dependency preparation, memory sharing, total task time, and revocation behaviour
+          against prebuilt containers and snapshot-based VMs. A faster fork is useful only if
+          the rest of the lifecycle preserves the gain.
+        </p>
 
-          <p>
-            Finally, integration should earn its place through a small,
-            comprehensible seam. I expect Sympozium to request an execution
-            capability set and receive a result, provenance, and verdict back.
-            Whether Kubernetes sees that as a CRD, a runtime class, or a
-            separate service is an implementation choice to test, not an
-            ideology to settle in advance.
-          </p>
-
-          <H2>What I hope to prove</H2>
-
-          <p>
-            First, that the simple experience can be good. Install Celln,
-            select the agent CLI you already use, ask a question directly, or
-            ask it to build something and see a real sealed cell, a narrow
-            authority boundary, output, and a retained run record. No new
-            agent framework required.
-          </p>
-
-          <p>
-            Second, that the benefits are measurable. The strongest version
-            of this idea is not a VM fleet that happens to start quickly. It
-            is a cache of verified capabilities that the host can lend to many
-            cells, reclaim, and revoke with one control point. That needs to
-            show up in startup time, page sharing, supply-chain surface, and
-            operator control against the container and snapshot alternatives.
-          </p>
-
-          <p>
-            And finally, that the right seam is useful beyond one project.
-            I think agent infrastructure needs an execution plane with clearer
-            primitives than image, shell, network, and hope. Celln is my
-            attempt to find out whether that seam holds.
-          </p>
-        </Prose>
+        <p>
+          My bet is that short agent tasks benefit from borrowing a defined capability set.
+          Celln is the attempt to make that lease concrete, and to find out where it is simpler
+          and more efficient than handing each task a general environment.
+        </p>
+      </Prose>
 
         <footer className="mt-12 text-center text-xs font-mono text-ash">
           <div className="mb-5 space-x-4">

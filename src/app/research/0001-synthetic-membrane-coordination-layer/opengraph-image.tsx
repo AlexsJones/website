@@ -11,10 +11,10 @@ export default async function Image() {
   return new ImageResponse(
     (
       <StencilOgCard
-        label="PAPER / V2.1"
+        label="PAPER / V2.2"
         title="The Synthetic"
         accent="Membrane"
-        subtitle="A coordination layer for multi-agent AI systems — six layers, default-deny permeability, event-sourced shared state."
+        subtitle="Shared evidence, selective access, and action ownership: an architecture proposal with a controlled evaluation plan."
       />
     ),
     { ...size },

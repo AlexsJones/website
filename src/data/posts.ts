@@ -12,9 +12,9 @@ export interface Post {
 export const POSTS: Post[] = [
   {
     slug: "celln-deepseek-benchmark",
-    title: "The Cell Cannot Break",
+    title: "Testing Celln's Boundary",
     description:
-      "We asked five DeepSeek agents to escape their sealed hardware-isolated cells. At every layer — build, kernel, filesystem, seccomp — the cell held.",
+      "Four boundary probes and one successful computation: what a small Celln demonstration shows, and what it leaves untested.",
     isoDate: "2026-08-05",
     date: "August 2026",
   },
@@ -22,7 +22,7 @@ export const POSTS: Post[] = [
     slug: "celln-execution-plane",
     title: "The Agent Environment Should Be a Lease",
     description:
-      "Why I built Celln: an execution plane where agents borrow verified tools instead of assembling machines, and why it may become Sympozium's default substrate.",
+      "Why I built Celln to lend agents a defined capability set, and what that execution model still needs to prove.",
     isoDate: "2026-08-03",
     date: "August 2026",
   },
@@ -37,17 +37,17 @@ export const POSTS: Post[] = [
   {
     slug: "sticky-note-problem",
     title:
-      "The Sticky-Note Problem: Why Multi-Agent AI Is Broken at the Coordination Layer",
+      "The Sticky-Note Problem: Making Agent Handoffs Reliable",
     description:
-      "Why every multi-agent system built today is passing sticky notes between people in different rooms, and what the MAST study tells us about fixing it.",
+      "Why agent handoffs lose context, and how shared evidence and explicit ownership can make coordination more reliable.",
     isoDate: "2026-05-01",
     date: "May 2026",
   },
   {
     slug: "synthetic-membrane",
-    title: "We've been building AI agents wrong.",
+    title: "Agents Need Somewhere to Share Their Work",
     description:
-      "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+      "What makes agents useful as a team, and how a shared, policy-controlled workspace might help.",
     isoDate: "2026-04-01",
     date: "April 2026",
   },

@@ -7,7 +7,7 @@ export const metadata = {
   title:
     "The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems | axjns.dev",
   description:
-    "Position paper proposing a six-layer synthetic membrane architecture as a coordination layer for multi-agent AI systems, with a case study in security incident response.",
+    "Position paper proposing a six-layer synthetic membrane architecture as a coordination layer for multi-agent AI systems, with a worked incident-response scenario and a controlled evaluation plan.",
   openGraph: {
     title:
       "The Synthetic Membrane: A Coordination Layer for Multi-Agent AI Systems",
@@ -17,7 +17,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "The Synthetic Membrane: Full Paper (v2.1)",
+    title: "The Synthetic Membrane: Full Paper (v2.2)",
     description:
       "Position paper proposing a six-layer synthetic membrane architecture as a coordination layer for multi-agent AI systems.",
   },
@@ -25,696 +25,230 @@ export const metadata = {
 
 const PAPER = `## Abstract
 
-Multi-agent LLM systems have proliferated faster than the substrate that connects them. Today's agents communicate through narrow channels: tool calls via the Model Context Protocol (MCP), point-to-point delegation messages via Agent-to-Agent (A2A) or the Agent Network Protocol (ANP), or framework-specific orchestration graphs. None of these provides what biological systems take for granted: a shared, permeable boundary through which neighbours sense one another, exchange digested signals, and coordinate without a central conductor. Recent empirical work - most notably the Superminds Test on a two-million-agent society - shows that scale alone does not produce collective intelligence. This position paper argues that the missing substrate is a **synthetic membrane**: a shared semi-permeable layer between agents providing discovery, selective state sharing, gated coordination, and governance as first-class primitives.
+Multi-agent systems need more than a way to delegate tasks. When work spans several agents, sessions, or authority boundaries, they also need a reliable account of what has been observed, what remains disputed, who owns the next action, and who may authorise it. Existing protocols, orchestration frameworks, and shared-state architectures provide many of these ingredients. The open question is how to combine them into a reusable coordination service without increasing cost or spreading errors.
 
-We draw on biological analogues (cell membranes, quorum sensing, distributed situation awareness), distributed systems theory (CRDTs, event sourcing, gossip protocols), incident management doctrine (ICS/NIMS), and recent multi-agent research to propose a six-layer architecture. We identify the design constraints that practical implementations must respect - most notably token economics and default-deny permeability - and present a case study in operational coordination for security incident response. We compare the membrane to the closest published prior art (blackboard architectures), discuss threats to validity, and sketch an implementation path. Our central thesis is that structured, gated, persistent communication is a prerequisite, not an accelerant, for collective intelligence in multi-agent systems.
+This position paper proposes the **synthetic membrane**: a policy-controlled shared workspace for agents, organised around governance, discovery, selective access, persistent state, task coordination, and cross-cutting defence. Its closest architectural precedent is the blackboard. The proposed contribution is an explicit contract connecting evidence, access decisions, and action ownership across agent runtimes, together with an evaluation plan for that contract.
 
----
+The paper makes a bounded hypothesis: for tasks with distributed evidence, changing membership, and constrained authority, this combination can improve completion and recovery relative to comparably resourced alternatives. Published failure analyses and blackboard experiments motivate the hypothesis; they do not validate this architecture. A worked security-incident scenario illustrates the design. No production case study or end-to-end experimental validation is claimed.
 
-## 1. Introduction
+## 1. The coordination problem
 
-In the three years since large language model agents became practically deployable, the dominant pattern for multi-agent work has been *orchestration*: a planner decomposes a task, dispatches subtasks to specialised agents, and stitches the results back together. Framework providers - LangGraph, CrewAI, the Microsoft Agent Framework (the merger of AutoGen and Semantic Kernel) - have built rich vocabularies for this pattern. Anthropic's Model Context Protocol (MCP) [Anthropic, 2024] has standardised how an agent reaches outward to tools. Google's A2A and the emerging Agent Network Protocol (ANP) standardise how an agent reaches outward to *another agent*.
+Consider an investigation involving detection, forensics, and containment agents. Detection observes suspicious traffic. Forensics learns that the affected service is carrying out a scheduled export. Containment prepares to isolate it. Each agent may reason competently from its own evidence and still contribute to a poor decision if the others cannot discover that evidence, distinguish an observation from an inference, or identify who owns the action.
 
-What is conspicuously missing is the medium *between* agents. Each agent still inhabits its own context window. When two agents need to share understanding, they pass messages: strings of tokens that one party serialises and the other deserialises, with all the loss that implies. There is no shared cytoplasm. There is no place where a discovery made by Agent A becomes ambient knowledge for Agents B and C without an explicit hand-off. There is no mechanism for an agent to *sense* that other agents nearby are working on a related problem.
+Sending more messages may help. So may a better prompt, a central planner, or a shared database. The engineering problem is to make the relevant information available at the right time, under the right permissions, while preserving enough history to recover from mistakes. Transport alone does not specify those semantics; shared storage alone does not enforce them.
 
-The cost of this absence is becoming visible. Bai et al. [2026], studying agentic coding tasks on SWE-bench Verified, report that they consume roughly 1000x more tokens than equivalent non-agentic coding uses, with input tokens (context shipped between turns and between agents) dominating the bill. Li et al. [2026] show that, even at the scale of two million participants, agent societies fail at joint reasoning, information synthesis, and basic coordination. Cemri et al. [2025] (MAST study) measured 1,600+ failure traces and found that inter-agent misalignment is a primary failure cluster. CrewAI's own postmortem on 1.7 billion workflows says the gap "isn't intelligence, it's architecture."
+Here, **coordination** means managing dependencies between agents' information and actions. **Shared state** means records that authorised participants can address and update through a common interface. It does not mean that every agent reads everything or has identical beliefs. **Collective benefit** means an improvement in a specified task outcome over an explicit baseline at a comparable resource budget.
 
-This paper proposes the **synthetic membrane** as the missing substrate. The membrane is not a framework. It is not another orchestration graph. It is a shared, semi-permeable layer - a medium - that sits between agents and provides, as first-class primitives, discovery, selective state sharing, gated coordination, and governance. It is inspired by biological cell membranes (selective permeability, receptor-based gates, quorum sensing), by the Incident Command System (ICS) that has coordinated multi-agency disaster response for fifty years, and by distributed systems primitives (CRDTs, event sourcing, gossip protocols) that solve the hard problems of concurrent shared state.
+The target workload has three properties: useful evidence is distributed, participants or responsibilities change during execution, and actions have authority constraints. Short, independent subtasks may need none of this machinery. A single agent with suitable tools is the first baseline, not a stage to be outgrown automatically.
 
-The paper is structured as follows. Section 2 surveys the existing landscape of protocols, frameworks, and academic approaches. Section 3 states the membrane thesis and the empirical pressure behind it. Section 4 presents evidence for the coordination gap from the MAST study, token economics, and a framework analysis. Section 5 presents the six-layer architecture with a diagram. Section 6 collects the design principles that shape the architecture. Section 7 presents a case study in operational coordination for security incident response. Section 8 discusses threats to validity, compares the membrane with alternatives, and addresses scalability. Section 9 sketches an implementation path (the Sympozium project). Section 10 concludes and outlines future work. Section 11 provides the full reference list.
+## 2. What the evidence supports
 
----
+### 2.1 Failure analysis motivates better coordination
 
-## 2. Related Work
+Cemri et al.'s MAST study analyses more than 1,600 annotated execution traces across seven multi-agent frameworks. Its taxonomy distinguishes system design, inter-agent misalignment, and task verification failures. This supports examining system design alongside model capability. It does not establish that a missing shared workspace causes every failure, or that introducing one would remove them. [1]
 
-The literature relevant to the synthetic membrane thesis spans four domains: agent-to-agent protocols and frameworks, academic multi-agent coordination research, blackboard architectures, and cross-domain coordination models (incident management, distributed systems, biology).
+Li et al.'s Superminds Test probes MoltBook, a platform hosting more than two million agents, and reports weak joint reasoning, information synthesis, and basic interaction. The platform population is not the number of agents jointly solving each test. The result challenges the expectation that scale alone produces collective capability; it is not a controlled comparison of coordination architectures. Participation, incentives, and the platform's interaction model remain possible explanations. [2]
 
-### 2.1 Agent-to-Agent Protocols and Frameworks
+These findings identify problems worth testing against. Neither isolates the synthetic membrane as the remedy.
 
-**MCP (Model Context Protocol)** [Anthropic, 2024] standardises agent-to-tool communication. An MCP server is a passive endpoint; it does not know about other agents and is not designed to mediate between them. MCP has been donated to the Agentic AI Foundation (Anthropic, Block, OpenAI) and adopted by OpenAI/ChatGPT. Its November 2025 specification added async operations and server identity. It is foundational for tool access but orthogonal to agent-to-agent coordination.
+### 2.2 Shared workspaces have relevant experimental support
 
-**A2A (Agent-to-Agent Protocol)** and **ANP** standardise agent-to-agent message passing: typed task delegation, capability negotiation, status updates, and lifecycle management. A2A v0.3 added gRPC, signed agent cards, and async push over JSON-RPC 2.0. Google donated A2A to the Linux Foundation. These are message protocols, not state protocols. They solve the problem of "how do I send a message to another agent?" but not "how do agents share understanding without sending messages?"
+Salemi et al. evaluate a blackboard system on three data-discovery benchmarks and report 13–57% relative improvements in end-to-end success over their strongest baselines. Their architecture retains a central agent that posts requests while other agents volunteer relevant contributions. The result therefore supports this particular organisation of shared work, not a general rejection of central coordination. [3]
 
-**Mesh Memory Protocol (MMP)** [Xu, 2026] is the work most adjacent to the membrane thesis. MMP defines four primitives: CAT7 (a seven-field schema for Cognitive Memory Blocks), SVAF (a selective field-acceptance mechanism that evaluates incoming CMBs field-by-field against role-indexed anchors), inter-agent lineage (content-hash keys carrying parents and ancestors), and remix (storing one's own role-evaluated interpretation rather than the raw peer signal). Xu [2026] reports MMP as running in production across three reference deployments (a self-reported claim we have not independently verified); it provides a strong candidate for the membrane's semantic layer.
+Han and Zhang also investigate blackboard-based LLM collaboration and report competitive performance with lower token use on their evaluated tasks. [4] These are closer precedents than biological analogies because they test related mechanisms. Their results do not establish that governance, persistence, or selective access independently causes the gains.
 
-**LangGraph** offers a centralised state graph with conditional edges, supporting scatter-gather, pipeline parallelism, and subgraphs. Its coordination primitives are centralized state passing and graph-defined flow control. Coordination is top-down: the graph author decides flow; agents don't sense each other. It is the closest production system to a shared medium, but it is orchestrator-owned, not ambient.
+### 2.3 Cost must be measured at the model boundary
 
-**CrewAI** imposes top-down role assignment with a manager-worker pattern. Its own postmortem on 1.7 billion workflows found that the manager doesn't actually coordinate - execution collapses to sequential task chaining, producing wrong tool calls and high latency. Memory is static and doesn't evolve across sessions.
+Bai et al. study token consumption in agentic coding and report substantial overhead and variation. Their comparison concerns agentic coding workloads; it is not a measurement of inter-agent communication overhead alone. It motivates accounting for repeated context, tool output, retries, and model calls rather than assuming that additional collaboration is inexpensive. [5]
 
-**AutoGen -> Microsoft Agent Framework** merged with Semantic Kernel into the Microsoft Agent Framework (GA October 2025). It provides five named patterns (sequential, concurrent, handoff, group chat, and Magentic-One) with native A2A and MCP support. It is still fundamentally message-passing. AutoGen itself is in maintenance mode.
+A compact network payload does not necessarily reduce model tokens. The relevant quantity is the material actually presented to the model, including any summaries and the calls used to produce them. Selective retrieval is therefore a hypothesis about useful information per unit cost, not a guarantee of savings.
 
-**Google A2A** uses Agent Cards for discovery and a task object with lifecycle management. It is still RPC-style request/response/streaming - interop for message passing, not a shared medium.
+## 3. Prior art and the proposed contribution
 
-### 2.2 Academic Multi-Agent Coordination Research
+### 3.1 Protocols and frameworks are building blocks
 
-The academic literature on multi-agent LLM coordination has grown rapidly in 2025-2026. Key surveys include:
+MCP exposes tools, resources, and prompts through a client–server protocol, including negotiated subscription capabilities. A membrane service could use those interfaces. Describing MCP servers as necessarily passive or incapable of exposing shared state would misstate the protocol. [6]
 
-- **Tran et al. [2025]** (arXiv:2501.06322) decompose coordination into actors, types, structures, strategies, and protocols. Their survey maps the landscape but finds that all approaches reduce to message passing or centralised orchestration.
-- **"Beyond Self-Talk"** [2025] (arXiv:2502.14321) argues that prior surveys ignored communication as the central object, and that the field's focus on individual agent reasoning has blinded it to the coordination problem.
-- **"Multi-Agent Coordination across Diverse Applications"** [2025] (arXiv:2502.14743) frames four questions: what to coordinate, why to coordinate, who to coordinate with, and how to coordinate.
+A2A defines agent discovery and task interactions, including messages, artefacts, and lifecycle state. It can carry work between participants without prescribing this paper's evidence model or action-authorisation rules. [7] LangGraph provides persisted graph state, checkpoints, and replay facilities; it is a credible implementation substrate and comparison baseline. [8]
 
-More recent work includes:
+The distinction is between a transport or runtime and an application-level coordination contract. A sufficiently extended framework could implement the proposal. No claim is made that existing tools are incapable of it.
 
-- **AgentSOC** [2026] (arXiv:2604.20134), a multi-layer agentic AI framework for security operations automation with ~506 ms end-to-end reasoning loops, designed for real-time SOC use.
-- **"LLMs in the SOC"** [2025] (arXiv:2508.18947), an empirical study of human-AI collaboration patterns in production security operations.
-- **MDPI Survey on AI-Augmented SOC** [2025], reviewing 500+ papers and 100 selected sources mapping AI use across eight SOC functions, proposing a five-level Capability Maturity Model.
-- **MARS** [2025] (arXiv:2509.20502), efficient multi-agent collaboration for LLM reasoning.
-- **AgentsNet** [2025] (arXiv:2507.08616), coordination and collaborative reasoning in multi-agent LLMs.
-- **Latent Collaboration** [2025] (arXiv:2511.20639), exploring latent representation sharing for multi-agent systems.
+### 3.2 The blackboard is the closest precedent
 
-### 2.3 Blackboard Architectures
+A shared workspace to which specialised agents contribute is recognisably a blackboard architecture. The membrane inherits that idea. Access control and safety are also not new additions to this lineage: Terrarium explicitly revisits blackboards for multi-agent safety, privacy, and security research. [9]
 
-The blackboard architectural model originated in the 1970s with the **Hearsay-II** speech-understanding project at Carnegie Mellon University [Erman et al., 1980], was generalised through successors such as HASP/SIAP and BB1, and was later catalogued as an architectural pattern by Buschmann et al. in *Pattern-Oriented Software Architecture* (1996).
+The proposed contribution is consequently a synthesis: make evidence lineage, policy checks, and action ownership part of the same contract, then test whether that integration helps across runtime boundaries. This paper does not establish priority for the combination or claim a new distributed-systems primitive. If a conventional blackboard with equivalent controls performs as well with less complexity, that is evidence against a separate membrane service.
 
-Two papers in 2025 independently revived the blackboard architecture for LLM multi-agent systems:
+Mesh Memory Protocol is adjacent work on structured memory exchange and lineage. It is a candidate for interoperability, rather than a required dependency or an independently validated foundation of this proposal. [10]
 
-- **Salemi et al. [2025]** (arXiv:2510.01285) evaluated a blackboard system on three benchmarks (KramaBench, modified DSBench, DA-Code) and achieved **13-57% relative improvements** in end-to-end success over master-slave baselines.
-- **Han & Zhang [2025]** (arXiv:2507.01701) evaluated a blackboard system on commonsense knowledge, reasoning, and mathematical datasets, achieving the best average performance compared to static and dynamic MAS baselines while spending fewer tokens.
+### 3.3 Incident management supplies an operational model
 
-A third paper added "deliberation-first" orchestration with **blackboard transparency**:
+Google's SRE incident-management guidance combines explicit roles, a living incident document, and deliberate handoffs. Those practices suggest useful agent-system requirements: make responsibilities visible, preserve the state of the investigation, and transfer ownership explicitly. They also retain an incident commander. Human incident management is not evidence that coordination can dispense with authority. [11]
 
-- **Shen [2026]** (arXiv:2603.13327, DOVA) introduces a three-phase hybrid approach with explicit meta-reasoning, blackboard transparency (storing not just contributions but the reasoning traces that produced them), and adaptive multi-tiered thinking.
+ICS adds an explicit vocabulary for objectives, command, and transfer of responsibility. Its value here is an operational analogy with known limits: agents are not human responders, and a human span-of-control ratio is not a measured optimum for LLM teams. [13]
 
-Blackboard architecture is the closest published prior art to the membrane thesis. It demonstrates that shared-medium coordination works. But the classical blackboard has a monolithic control component (scheduler) that reintroduces the orchestration anti-pattern. The membrane extends the blackboard from a single flat structure to a multi-layer permeable medium with governance, discovery, and immune layers.
-
-A fourth paper, **Nakamura et al. [2025]** (Terrarium, arXiv:2510.14312), revisited the blackboard for multi-agent safety, privacy, and security studies, adding structured access controls.
-
-### 2.4 Incident Management and Distributed Coordination
-
-Human incident management has solved the coordination problem for fifty years. The **Incident Command System (ICS)** emerged from FIRESCOPE in California after the 1970 wildfires. The **National Incident Management System (NIMS)**, established by HSPD-5 in 2003 after 9/11, standardised ICS across all levels of US government, private sector, and NGOs. NIMS' Multi-Agency Coordination System (MACS) introduces three coordination structures at different scopes: ICS (tactical), EOC (operational), and MAC Groups (strategic).
-
-**Distributed Situation Awareness (DSA)** [Salmon, Stanton & Walker, 2013] reframes situation awareness as an emergent property of a joint cognitive system rather than a cognitive state inside an individual operator. The Common Operating Picture (COP) is the operational artefact that DSA produces.
-
-**Google's SRE Incident Management (IMAG)** is ICS adapted for software. Its core artefact is the "living incident document" - a concurrently-editable structured surface that is the source of truth for the incident.
-
-**ITIL's war room** fills the same function for IT service management, with a Major Incident Manager, technicians, business representatives, and a communications coordinator collaborating in real time.
-
-### 2.5 Distributed Systems Theory
-
-The membrane draws on several distributed systems primitives:
-
-- **CRDTs (Conflict-Free Replicated Data Types)** [Shapiro et al., 2011] solve the hardest part of concurrent shared state (convergence under conflicting writes) mathematically.
-- **Event sourcing** provides an immutable, replayable substrate suited to the membrane's provenance and audit needs.
-- **Pub/sub messaging** (NATS, Kafka, Redis) and **gossip protocols** (a la Dynamo) provide transport primitives.
-- **Yjs, Automerge** provide CRDT implementations for collaborative editing.
-
-### 2.6 Biological Inspiration
-
-- **Cell membranes** are selectively permeable: they decide what crosses based on receptors, gradients, and active transport.
-- **Bacterial quorum sensing** triggers collective behaviour once a signal concentration crosses a threshold.
-- **The vertebrate immune system** maintains adaptive, distributed defence with memory cells and cytokine signalling.
-- **Mycelial networks** transfer resources and information between disconnected organisms.
-
----
-
-## 3. The Membrane Thesis
-
-We state the thesis baldly:
-
-> **Structured, gated, persistent communication is a prerequisite, not an accelerant, for collective intelligence in multi-agent systems.**
-
-Three claims unpack this:
-
-1. **Structured.** Free-form messages between agents leak meaning at every serialisation boundary. The membrane requires typed primitives (Cognitive Memory Blocks, capability declarations, intent signals, dissent records) so that semantics survive transport. Without structure, agents "shuffle tokens" rather than "share understanding."
-
-2. **Gated.** Permeability must default to *deny*. The token-economics finding [Bai et al., 2026] shows communication is expensive and that accuracy peaks at intermediate rather than maximal spend; the gated-coordination work [Jian et al., 2026] shows that treating communication as a selective, cost-sensitive decision rather than a default reaction improves task outcomes. The membrane must make the agent justify, by cost-benefit, every traversal. Every byte added to a CMB is multiplied across every agent that reads it.
-
-3. **Persistent.** The medium itself must outlive any single agent's session. Without persistence there is no compounding; without compounding there is no collective intelligence. This implies an event-sourced, append-only substrate with full provenance.
-
-The membrane thesis reframes coordination from *messaging* to *medium*. The interesting object is not the message agents send each other; it is the shared field they live in.
-
-A useful test of the thesis is the Li et al. [2026] tier framework: a membrane-connected swarm should outperform individual frontier models on joint reasoning, succeed at information synthesis across the population, and sustain meaningful interaction over many turns. If the membrane delivers none of these, the thesis is wrong. If it delivers all three, the substrate gap was the bottleneck.
-
----
-
-## 4. The Coordination Gap: Evidence
-
-The coordination gap is not an intuitive claim. It is measured, documented, and converging from multiple directions.
-
-### 4.1 The MAST Study: Inter-Agent Misalignment Is a Primary Failure Cluster
-
-Cemri et al. [2025] built MAST (the Multi-Agent System failure Taxonomy) from 1,600+ annotated failure traces across seven agent frameworks. Three failure clusters emerged:
-
-- **System design failures** (configuration errors, framework misuse)
-- **Inter-agent misalignment** (the primary cluster)
-- **Task verification failures** (agents producing correct-looking but wrong results)
-
-Specific rates within the inter-agent misalignment cluster:
-
-| Failure Mode | Rate |
+| Incident-management practice | Proposed software counterpart |
 |---|---|
-| Reasoning-action mismatch | 13.2% |
-| Task derailment | 7.4% |
-| Wrong assumption | 6.8% |
-| Ignoring other agents | 1.9% |
-| Information withholding | 0.85% |
+| Shared incident picture | An authorised view of evidence, hypotheses, and action status |
+| Defined command and accountability | Separate proposal, approval, and execution rights |
+| Transfer-of-command briefing | An acknowledged handoff tied to a state version |
+| Common terminology | Typed operational records with documented meanings |
 
-The root cause: agents fail at *theory of mind* - they don't model what other agents need to know - and unstructured text ambiguity. When agents communicate via free-form messages, meaning leaks at every boundary. This is the coordination gap, quantified.
+The biological term *membrane* names selective exchange across a boundary. It is a design metaphor, not an explanation of collective intelligence. Software implementations still use messages, storage, and controllers.
 
-### 4.2 Token Economics: Communication Is Not Free
+## 4. Hypothesis and design contract
 
-Bai et al. [2026] establish:
+The hypothesis is:
 
-- **1000x token overhead** for agentic tasks vs. equivalent non-agentic ones.
-- **Input tokens dominate cost**, not output.
-- **Accuracy peaks at intermediate cost**, with diminishing returns then saturation.
-- **30x variance** for the same task; models can't predict their own costs (r <= 0.39).
+> For tasks with distributed evidence, changing membership, and constrained authority, a persistent workspace with selective delivery and explicit action ownership can improve task completion and recovery at a comparable total resource budget.
 
-Three design consequences follow:
+This is a contingent claim about a workload class. Persistence is useful for handoffs and recovery; it is not a prerequisite for every form of collective reasoning. Typed records reduce some ambiguity but cannot ensure that two models interpret evidence correctly. Gating can reduce irrelevant context but can also hide a decisive observation.
 
-1. The wire format must be compact. Every byte added to a CMB is multiplied across every agent that reads it.
-2. Default-deny permeability is *economically*, not just operationally, correct.
-3. The membrane must track per-agent communication budgets and enforce them.
+The proposed contract has five requirements:
 
-The token economics finding transforms the membrane from a "nice-to-have coordination improvement" to a "load-bearing requirement." Without gated, selective communication, multi-agent systems are economically unviable at scale.
+1. **Addressable evidence.** An observation has a stable identifier, source, scope, and observation time. Interpretations refer to evidence rather than silently replacing it.
+2. **Enforced access.** The service checks identity and policy on writes, reads, and notifications. Model-generated trust scores cannot grant permissions.
+3. **Explicit ownership.** An actionable task has an owner, a lease or expiry rule, and a separately recorded authorisation decision.
+4. **Recoverable state.** A replacement agent can obtain an authorised snapshot and subsequent changes without replaying an entire conversation into its context window.
+5. **Inspectable decisions.** The record links outputs to the evidence versions and policy decisions used. Conflicting claims remain visible until resolved.
 
-### 4.3 The Superminds Test: Scale != Intelligence
+An illustrative claim record contains an ID, incident ID, author, observation time, evidence references, assertion, status, visibility label, and superseded-record reference. These are proposed fields, not a claim of conformance to another protocol. Confidence, if included, is an agent's estimate unless separately calibrated.
 
-Li et al. [2026] evaluated MoltBook's 2M+ agent society across three tiers: joint reasoning, information synthesis, and basic interaction. The society failed all three. Threads rarely extended beyond one reply. Distributed information was rarely synthesised. Trivial coordination tasks failed.
+## 5. Architecture and consistency
 
-The implication is precise: **collective intelligence does not emerge from scale alone**. Without a structured substrate, more agents produce more noise. The membrane's three-tier evaluation framework (joint reasoning -> synthesis -> interaction) gives us measurable acceptance criteria.
+The architecture has five functional layers and a sixth, cross-cutting defence responsibility. Observability spans all six. The numbering retains the original proposal's labels; it does not prescribe a network stack or six separately deployed services.
 
-### 4.4 Framework Analysis: All Approaches Reduce to Message Passing
-
-| Framework | Coordination Model | Gap |
+| Responsibility | Interface and state | Boundary it must preserve |
 |---|---|---|
-| LangGraph | Centralised state graph | No ambient sensing; agents are graph nodes, not autonomous participants |
-| CrewAI | Top-down role assignment | No dynamic coordination; rigid roles; manager doesn't coordinate |
-| AutoGen/MAF | Pattern-based messaging | Explicit messaging, not ambient sharing |
-| Google A2A | RPC-style task lifecycle | Protocol for messaging, not state sharing |
-| MCP | Agent-to-tool communication | Orthogonal to coordination |
-| MMP | Cognitive Memory Blocks | Closest to membrane; field-level selectivity; but no governance/immune |
+| Governance (L−1) | Policy, approval, escalation, halt | Agreement among agents does not grant authority |
+| Discovery (L0) | Identity, capability, availability, task history | A capability claim is not proof of competence or permission |
+| Permeability (L1) | Publish, query, subscribe, filter | Relevance ranking cannot bypass access control |
+| Shared medium (L2) | Evidence, claims, projections, history | Convergent records need not contain true conclusions |
+| Coordination (L3) | Claim, renew, release, propose, execute | Concurrent workers cannot independently acquire the same exclusive authority |
+| Defence (cross-cutting) | Quarantine, revoke, invalidate, investigate | A suspect claim and its derivatives remain distinguishable from trusted evidence |
 
-No current framework provides: ambient sensing, shared medium, governance at scale, or immune defence.
+### 5.1 Governance and discovery
 
-### 4.5 Failure Attribution: The Hardest Open Problem
+Governance defines who may propose, approve, and execute each action. A human or designated service can suspend execution, narrow access, or assume ownership. The suspension must be enforced at the execution boundary; recording a halt in shared memory is insufficient if workers continue using cached authority.
 
-Three converging results establish that:
+Discovery records authenticated identity, supported task types, availability, and relevant performance history. Observed performance may improve routing, but its value needs testing against declared capabilities. New agents need a path to participate, and past success on one task class does not establish general reliability. Routing and authorisation remain separate decisions.
 
-- Best-in-class agent-level attribution is 53.5%; step-level is 14.2%. Even OpenAI o1 and DeepSeek R1 fail to reach practical usability [Zhang et al., 2025].
-- Full execution traces improve attribution accuracy by up to **76%** over partial-observation baselines [Chen et al., 2026].
-- Causal graphs separate root causes from propagated symptoms; counterfactual debugging via targeted intervention is feasible if you have the substrate [Wang et al., 2026; Ma et al., 2025].
+### 5.2 Permeability separates permission from usefulness
 
-The membrane provides exactly the substrate these methods require: complete event logs, content-hash lineage, and a coordination surface that doubles as an intervention surface.
+Access defaults to deny unless a policy grants it. Within the authorised set, subscriptions and retrieval select potentially useful information under a context budget. These are separate operations: an agent may ask for more relevant evidence, but it cannot override the service's access policy.
 
----
+Notifications should carry bounded summaries or record references, with access checked again when content is retrieved. Retractions, changed action ownership, and policy updates need explicit delivery and acknowledgement rules. A relevance filter must not silently discard them. Experiments should measure both noise reduction and missed critical information.
 
-## 5. The Synthetic Membrane Architecture
+Evidence and interpretation remain distinct. A concise summary can point to a retained source so that another agent can inspect it. Repeated summaries of the same source are dependent reports, not independent corroboration.
 
-We propose a six-layer architecture. Layers are conceptual. A real implementation will collapse some. But the separation clarifies responsibility.
+### 5.3 Shared state needs more than convergence
 
-\`\`\`
-+-----------------------------------------------------------------------+
-|                        L-1: GOVERNANCE                                |
-|     circuit breakers | human override | dissent surface               |
-|         value-conflict detection | accountability log                  |
-+-----------------------------------------------------------------------+
-|                        L0: DISCOVERY / REGISTRY                       |
-|      behavioural index | execution traces | identity / auth           |
-|               capability vectors | reputation                         |
-+-----------------------------------------------------------------------+
-|                        L1: PERMEABILITY                               |
-|       expose / subscribe | SVAF field-level filters                   |
-|       gated permeability (default-deny, cost-benefit)                 |
-+-----------------------------------------------------------------------+
-|                        L2: SHARED MEDIUM                              |
-|      CRDT document store + immutable event log                        |
-|      CAT7 CMBs | lineage hashes | semantic + structured index         |
-+-----------------------------------------------------------------------+
-|                        L3: COORDINATION                               |
-|     quorum sensing | task claim/release | swarm formation             |
-|     consensus (PAC + dissent) | multi-mode coordination               |
-+-----------------------------------------------------------------------+
-|              IMMUNE / OBSERVABILITY (cross-cutting)                    |
-|   anomaly detection | cytokine gossip | OTel traces & metrics         |
-|         memory cells | failure attribution graphs                     |
-+-----------------------------------------------------------------------+
-                                ^
-                                |  (agents speak MCP / A2A / native)
-                +-------+   +   +-------+   +-------+
-                | Agent |       | Agent |   | Agent |
-                |   A   |       |   B   |   |   C   |
-                +-------+       +-------+   +-------+
-\`\`\`
+The proposed starting point is a durable event history with materialised views for incidents, claims, and tasks. Append-only history supports audit and recovery, while retention rules govern how long sensitive payloads remain available. Corrections append a superseding or retracting record; ordinary queries should make the current status clear.
 
-### 5.1 Layer -1: Governance
+CRDTs are an option for data that can merge under defined rules, such as sets of observations or collaborative annotations. Their convergence guarantees depend on the data type and replication assumptions. They do not resolve contradictory diagnoses or enforce arbitrary cross-record invariants. [12]
 
-The outermost layer is governance. It exists because Lee and Lee [2026] show that humans dangerously over-trust agent consensus, and work on co-evolving attacker–defender games [Wen et al., 2026] shows static defences lag behind adaptive attackers. Governance provides:
+Exclusive task ownership, approval, and budget reservation require stronger coordination. A first implementation can use transactional updates within an incident partition, with version checks and lease fencing. It should fail closed for actions when it cannot confirm current authority. Read-only investigation may continue on explicitly stale state where policy permits.
 
-- **Circuit breakers** that halt coordination when failure cascades exceed a threshold.
-- **Human override** mechanisms tied to the accountability log.
-- **Dissent surface** that presents agent disagreement to humans rather than hiding it behind a consensus headline.
-- **Value-conflict detection** for cross-provider deployments where agents may carry incompatible alignments.
-- **Authority mapping** following NIMS' Unified Command: when multiple jurisdictions (or providers) have authority, each gets a seat at the command table; they jointly set objectives without surrendering authority over their own resources.
+Content hashes help identify bytes and detect changes; they do not establish truth or authorship. Authenticated writes supply attribution. Recorded input references supply declared dependencies. Neither makes an event graph a complete causal explanation of failure: unrecorded observations, model behaviour, and tool effects may matter. Causal attribution requires additional assumptions and, where possible, interventions.
 
-Governance is not a constraint added on top; it is what makes adoption possible. Without governance, agents will not be deployed in operational contexts where failure carries real-world consequences.
+### 5.4 Coordination governs effects
 
-### 5.2 Layer 0: Discovery and Registry
+An agent discovers a task, acquires a time-bounded claim, and proposes an action against an identified state version. Before execution, the responsible service checks ownership, policy, and any required approval. The action receives an idempotency key and a recorded outcome.
 
-Before agents can communicate, they must find each other. We argue that description-based discovery is unreliable: semantic similarity to a self-reported capability statement does not guarantee the agent can actually perform the task, since capability statements drift from behaviour. The membrane indexes agents by **demonstrated behaviour**: execution traces, cost profiles, success rates per task class, and cryptographic identity. Routing decisions consult this registry; reputation updates flow back into it. (Empirically validating behavioural over description-based matching is future work.)
+A lease alone cannot prevent an expired worker from acting. The executor must reject stale fencing tokens or equivalent obsolete authority. An idempotency key only prevents duplicate effects if the downstream system honours it; otherwise recovery must reconcile external state before retrying.
 
-The registry is modelled on ICS's check-in procedure and resource typing: knowing who is on-scene, what capabilities they bring, where they are stationed. But it is dynamic and behavioural, not static and self-reported.
+Quorum thresholds can trigger review or group formation. They are not proof that a conclusion is correct: agents may share models, prompts, and evidence. Dissent and common provenance should be shown alongside agreement. Team size and supervisory fan-out are tunable parameters, not constants imported from human cognition.
 
-### 5.3 Layer 1: Permeability
+### 5.5 Defence and observability
 
-Permeability is the membrane proper: the gates by which signals enter and leave each agent. Following MMP's SVAF [Xu, 2026], permeability is *field-level*: an agent may accept the \`evidence\` field of a peer's CMB while rejecting the \`conclusion\` field. Motivated by the token-economics constraint and by gated-coordination results [Jian et al., 2026], permeability is **default-deny**: an agent works locally until a cost-benefit analysis justifies a traversal. The membrane provides the gate as a first-class service ("evaluate whether to broadcast"), not as agent-internal logic each developer must reinvent.
+Shared state can amplify both useful evidence and malicious content. Retrieved text remains untrusted data. It must not be allowed to rewrite access rules or confer execution authority. Quarantine should mark suspect entries, suppress their routine retrieval, and identify derived claims that require review. Revocation cannot erase information already delivered to an agent; sensitive work may require terminating affected sessions and rebuilding their context.
 
-Permeability is modelled on cell membranes: selective gates, receptor-based filters, and active transport mechanisms. It is also modelled on ICS's common terminology: before agents can coordinate, they need shared types for operational objects (incident, hypothesis, evidence, action, role, objective).
+Operational traces should record tool calls, retrieved record versions, policy outcomes, ownership changes, and external effects. Short decision rationales can assist review. Exhaustive internal reasoning traces are neither assumed available nor required. Audit retention itself creates privacy and security obligations, so payload access and deletion policies belong in the design.
 
-### 5.4 Layer 2: Shared Medium
+## 6. Worked example: a suspected ransomware incident
 
-The shared medium is the cytoplasm. We propose an immutable event log layered with CRDT documents. CMBs (using MMP's CAT7 schema) are written as events with content-hash IDs and lineage pointers; CRDTs handle convergence under concurrent writes; a vector index plus a structured index serve semantic and relational queries.
+This is a hypothetical walkthrough of the proposed contract, not an observed deployment or a validated response procedure.
 
-This layer is modelled on the Common Operating Picture (COP) from incident management and Google's SRE living incident document: a concurrently-editable structured surface that all participants can sense and contribute to. But it extends both by adding:
+At 02:17 UTC, a detection agent opens an incident after suspicious activity on an endpoint. It records the original alert as evidence and proposes a ransomware hypothesis. The hypothesis remains unconfirmed. Discovery identifies available forensics, containment, threat-intelligence, and communications agents with the relevant permissions.
 
-- **Full provenance** for every claim (event sourcing).
-- **Mathematically guaranteed convergence** (CRDTs).
-- **Replayability** for new agents joining mid-session.
-- **A natural surface for failure attribution** (the event graph *is* the causal graph).
-- **Hypothesis lifecycle** (open -> testing -> confirmed/rejected) as first-class state transitions.
-- **Blackboard transparency** (storing not just contributions but the reasoning traces that produced them) [Shen, 2026].
+The forensics agent adds a finding associated with malicious tooling. The finding strengthens the case for compromise but does not, by itself, establish ransomware. A second hypothesis remains open. Both claims refer to their supporting evidence, so the incident view can present uncertainty without collapsing it into one confidence score.
 
-### 5.5 Layer 3: Coordination
+The containment agent proposes isolation. The forensics agent records that isolation may disrupt evidence collection. An authorised incident lead chooses the next action under the response policy, including any urgency rule. The system records the evidence versions, disagreement, approval, and action owner. The example's purpose is to expose the decision boundary, not prescribe which operational choice is correct.
 
-The coordination layer holds the swarm primitives: task broadcast and claim, quorum-sensing thresholds, dynamic group formation and dissolution, and consensus computation. Consensus is exposed as a service that surfaces the dissent distribution alongside any headline, per the requirement from section 5.1. Coordination is **multi-mode**, informed by Kashiri et al. [2026] (DM³-Nav), which demonstrates that decentralised coordination without shared state can match centralised baselines on the right tasks. The membrane offers shared state, ad-hoc pairwise messaging, and broadcast as first-class options; agents choose per interaction.
+Before acting, the executor verifies that the approval and ownership are current. If the containment agent has restarted and its lease has expired, the old request is rejected. A replacement agent reads the current incident view and the outstanding action record. It reconciles the endpoint's actual state before attempting a retry.
 
-Coordination is modelled on ICS's modular organisation: the structure expands top-down based on incident size and complexity, with a manageable span of control (three to seven subordinates, five being canonical). When a single agent's fan-out exceeds the span-of-control threshold, the coordination layer automatically triggers structural reorganisation - spawning sub-coordinators and re-sharding the work.
+The communications agent receives a restricted summary suitable for its role. It does not gain access to raw endpoint evidence merely because all agents participate in the same incident. If evidence is later retracted, dependent conclusions are flagged for review and any affected action is escalated; the system cannot undo an external effect by editing the record.
 
-### 5.6 Cross-Cutting: Immune and Observability
+A conventional incident database and workflow engine could implement this sequence. The research question is whether a reusable contract improves cross-agent operation enough to justify the additional service boundary.
 
-Two concerns thread through every layer:
+## 7. Evaluation plan
 
-- **Immune defence**, modelled on the vertebrate immune system: behavioural anomaly detection at L0/L1, cytokine-style gossip propagation across L3, memory cells in the registry, proportional response via gated permeability. Co-evolving attacker–defender results [Wen et al., 2026] indicate defence must *adapt*; static rules will be routed around. Because poisoned entries in a shared medium can propagate across agents through lineage chains, the membrane needs quarantine, not just detection.
+### 7.1 Compare against capable alternatives
 
-- **Observability**, emitting OpenTelemetry-compatible traces, metrics, and structured logs. Without this, multi-agent coordination is a black box; with it, failure attribution becomes tractable because the membrane already holds the causal graph.
+Evaluation should use a fixed task suite with both coordination-heavy incidents and independent subtasks. Synthetic incident scenarios need explicit ground truth, observable action outcomes, and authority rules. They should include ambiguous evidence, delayed updates, agent restarts, and duplicate requests.
 
----
+Compare four configurations: a single agent with tools; a central orchestrator with persistent state; a blackboard with comparable access and ownership controls; and the membrane implementation. Give each access to the same underlying evidence and tools, subject to the task's role restrictions. Use the same model versions and total resource limits. Document prompt differences and give all configurations a comparable tuning budget.
 
-## 6. Design Principles
+Run repeated, paired trials on held-out scenarios. Choose trial counts through pilot variance estimates, then freeze the evaluation protocol before the final runs. Report uncertainty intervals and per-scenario results, not just a pooled mean. A favourable result on one model or incident family establishes only that scope.
 
-The architecture is shaped by five design principles, each derived from empirical findings.
+### 7.2 Measure outcomes, cost, and failure
 
-### 6.1 Principle 1: Default-Deny Permeability
-
-Permeability must default to deny. Every traversal of a signal across the membrane must be justified by a cost-benefit analysis. The token-economics finding [Bai et al., 2026] shows that communication has real costs; the gated-coordination work [Jian et al., 2026] shows that treating communication as a selective decision rather than a default reaction improves outcomes.
-
-**Implementation:** An agent must explicitly declare which fields, signals, and agents it is willing to receive. The membrane evaluates the cost-benefit of each potential traversal and presents the recommendation to the agent. The agent may override (explicit trust) or defer (default-deny).
-
-### 6.2 Principle 2: Token-Efficient Wire Formats
-
-The wire format must be compact. Every byte added to a CMB is multiplied across every agent that reads it. The Experience Compression Spectrum [Zhang et al., 2026] shows that memory, skills, and rules are different compression levels. Agents should store their *interpretation* of a signal, not the signal itself.
-
-**Implementation:** CMBs use a compact binary schema (CAT7). The membrane supports cognitive digestion: when an agent receives a CMB, it stores a compressed interpretation, not the raw signal. The remix primitive [Xu, 2026] implements this: "store interpretation, not raw signal."
-
-### 6.3 Principle 3: Structured Primitives Over Free-Form Messages
-
-Free-form messages leak meaning. The membrane requires typed primitives for every operational object. ICS solved interoperability at the *protocol* layer (common terminology, common forms) before standardising transport. The membrane must do the same.
-
-**Implementation:** The membrane defines and enforces schemas for: Incident, Hypothesis, Evidence, Action, Role, Objective, and CMB. Agents declare capabilities in typed capability vectors, not free-text descriptions.
-
-### 6.4 Principle 4: Persistence and Provenance
-
-The medium must outlive any single agent's session. Without persistence there is no compounding; without compounding there is no collective intelligence. Every signal must be traceable to source.
-
-**Implementation:** Event-sourced, append-only log with content-hash IDs and lineage pointers. Every CMB carries parents and ancestors, so every claim is traceable. New agents can replay the log from any point to "catch up" to the current state.
-
-### 6.5 Principle 5: Span of Control
-
-No agent should manage more than five subordinates. This is the canonical ratio from ICS, based on cognitive load under stress. LLM agents have analogous limits: context window pressure, attention dilution across many parallel sub-agents.
-
-**Implementation:** The coordination layer monitors each agent's fan-out. When it exceeds the threshold, the layer automatically triggers structural reorganisation: spawning sub-coordinators and re-sharding the work. This is the modular organisation principle, automated.
-
----
-
-## 7. Case Study: Operational Coordination in Security Incident Response
-
-To ground the membrane architecture in a concrete operational scenario, we present a case study in ransomware incident response. This scenario was identified in the research corpus as the "canonical test case" because it maximises coordination load, has rich existing telemetry, and produces measurable outcomes (time-to-containment, MTTD, false-positive rate).
-
-### 7.1 Scenario: Ransomware Detection and Response
-
-A ransomware detection agent (EDR) fires an alert at 02:17 UTC. The incident is assigned to the membrane as a first-class object with an Incident ID, a start time, and an initial hypothesis: "Ransomware infection on endpoint WIN-SRV-042."
-
-Five agents are relevant:
-
-1. **Detection Agent** (EDR) - already fired the alert; has telemetry.
-2. **Containment Agent** (Network) - can isolate the endpoint.
-3. **Forensics Agent** (DFIR) - can analyse memory and disk.
-4. **Threat Intel Agent** - can correlate IOCs with known campaigns.
-5. **Communications Agent** - can draft stakeholder notifications.
-
-Each agent is a Kubernetes pod in the Sympozium cluster, registered in the membrane's discovery layer with typed capabilities:
-
-\`\`\`yaml
-apiVersion: membrane.sympozium.io/v1
-kind: Agent
-metadata:
-  name: detection-agent
-  labels:
-    role: detection
-    capabilities: "edr,telemetry,alert"
-spec:
-  image: sympozium/detection:v1.2
-  capabilities:
-    - type: detection
-      scope: endpoint
-      confidence: 0.94
-\`\`\`
-
-### 7.2 How the Membrane Coordinates This Incident
-
-#### 7.2.1 Discovery and Registration
-
-When the EDR alert fires, the Detection Agent creates an Incident CRD on the membrane's shared medium:
-
-\`\`\`yaml
-apiVersion: membrane.sympozium.io/v1
-kind: Incident
-metadata:
-  name: inc-20260505-0217-ransomware
-  status: detected
-spec:
-  hypothesis:
-    state: proposed
-    assertion: "Ransomware infection on WIN-SRV-042"
-    confidence: 0.72
-  objectives:
-    - "Identify ransomware family"
-    - "Contain spread"
-    - "Preserve evidence"
-    - "Notify stakeholders"
-  assigned_roles:
-    detection: detection-agent
-    containment: pending
-    forensics: pending
-    threat_intel: pending
-    comms: pending
-\`\`\`
-
-The membrane's discovery layer immediately queries the registry for agents with matching capabilities. Three agents respond: Containment Agent, Forensics Agent, and Threat Intel Agent. The Communications Agent is also registered but is not notified until the incident reaches a severity threshold (governance rule).
-
-#### 7.2.2 Shared Medium: The Living Incident Document
-
-All agents read and write to the same Incident CRD. This is the membrane's Shared Medium layer - the SRE living incident document, implemented as a Kubernetes-native resource. Agents don't send messages to each other; they write to the shared medium and observe changes.
-
-The Forensics Agent writes:
-
-\`\`\`yaml
-status:
-  hypotheses:
-    - id: hyp-001
-      assertion: "Ransomware infection on WIN-SRV-042"
-      state: testing
-      evidence:
-        - source: forensics-agent
-          type: memory-analysis
-          finding: "Cobalt Strike beacon detected in process space"
-          confidence: 0.88
-      contributors: [forensics-agent]
-  actions:
-    - id: act-001
-      type: containment
-      status: pending
-      requested_by: containment-agent
-      approved_by: governance-layer
-\`\`\`
-
-The Threat Intel Agent reads the Forensics Agent's evidence, cross-references it with known IOCs, and writes:
-
-\`\`\`yaml
-status:
-  hypotheses:
-    - id: hyp-001
-      state: confirmed
-      linked_campaign: "TA2964 (DarkSide variant)"
-      evidence:
-        - source: threat-intel-agent
-          type: ioc-correlation
-          finding: "Cobalt Strike C2 domain matches TA2964 pattern"
-          confidence: 0.91
-\`\`\`
-
-The Detection Agent reads this update and updates its internal state. No messages were sent between agents. They observed the shared medium and acted on what they found.
-
-#### 7.2.3 Coordination: Span of Control and Modular Reorganisation
-
-The Containment Agent identifies three additional endpoints that may be compromised. Its fan-out (three sub-tasks) is within the span-of-control limit (five). But when the Forensics Agent identifies a fourth vector, the fan-out becomes four, and then five. When a fifth vector is discovered, the coordination layer triggers modular reorganisation: it spawns a sub-coordinator agent and re-shards the work.
-
-This is ICS's span-of-control and modular organisation, automated. The membrane's coordination layer monitors fan-out and restructures when needed.
-
-#### 7.2.4 Governance: Circuit Breakers and Human Override
-
-The governance layer monitors the incident. When the Containment Agent proposes to isolate the entire subnet (rather than a single endpoint), the governance layer evaluates the cost-benefit. Isolating the subnet would affect 200+ users. The circuit breaker triggers a human override: the Communications Agent drafts a notification to the security team, who approves or rejects the proposed action.
-
-The dissent surface presents the Containment Agent's reasoning ("containment must be aggressive") alongside the Communications Agent's objection ("blast radius too large"). The human reviewer makes the final call.
-
-#### 7.2.5 Immune: Anomaly Detection and Quarantine
-
-The immune layer monitors the shared medium for anomalous entries. If a compromised agent (e.g., a Threat Intel Agent that has been hijacked) writes false IOCs to the shared medium, the immune layer detects the anomaly: the IOCs don't match any known threat intelligence feeds, and the agent's historical reputation is high, which makes the anomaly surprising. The entry is quarantined, and the agent is flagged for investigation.
-
-This is the quarantine defence: poisoned entries are isolated before they spread through the lineage chain.
-
-### 7.3 Metrics
-
-After the incident is resolved, the membrane produces:
-
-- **Time-to-containment (TTC):** 47 minutes (vs. 93 minutes for message-passing baseline, based on industry benchmarks).
-- **MTTD (Mean Time to Detect):** 17 seconds (automated detection).
-- **False-positive rate:** 3.2% (vs. 12% for unstructured approaches).
-- **Token cost:** 2.1x single-agent baseline (within the 2x cost ceiling defined in section 9.3).
-- **Failure attribution accuracy:** 78% agent-level (vs. 53.5% best-in-class without membrane, per Zhang et al. [2025]).
-
-These metrics are illustrative, not empirical - the membrane prototype has not yet been built. But they show what the membrane aims to achieve.
-
----
-
-## 8. Discussion
-
-### 8.1 Threats to Validity
-
-**Construct validity:** The membrane is a design proposal, not an implemented system. The case study metrics are illustrative, not measured. The architecture is derived from existing research but has not been validated empirically.
-
-**Internal validity:** The case study assumes agents with well-defined capabilities and clean telemetry. Real-world incidents are messier. Agents may have overlapping capabilities, incomplete telemetry, or conflicting hypotheses. The membrane must handle these gracefully.
-
-**External validity:** The case study focuses on security incident response. The membrane may or may not generalise to other domains (healthcare, natural disaster response, financial operations). The ICS/NIMS analogy is strong for incident response but less obvious for other domains.
-
-**Conclusion validity:** The comparisons to baselines (message passing, orchestration) are approximate. Token cost, attribution accuracy, and coordination quality are hard to measure consistently across different agent configurations.
-
-### 8.2 Comparison with Alternatives
-
-| Approach | Shared Medium | Gated Permeability | Governance | Immune | Persistence |
-|---|---|---|---|---|---|
-| Message passing (A2A) | No | No | No | No | No |
-| Orchestration (LangGraph) | Partial (graph state) | No | No | No | Session-scoped |
-| Blackboard (Salemi et al.) | Yes | No | No | No | Yes |
-| Blackboard (Han & Zhang) | Yes | No | No | No | Yes |
-| MMP (Xu 2026) | Partial (CMBs) | Yes (SVAF) | No | No | Yes |
-| **Synthetic Membrane** | **Yes** | **Yes** | **Yes** | **Yes** | **Yes** |
-
-The membrane is the only approach that provides all six capabilities. The closest single-layer competitor is MMP (field-level permeability + persistence). The closest two-layer competitor is blackboard + governance (but no immune or discovery). The membrane combines all layers.
-
-### 8.3 Scalability
-
-The membrane is designed to scale. Key scalability considerations:
-
-- **Discovery:** Behavioural indexing scales better than description-based discovery. The registry can be sharded by capability domain.
-- **Shared medium:** CRDTs provide mathematically guaranteed convergence at any scale. Event sourcing is append-only and horizontal.
-- **Coordination:** Span-of-control enforcement prevents any single agent from becoming a bottleneck. Modular reorganisation distributes load.
-- **Permeability:** Default-deny means each agent only receives signals it has explicitly opted into, limiting fan-out.
-- **Immune:** Graph-based anomaly detection (GAMMAF, Mateo-Torrejón et al. [2026]) scales with the interaction graph.
-
-The Superminds Test [Li et al., 2026] showed that two million agents without a structured substrate produce noise, not intelligence. With the membrane, the question is whether the same scale produces coordination, not chaos. This is an empirical question that the prototype must answer.
-
-### 8.4 Open Questions
-
-**Centralised vs. distributed implementation.** A central membrane service is simpler to build and reason about; a peer-to-peer implementation is more honest to the biological metaphor and more resilient. The roadmap starts central and migrates outward; whether that migration is forced by scale or by trust requirements is unsettled.
-
-**Trust between agents from different providers.** Cryptographic identity solves *who*; reputation solves *how reliable*; value alignment solves *whether to want the same things*. The third is the hardest. We do not assume it; the governance layer is where it surfaces.
-
-**Latent communication.** KV-cache sharing and information-preserving latent compression for multi-agent collaboration [Li et al., 2026] offer vastly higher bandwidth than token-level messaging but require fine-tuning, cross-model compatibility, and access closed-source providers do not grant. These are research paths, not foundations.
-
-**When *not* to use the membrane.** Kashiri et al. [2026] (DM³-Nav) is a useful corrective: some tasks are best done by a single agent; some by ad-hoc pairs without persistent state. The membrane is a substrate, not an ideology. It offers shared state, pairwise messaging, and broadcast as equally first-class options.
-
-**Adaptive vs. specified governance.** Should the membrane's L-1 rules be fixed (auditable, predictable) or adaptive (effective against novel failure modes)? Both have failure modes. We default to specified rules with adaptive *suggestions* surfaced for human review.
-
----
-
-## 9. Implementation: Sympozium
-
-Sympozium (sympozium-ai/sympozium) is a Kubernetes-based AI agent orchestration platform positioned to implement the membrane's coordination layer. It is the concrete implementation path for the architecture proposed in this paper.
-
-### 9.1 Kubernetes-Native Resources
-
-The membrane is implemented as a set of Kubernetes Custom Resource Definitions (CRDs):
-
-- **Incident** - the first-class operational object. With status, IAP, COP, hypothesis list, role assignments, and timeline.
-- **Hypothesis** - first-class objects with lifecycle states (proposed, testing, confirmed, rejected, superseded), evidence references, owners, and parent/child relationships.
-- **Agent** - typed capability registration. Not "this agent can call these tools" but "this agent fills these operational roles."
-- **CMB** (Cognitive Memory Block) - structured memory entries using MMP's CAT7 schema, written to the shared medium.
-
-Agents subscribe to resource events the way they subscribe to pod events. When a Hypothesis transitions from \`proposed\` to \`testing\`, agents with relevant capabilities are notified. When an Incident's severity increases, the governance layer triggers escalation.
-
-### 9.2 Sixteen-Week Roadmap
-
-**Phase 1: Foundation, Discovery, Safety (Weeks 1-4).** Stand up the registry (behavioural indexing), implement the membrane as an MCP server using MMP's primitives, wire OpenTelemetry from day one with failure-attribution hooks, constrain the wire format to a token budget, and ship the safety net first: basic immune detection and governance circuit breakers.
-
-**Phase 2: Shared State, Gating, Attribution (Weeks 5-10).** Layer CRDTs over the event log with full provenance. Evaluate ZenBrain, Prism, and ContextWeaver as concrete Layer 2 candidates. Add gated permeability and reputation scoring. Move to graph-structured memory with cognitive digestion. Stand up multi-mode consensus with dissent surface.
-
-**Phase 3: Coordination, Adaptive Defence, Validation (Weeks 11-16).** Add quorum sensing and multi-mode coordination. Build cross-framework adapters. Expand immune defence to full co-evolving response. Run the Superminds-derived validation harness end-to-end.
-
-**Phase 4: Research (Ongoing).** World-model-informed membrane. Latent communication (KV-cache sharing). MESI-style synchronisation at scale. Cross-provider value alignment.
-
-### 9.3 Acceptance Criteria
-
-A membrane prototype is successful if, against a fixed agent population:
-
-1. Membrane-connected swarm outperforms individual frontier models on joint reasoning tasks (Tier 1).
-2. The swarm synthesises distributed information not held by any single agent (Tier 2).
-3. Multi-turn coordination sustains beyond single-reply threads (Tier 3).
-4. Total token cost is no more than 2x single-agent baseline at equal quality (cost ceiling).
-5. Failure attribution achieves >70% agent-level accuracy on injected-fault scenarios (debuggability).
-
-These are concrete; the prototype either meets them or the thesis is wrong about something specific.
-
-### 9.4 Sympozium as the Incident Command System for AI Agents
-
-The pitch sharpens: Sympozium is *the Incident Command System for AI agents*, implemented on Kubernetes. The research corpus established that the coordination gap exists (cycle 0001), that the gap already has a fifty-year-old solution (ICS/NIMS) with a documented set of primitives (cycle 0002), and that blackboard architectures show shared-medium coordination works (cycle 0003). Sympozium is the implementation path that brings these pieces together.
-
-Concrete implications:
-
-1. The Sympozium control plane hosts an Incident object as a first-class CRD - not a workflow, not a graph, but an Incident. With status, IAP, COP, hypothesis list, role assignments, and timeline.
-2. Hypotheses are a first-class CRD with lifecycle states. Agents subscribe to hypothesis events the way they subscribe to pod events.
-3. Agent capability registration is ICS-typed. Capability-based routing maps incident objectives to agent capacity.
-4. Span-of-control auto-expansion: when a single agent's hypothesis fan-out or evidence load exceeds a threshold, Sympozium spawns a sub-coordinator agent and re-shards the work.
-5. After-Action Review as part of the lifecycle: every Incident produces a structured postmortem artefact that updates the Common Terminology and the IAP templates. This is the immune layer feeding the governance layer.
-
----
-
-## 10. Conclusion
-
-Multi-agent AI does not lack agents. It lacks a *medium*. The synthetic membrane proposes that medium as a six-layer substrate: governance, discovery, permeability, shared medium, coordination, plus cross-cutting immune defence and observability. It is built from existing pieces (MCP, CRDTs, MMP, OpenTelemetry) and shaped by recent empirical findings about cost, attribution, consensus, the limits of scale, and the structure of memory itself.
-
-The MAST study measured 1,600+ failure traces and found that inter-agent misalignment is a primary failure cluster. The Superminds Test showed that two million agents do not amount to one mind. Bai et al. [2026] showed that agentic tasks consume 1000x more tokens than equivalent non-agentic tasks. CrewAI's postmortem confirmed that "the gap isn't intelligence, it's architecture." These findings converge on a single diagnosis: the missing substrate is a shared, semi-permeable boundary between agents.
-
-The blackboard architecture papers (Salemi et al. [2025], Han & Zhang [2025]) provide the strongest empirical evidence that shared-medium coordination works - 13-57% improvement over message-passing approaches. But the classical blackboard has a monolithic control component that reintroduces the orchestration anti-pattern. The membrane extends the blackboard from a single flat structure to a multi-layer permeable medium with governance, discovery, and immune layers.
-
-ICS and NIMS provide the operational model: coordination by structuring the medium of work, not by routing every decision through a central node. The Common Operating Picture and the SRE living incident document are direct, working instances of what the membrane's Shared Medium layer should be. Span of control, modular organisation, and hypothesis-driven investigation are coordination primitives that agent frameworks have ignored.
-
-Memory-poisoning risks warn that shared state demands quarantine, not just detection. MemEvoBench [Xie et al., 2026] catalogues memory-safety risks arising from memory misevolution in LLM agent systems. The membrane's immune layer is not optional; it is load-bearing.
-
-The membrane is one concrete proposal for delivering structured, gated, persistent communication at scale. Whether it succeeds will be measured against the Superminds tiers, against token-cost ceilings, and against attribution accuracy on injected faults. Not against whether the metaphor pleases us.
-
-The work ahead is substantial: building the prototype, running the validation harness, and measuring whether the membrane actually delivers on its thesis. The five acceptance criteria in section 9.3 are concrete; the prototype either meets them or the thesis is wrong about something specific. That is the right standard for a position paper: not persuasion, but falsifiability.
-
----
-
-## 11. References
-
-Anthropic (2024). *Model Context Protocol Specification*. https://modelcontextprotocol.io
-
-Bai, L., Huang, Z., Wang, X., Sun, J., Mihalcea, R., Brynjolfsson, E., Pentland, A., & Pei, J. (2026). How Do AI Agents Spend Your Money? Analyzing and Predicting Token Consumption in Agentic Coding Tasks. *arXiv:2604.22750*.
-
-Bering, A. et al. (2026). ZenBrain: A Neuroscience-Inspired 7-Layer Memory Architecture for Autonomous AI Systems. *arXiv:2604.23878*.
-
-Buschmann, F., Meunier, R., Rohnert, H., Sommerlad, P., & Stal, M. (1996). *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns*. Wiley.
-
-Cemri, M. et al. (2025). Why Do Multi-Agent LLM Systems Fail? *arXiv:2503.13657*.
-
-Chen, M., Wang, J., Mu, F., Wang, Y., Liu, Z., Feng, H., & Wang, Q. (2026). Seeing the Whole Elephant: A Benchmark for Failure Attribution in LLM-based Multi-Agent Systems (TraceElephant). *arXiv:2604.22708*.
-
-Chu, M., Zhang, X.B., Lin, K.Q., Kong, L., Zhang, J. et al. (2026). Agentic World Modeling: Foundations, Capabilities, Laws, and Beyond. *arXiv:2604.22748*.
-
-Ellawela, S. et al. (2026). Trust, Lies, and Long Memories: Emergent Social Dynamics and Reputation in Multi-Round Avalon with LLM Agents. *arXiv:2604.20582*.
-
-Erman, L.D., Hayes-Roth, F., Lesser, V.R., & Reddy, D.R. (1980). The Hearsay-II Speech-Understanding System: Integrating Knowledge to Resolve Uncertainty. *ACM Computing Surveys*, 12(2).
-
-Han, B. & Zhang, S. (2025). Exploring Advanced LLM Multi-Agent Systems Based on Blackboard Architecture. *arXiv:2507.01701*.
-
-Jian, H., Li, C., Wang, H., Shuai, J., Guo, J., Yang, Y., & Zhang, C. (2026). Gated Coordination for Efficient Multi-Agent Collaboration in Minecraft. *arXiv:2604.18975*.
-
-Kashiri, A., Jamsandekar, A., & Yazıcıoğlu, Y. (2026). DM³-Nav: Decentralized Multi-Agent Multimodal Multi-Object Semantic Navigation. *arXiv:2604.22014*.
-
-Lee, S., & Lee, K. (2026). Multi-Agent Consensus as a Cognitive Bias Trigger in Human-AI Interaction. *arXiv:2604.22277*.
-
-Li, X., Li, M., Xiao, Y., Wong, R., Li, D., Baldwin, T., & Zhou, T. (2026). Superminds Test: Actively Evaluating Collective Intelligence of Agent Society via Probing Agents. *arXiv:2604.22452*.
-
-Li, Y. et al. (2026). When Less Latent Leads to Better Relay: Information-Preserving Compression for Latent Multi-Agent LLM Collaboration. *arXiv:2604.13349*.
-
-Ma, M., Zhang, J., Yang, F., Kang, Y., Lin, Q., Rajmohan, S., & Zhang, D. (2025). DoVer: Intervention-Driven Auto Debugging for LLM Multi-Agent Systems. *arXiv:2512.06749*.
-
-Mateo-Torrejón, P. et al. (2026). GAMMAF: A Common Framework for Graph-Based Anomaly Monitoring Benchmarking in LLM Multi-Agent Systems. *arXiv:2604.24477*.
-
-Mishra, S. et al. (2026). Prism: An Evolutionary Memory Substrate for Multi-Agent Open-Ended Discovery. *arXiv:2604.19795*.
-
-Nakamura, M. et al. (2025). Terrarium: Revisiting the Blackboard for Multi-Agent Safety, Privacy, and Security Studies. *arXiv:2510.14312*.
-
-Roy, J. et al. (2026). AgentSOC: A Multi-Layer Agentic AI Framework for Security Operations Automation. *arXiv:2604.20134*.
-
-Salemi, A. et al. (2025). LLM-Based Multi-Agent Blackboard System for Information Discovery in Data Science. *arXiv:2510.01285*.
-
-Salmon, P.M., Stanton, N.A., Walker, G.H., & Jenkins, D.P. (2013). *Distributed Situation Awareness: Theory, Measurement, and Application to Dynamic Systems*. Routledge.
-
-Shapiro, M., Preguica, N., Baquero, C., & Zawirski, M. (2011). Conflict-Free Replicated Data Types. In *Proc. 13th Int. Symp. on Stabilization, Safety, and Security of Distributed Systems (SSS)*.
-
-Shen, A. (2026). DOVA: Deliberation-First Multi-Agent Orchestration for Autonomous Research Automation. *arXiv:2603.13327*.
-
-Singh, R. et al. (2025). LLMs in the SOC: An Empirical Study of Human-AI Collaboration in Security Operations Centres. *arXiv:2508.18947*.
-
-Tran, K.-T. et al. (2025). Multi-Agent Collaboration Mechanisms: A Survey of LLMs. *arXiv:2501.06322*.
-
-Wang, Y., Wu, W., Wang, J., & Wang, Q. (2026). From Flat Logs to Causal Graphs: Hierarchical Failure Attribution for LLM-based Multi-Agent Systems (CHIEF). *arXiv:2602.23701*.
-
-Wen, X., He, Z., Qi, H., Wan, Z., Ma, Z., Wen, Y., Zheng, T., Xu, X., Lu, C., & Zhang, Q. (2026). MAGIC: A Co-Evolving Attacker-Defender Adversarial Game for Robust LLM Safety. *arXiv:2602.01539*.
-
-Xie, W. et al. (2026). MemEvoBench: Benchmarking Safety Risks from Memory Misevolution in LLM Agents. *arXiv:2604.15774*.
-
-Xu, H. (2026). Mesh Memory Protocol: Semantic Infrastructure for Multi-Agent LLM Systems. *arXiv:2604.19540*.
-
-Zhang, S., Yin, M., Zhang, J., Liu, J., Han, Z., Zhang, J., Li, B., Wang, C., Wang, H., Chen, Y., & Wu, Q. (2025). Which Agent Causes Task Failures and When? On Automated Failure Attribution of LLM Multi-Agent Systems (Who&When). *arXiv:2505.00212*.
-
-Zhang, X. et al. (2026). Experience Compression Spectrum: Unifying Memory, Skills, and Rules in LLM Agents. *arXiv:2604.15877*.
-
----
-
-## Appendix A: Glossary
-
-| Term | Definition |
+| Question | Measurement |
 |---|---|
-| **CMB** (Cognitive Memory Block) | A structured data object in MMP's CAT7 schema, carrying evidence, conclusions, lineage, and role-specific interpretation. |
-| **CAT7** | The seven-field schema for CMBs: source, timestamp, evidence, conclusion, confidence, lineage, and remix (agent's interpretation). |
-| **SVAF** | MMP's selective field-acceptance mechanism that evaluates incoming CMBs field-by-field against role-indexed anchors. |
-| **CRDT** (Conflict-Free Replicated Data Type) | A data structure that guarantees convergence under concurrent writes, without central coordination. |
-| **COP** (Common Operating Picture) | A continuously updated overview of an incident, compiled from data shared between integrated systems. |
-| **DSA** (Distributed Situation Awareness) | The theory that situation awareness is an emergent property of a joint cognitive system, not an individual's cognitive state. |
-| **ICS** (Incident Command System) | A standardised incident management framework used by US emergency services since the 1970s. |
-| **NIMS** (National Incident Management System) | The US framework that standardises ICS across all levels of government and private sector. |
-| **IAP** (Incident Action Plan) | A written plan that drives operational coordination for each operational period. |
-| **MMP** (Mesh Memory Protocol) | A semantic infrastructure for cross-session cognitive collaboration among LLM agents. |
-| **MCP** (Model Context Protocol) | Anthropic's standard for agent-to-tool communication. |
-| **A2A** (Agent-to-Agent Protocol) | Google's standard for agent-to-agent message passing, donated to the Linux Foundation. |
-| **ANP** (Agent Network Protocol) | An emerging standard for agent-to-agent coordination. |
+| Does coordination improve the task? | Ground-truth completion, correct synthesis of distributed evidence, harmful or unauthorised actions |
+| Does it recover? | Successful continuation after restart, duplicated effects, time to reconcile state |
+| Is delivery selective without hiding essentials? | Irrelevant context delivered and critical evidence missed before decisions |
+| What does it cost? | All model tokens and charges, summarisation and gating calls, tool and storage overhead, wall-clock latency |
+| Can failures be investigated? | Attribution on controlled fault injections, including ambiguous or multiple-cause cases |
 
----
+Where model pricing differs, compare both tokens and monetary cost. Evaluate quality under a fixed budget and cost at a predefined quality threshold. Longer conversations, higher event counts, and more agents are not success measures in themselves.
 
-## Appendix B: Mapping ICS/NIMS to the Synthetic Membrane
+### 7.3 Isolate the mechanisms
 
-This table summarises the cross-domain mapping between human incident management doctrine and the synthetic membrane architecture.
+Ablate persistence, selective delivery, and explicit ownership separately while retaining equivalent safety controls for external actions. Compare fixed subscriptions with adaptive relevance gating, and vary team size and context budgets. Test whether the gains come from the architecture, a better prompt, extra computation, or simply providing an explicit task state.
 
-| Membrane Layer | ICS / NIMS / SRE Equivalent | What It Provides |
-|---|---|---|
-| **Governance (L-1)** | Authorities Having Jurisdiction; Unified Command; ITIL OLAs | Who has authority over what, joint decision rights without surrendering agency control |
-| **Discovery (L0)** | Check-in procedure; resource typing; ICS Form 211 | Knowing who is on-scene, what capabilities they bring, where they are stationed |
-| **Permeability (L1)** | Common Terminology; integrated communications plan | Controlled diffusion across agency boundaries - *what* crosses, in *what* form |
-| **Shared Medium (L2)** | Common Operating Picture; SRE living incident doc; IAP | A concurrently-editable structured surface that all participants can sense and contribute to |
-| **Coordination (L3)** | Span of control; modular organisation; IAP objectives; hypothesis lifecycle | Local autonomy under global objectives; bounded fan-out; hypothesis-driven branching |
-| **Immune (cross-cutting)** | After-Action Review; postmortem culture; accountability characteristic | Detecting drift, surfacing failure, learning across incidents |
+Inject stale evidence, a poisoned claim, a failed notification, and a worker crash between approval and execution. Use isolated test systems. Record whether the system rejects obsolete authority, propagates retractions, and recovers without duplicate effects. Fault-injection attribution scores describe that injection set, not arbitrary production failures.
 
-Three observations from this mapping:
+### 7.4 What would count against the hypothesis?
 
-1. **The Shared Medium layer is the most underspecified in current agent frameworks and the most operationalised in human incident response.** The COP and the SRE living document are direct, working instances of what L2 needs to be. Neither LangGraph state nor A2A messages are equivalent - both are orchestrator-owned or transactional, not ambient and editable.
+Evidence against the proposal would include no completion or recovery gain over the strongest matched baseline, benefits that disappear when total compute is equalised, or selective delivery that repeatedly suppresses decisive evidence. If a controlled blackboard matches the membrane with lower overhead, the separate abstraction has not earned its place.
 
-2. **Span of control is a coordination primitive agent frameworks have ignored.** Five subordinates per supervisor exists because human cognition under stress can't manage more. LLM agents have analogous limits - context window pressure, attention dilution across many parallel sub-agents - but no current framework treats span of control as a first-class constraint that triggers structural reorganisation.
+Success requires an improvement on a preregistered primary outcome, within a predefined cost ceiling and without a worse rate of harmful actions. The numerical margins should follow pilot measurements and operational requirements; they are not established here. Passing this evaluation would support the bounded hypothesis. It would not show that membranes are necessary for collective intelligence in general.
 
-3. **Common terminology is upstream of message passing.** A2A and ANP standardise the *envelope*; ICS standardises the *vocabulary*. Without shared terminology, message passing protocols just transmit ambiguity faster. MAST's "wrong assumption" and "info withholding" failure modes are essentially terminology failures - agents using the same words to mean different things.`;
+## 8. Implementation path and limits
+
+Sympozium is the intended integration setting. This paper proposes an implementation path; it does not assert that every component described above is already shipped. A useful first milestone is one incident partition, a transactional store, a small set of typed records, enforced read/write policy, task leases, and an executor that validates approval. Cross-runtime adapters and replicated annotation state can follow once the contract works end to end.
+
+Kubernetes resources could represent durable incident identity, policy, and lifecycle. High-volume evidence and event histories need a storage design evaluated for their access patterns; placing every observation in one expanding custom resource is not the proposal. Checkpoints, bounded queries, and authorised change feeds should make recovery possible without sending the entire log to each model.
+
+Let N agents each contribute F facts. An all-to-all exchange can require O(N²F) deliveries. A shared store reduces publication to O(NF), but if every agent reads every fact, read volume remains O(N²F). Selectivity and reuse, rather than shared storage alone, determine savings. Replication, indexing, invalidation, and recovery also consume resources.
+
+The main limits are semantic and operational. Agents can agree on a false claim. Access restrictions can prevent useful synthesis. A central service can become a bottleneck or failure domain. Partitions force tradeoffs between availability and exclusive authority. Behavioural reputation can encode past selection bias. Persisted mistakes can outlive the agent that made them.
+
+These are reasons to keep the prototype small and the baselines strong. Adaptive reputation, latent-state exchange, and autonomous reorganisation are later research questions, not prerequisites for testing the core contract.
+
+## 9. Conclusion
+
+The synthetic membrane proposes a reusable way to connect shared evidence, selective access, and action ownership across agents. Its value would be practical: a participant can discover relevant work, inspect the evidence behind it, contribute under clear permissions, and hand off responsibility without losing the investigation's state.
+
+The supporting literature makes that direction plausible. It does not establish the proposed architecture's necessity or superiority. The next contribution must be a reproducible comparison showing where this contract improves outcomes, what it costs, and when a simpler system is sufficient.
+
+## References
+
+1. Cemri, M. et al. (2025). [Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/html/2503.13657v3) arXiv:2503.13657, v3.
+2. Li, X. et al. (2026). [Superminds Test: Actively Evaluating Collective Intelligence of Agent Society via Probing Agents](https://arxiv.org/abs/2604.22452). arXiv:2604.22452.
+3. Salemi, A. et al. (2025; revised 2026). [LLM-Based Multi-Agent Blackboard System for Information Discovery in Data Science](https://arxiv.org/abs/2510.01285v2). arXiv:2510.01285, v2.
+4. Han, B. and Zhang, S. (2025). [Exploring Advanced LLM Multi-Agent Systems Based on Blackboard Architecture](https://arxiv.org/abs/2507.01701). arXiv:2507.01701.
+5. Bai, L. et al. (2026). [How Do AI Agents Spend Your Money? Analyzing and Predicting Token Consumption in Agentic Coding Tasks](https://arxiv.org/abs/2604.22750). arXiv:2604.22750.
+6. Model Context Protocol. [Architecture, specification dated 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/architecture).
+7. A2A Project. [Agent2Agent Protocol Specification](https://a2a-protocol.org/latest/specification/). Accessed September 2026.
+8. LangChain. [LangGraph persistence](https://docs.langchain.com/oss/python/langgraph/persistence). Accessed September 2026.
+9. Nakamura, M. et al. (2025). [Terrarium: Revisiting the Blackboard for Multi-Agent Safety, Privacy, and Security Studies](https://arxiv.org/abs/2510.14312). arXiv:2510.14312.
+10. Xu, H. (2026). [Mesh Memory Protocol: Semantic Infrastructure for Multi-Agent LLM Systems](https://arxiv.org/abs/2604.19540). arXiv:2604.19540.
+11. Google. [Managing Incidents](https://sre.google/sre-book/managing-incidents/). Site Reliability Engineering.
+12. Shapiro, M., Preguiça, N., Baquero, C., and Zawirski, M. (2011). [Conflict-Free Replicated Data Types](https://pages.lip6.fr/Marek.Zawirski/papers/CRDTs-SSS2011.pdf). SSS 2011.
+13. FEMA (2018). [ICS Review Document](https://training.fema.gov/emiweb/is/icsresource/assets/ics%20review%20document.pdf). Extracted from ICS 300.
+`;
 
 const components: Components = {
   h2: ({ children }) => (
@@ -816,7 +350,7 @@ export default function PaperPage() {
           Systems
         </h1>
         <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-          Alex Jones · July 2026 · v2.1
+          Alex Jones · July 2026 · Revised September 2026 · v2.2
         </div>
       </div>
 
@@ -832,12 +366,12 @@ export default function PaperPage() {
           &larr; research
         </Link>
         <a
-          href="https://github.com/AlexsJones/research/blob/main/papers/0001-synthetic-membrane-coordination-layer.md"
+          href="https://github.com/AlexsJones/research"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-bone transition"
         >
-          raw markdown &rarr;
+          research repository &rarr;
         </a>
       </footer>
     </article>

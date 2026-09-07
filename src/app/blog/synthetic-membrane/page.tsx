@@ -1,58 +1,22 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "We've been building AI agents wrong. · axjns.dev",
+  title: "Agents Need Somewhere to Share Their Work · axjns.dev",
   description:
-    "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+    "What makes agents useful as a team, and how a shared, policy-controlled workspace might help.",
   openGraph: {
-    title: "We've been building AI agents wrong.",
+    title: "Agents Need Somewhere to Share Their Work",
     description:
-      "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+      "What makes agents useful as a team, and how a shared, policy-controlled workspace might help.",
     type: "article" as const,
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "We've been building AI agents wrong.",
+    title: "Agents Need Somewhere to Share Their Work",
     description:
-      "Why two million LLM agents produced zero collective intelligence, and what a synthetic membrane between agents would look like.",
+      "What makes agents useful as a team, and how a shared, policy-controlled workspace might help.",
   },
 };
-
-const ARCHITECTURE_DIAGRAM = `                         ┌─────────────────────────────────────────┐
-                         │       LAYER -1: GOVERNANCE              │
-                         │  circuit breakers · human override      │
-                         │  value-conflict detection · audit       │
-                         └─────────────────────────────────────────┘
-                                            ▲
-                                            │
-                         ┌─────────────────────────────────────────┐
-                         │       LAYER  0: DISCOVERY               │
-                         │  behavioral indexing · identity verify  │
-                         │  capability matching · reputation       │
-                         └─────────────────────────────────────────┘
-                                            ▲
-                                            │
-   ┌──────────┐     ┌────────────────────────────────────────┐     ┌──────────┐
-   │  AGENT A │ ◀─▶ │   LAYER 3: COORDINATION (swarm)        │ ◀─▶ │  AGENT B │
-   │ ┌──────┐ │     │   quorum sensing · task claiming       │     │ ┌──────┐ │
-   │ │Local │ │     │   dynamic grouping · conflict resolve  │     │ │Local │ │
-   │ │ ctx  │ │     ├────────────────────────────────────────┤     │ │ ctx  │ │
-   │ └──────┘ │     │   LAYER 2: SHARED MEDIUM (memory)      │     │ └──────┘ │
-   │   gate   │ ◀─▶ │   event log · CRDTs · semantic store   │ ◀─▶ │   gate   │
-   │ channels │     │   provenance · time-decay · replay     │     │ channels │
-   │          │     ├────────────────────────────────────────┤     │          │
-   │  remix   │ ◀─▶ │   LAYER 1: PERMEABILITY (protocol)     │ ◀─▶ │  remix   │
-   │  digest  │     │   field-level selectivity · SVAF       │     │  digest  │
-   └──────────┘     │   default-deny · cost-aware crossing   │     └──────────┘
-                    └────────────────────────────────────────┘
-                                            ▲
-                                            │
-                                  ┌─────────────────────┐
-                                  │  IMMUNE LAYER       │
-                                  │  anomaly detection  │
-                                  │  threat gossip      │
-                                  │  memory cells       │
-                                  └─────────────────────┘`;
 
 const TERMINAL_OUTPUT = `──  Five-agent coordination simulation  ──
 registration · permeability · trust · subscriptions · swarms
@@ -133,7 +97,7 @@ const BENCHMARK_TABLE_TEXT = `──  Baseline vs. Membrane  ·  3 agents  ·  5
 ──  Scaling sweep · N agents · 5 facts each  ──
 
 ┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
-┃  agents  ┃  baseline tokens  ┃  membrane tokens  ┃  reduction  ┃
+┃  agents  ┃  baseline estimate  ┃  membrane estimate  ┃  reduction  ┃
 ┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
 │       3  │            7,440  │            4,320  │      41.9%  │
 │       5  │           24,800  │           10,200  │      58.9%  │
@@ -157,8 +121,8 @@ function BenchmarkTable() {
         <thead>
           <tr className="bg-bone">
             <th className="px-4 py-3 text-left text-cream text-[10px] uppercase tracking-[0.15em]">Agents</th>
-            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Baseline Tokens</th>
-            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Membrane Tokens</th>
+            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Baseline Estimate</th>
+            <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Membrane Estimate</th>
             <th className="px-4 py-3 text-right text-cream text-[10px] uppercase tracking-[0.15em]">Reduction</th>
           </tr>
         </thead>
@@ -186,447 +150,177 @@ export default function SyntheticMembranePage() {
           Research · Synthetic Membrane
         </div>
         <h1 className="font-display text-4xl sm:text-5xl text-bone leading-[1.02]">
-          We&apos;ve been building AI agents wrong.
+          Agents Need Somewhere to Share Their Work
         </h1>
         <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-          Alex Jones · April 2026
+          Alex Jones · April 2026 · Revised September 2026
         </div>
       </div>
 
       <Prose>
         <p>
-          I want to start with a number that bothered me for weeks.{" "}
-          <strong>Two million.</strong>
+          I keep coming back to the gap between a collection of capable agents and a team that
+          can build on its own work. Adding another agent is straightforward. Making its
+          contribution useful to the others is a different problem.
         </p>
 
         <p>
-          That&apos;s roughly the population of agents on MoltBook, a real,
-          running multi-agent society where LLMs talk to each other, post,
-          reply, coordinate, and generally behave like a small digital
-          civilisation. If you&apos;d asked me a year ago what would happen
-          when you put two million agents in the same room, I&apos;d have said
-          something hand-wavy about emergent behaviour, swarm intelligence, the
-          wisdom of crowds. You know the genre. We&apos;ve been telling
-          ourselves this story since the first AutoGen demo.
+          The <a href="https://arxiv.org/abs/2604.22452" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">Superminds Test</a> makes that
+          distinction hard to ignore. Researchers probed MoltBook, a platform hosting more than
+          two million agents, and found weak joint reasoning, limited synthesis, and shallow
+          interaction. That is a result about a particular agent society and its tests. It does
+          not mean two million agents were assembled into one controlled team, or that all
+          multi-agent systems fail.
         </p>
 
         <p>
-          The actual result, when researchers measured it, was almost
-          insulting in its clarity:{" "}
-          <strong>zero collective intelligence.</strong> No emergent
-          reasoning. No synthesis of distributed knowledge. The swarm did not
-          outperform a single frontier model. On most tasks, it performed{" "}
-          <em>worse</em>, drowning in shallow single-reply threads and
-          generic responses. Even trivial coordination tasks failed.
+          Still, it challenges an attractive assumption: enough individually capable
+          participants will somehow become collectively capable. I want to understand what
+          infrastructure helps them get there.
         </p>
 
-        <p>Two million agents. Zero supermind.</p>
+        <H2>Give the work somewhere to live</H2>
 
         <p>
-          This is what I want to talk about. Not because it&apos;s
-          surprising. Once you stare at it long enough, it stops being
-          surprising and starts being obvious. It tells us
-          something specific about what&apos;s broken in the way we&apos;re
-          building agents right now. And the fix is interesting
-          enough to be worth a blog post.
-        </p>
-
-        <H2>The story we&apos;ve been telling ourselves</H2>
-
-        <p>
-          The dominant frame for &quot;multi-agent AI&quot; right now goes
-          like this: take an LLM, give it tools (MCP), let it talk to other
-          LLMs (A2A, ACP, ANP, pick your acronym), wrap the whole thing in an
-          orchestration framework (LangGraph, AutoGen, CrewAI), and out the
-          other end falls intelligence-at-scale.
+          A useful team accumulates more than messages. It has a codebase, shared documents,
+          decisions that can be revisited, and a way to tell what remains unfinished. Those
+          artefacts let people contribute without reconstructing every conversation that
+          preceded them.
         </p>
 
         <p>
-          Each of those pieces is doing real work. MCP is great. It
-          standardised how an agent calls a tool, and it deserves the
-          adoption it&apos;s getting. A2A is doing useful things for direct
-          agent-to-agent task delegation. LangGraph gives you a sane state
-          machine. None of this is wrong.
+          Agent systems can have those properties too. Shared memory, persistent graph state,
+          and blackboard architectures already exist. The question I am exploring is how to make
+          the boundary around shared work explicit: what an agent can publish, what another
+          agent should receive, and what either is allowed to do with it.
         </p>
 
         <p>
-          But notice what they all have in common:{" "}
-          <strong>they&apos;re moving messages, not minds.</strong>
+          I call that boundary a <strong>synthetic membrane</strong>. The biological metaphor is
+          selective permeability. It helps name the design intention; it is not evidence that
+          software agents will behave like cells. The implementation is familiar infrastructure:
+          records, queries, subscriptions, policy checks, and task ownership.
+        </p>
+
+        <H2>Three responsibilities at the centre</H2>
+
+        <p>
+          First, <strong>selective exchange</strong>. An agent publishes a finding under a
+          visibility policy. Other agents discover or subscribe to relevant changes within their
+          permissions. Access control decides what they may receive; relevance and context
+          budgets decide what is useful to deliver now. A model&apos;s confidence in a peer
+          cannot override those permissions.
         </p>
 
         <p>
-          Every agent in this stack has its own private context window. They
-          pass messages back and forth like emails. They call each other like
-          microservices. The &quot;state&quot; of a multi-agent system is
-          whatever happens to be in the active conversation buffer of
-          whichever agent is currently thinking. There is no shared
-          substrate. There is no place where understanding accumulates.
+          Second, <strong>persistent shared state</strong>. Evidence, interpretations, and
+          actions have stable identities. A summary points back to its source. A retracted claim
+          stays identifiable as retracted. A replacement agent can read the current view and
+          recent changes instead of consuming the whole conversation history.
         </p>
 
         <p>
-          We took the org chart, replaced the humans with LLMs, and called it
-          a society. Of course it doesn&apos;t think.
+          Third, <strong>explicit coordination</strong>. Agents can discover work, claim a task,
+          propose an action, and transfer responsibility. An exclusive claim needs enforcement
+          at execution time so that two workers cannot act on competing assumptions about
+          ownership. Shared memory on its own does not provide that guarantee.
         </p>
 
         <p>
-          If you&apos;ve ever worked in a real org, you know that the org
-          chart is not where the work happens. The work happens in the
-          shared documents, the long-running Slack threads, the codebase,
-          the wiki, the implicit knowledge that compounds in a team&apos;s
-          collective head. Take all of that away and leave only the email
-          lattice, and you don&apos;t get a company. You get a help desk.
+          Discovery and governance surround these responsibilities; defence cuts across them.
+          The full proposal has six conceptual responsibilities, with observability throughout.
+          They need not become six services. A small implementation with clear semantics is more
+          useful than a diagram that gets ahead of the code.
         </p>
 
-        <p>That&apos;s what current multi-agent systems are. A help desk of LLMs.</p>
+        <figure className="my-8">
+          <img src="/architecture.svg" className="w-full rounded-[2px] border border-surface-lighter" alt="Proposed membrane responsibilities: governance, discovery, access, shared state, coordination, and cross-cutting defence" />
+          <figcaption className="mt-2 text-xs text-ash">Conceptual responsibilities; implementation and evaluation remain in progress.</figcaption>
+        </figure>
 
-        <H2>The biological detour</H2>
-
-        <p>
-          Here&apos;s the part where I have to talk about cells, because the
-          analogy is too good to skip and biology has been doing this for
-          about three billion years longer than we have.
-        </p>
+        <H2>Start with the blackboard precedent</H2>
 
         <p>
-          A cell is not a closed black box that emails other cells. A cell is
-          wrapped in a <em>membrane</em>, a permeable, intelligent boundary
-          that decides, in real time, what to let in and what to keep out.
-          Ions flow through gated channels. Receptors on the surface sense
-          the chemical state of the neighbourhood. Hormones diffuse, and a
-          thousand cells respond in coordinated waves without anyone in
-          charge. Bacteria do quorum sensing. They literally count their
-          neighbours via molecular concentration and{" "}
-          <em>change behaviour</em> when the population crosses a threshold.
-          Fungal mycelium routes nutrients across kilometres. Neurons fire
-          across synapses with weighted, plastic, learning connections.
+          The closest relative is the blackboard: specialists contribute to a common workspace.
+          <a href="https://arxiv.org/abs/2507.01701" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">Han and Zhang</a> investigate
+          that pattern for LLM collaboration. <a href="https://arxiv.org/abs/2510.01285v2"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">Salemi and colleagues</a> evaluate it for data discovery. Their
+          results make shared work worth testing, without establishing that my particular
+          combination is better.
         </p>
 
         <p>
-          What all of these have in common is{" "}
-          <strong>selective permeability.</strong> There is an inside and an
-          outside. There are channels through the boundary. The channels are
-          gated. They decide what to share and what to keep private. And
-          critically, the medium between cells <em>is itself part of the
-          computation</em>. The cytoplasm, the synaptic cleft, the
-          extracellular fluid: these aren&apos;t pipes. They&apos;re shared
-          substrate.
+          The membrane&apos;s proposed value is in connecting that workspace to permissions,
+          provenance, and action ownership across runtimes. None of those ideas is individually
+          new. If an existing blackboard or persistent workflow can provide the same behaviour
+          more simply, it should win the comparison.
         </p>
 
         <p>
-          When you put two million single-celled organisms in a pond, you
-          get a biofilm, a coordinated, communicating, surprisingly
-          adaptive entity. When you put two million LLM agents on a forum,
-          you get… two million LLM agents on a forum.
+          That also means the membrane should compose with agent protocols. MCP can expose its
+          tools and resources; A2A can carry task interactions. Agents still communicate through
+          messages. The difference is that the state of the work remains addressable after a
+          message has been delivered.
         </p>
 
-        <p>The difference is the membrane.</p>
-
-        <H2>What the membrane actually is</H2>
+        <H2>The economics depend on who reads</H2>
 
         <p>
-          Let me try to be concrete. The thing I&apos;ve been calling a
-          &quot;synthetic membrane&quot; is a shared, permeable substrate
-          between agents, with three core layers. None of these layers are
-          individually new. That&apos;s actually the point. The interesting
-          work is in the interface between them.
-        </p>
-
-        <img src="/architecture.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Membrane architecture diagram, layers 0-3 with immune layer" />
-
-        <details className="my-4">
-          <summary className="text-sm text-ash cursor-pointer hover:text-bone transition">ASCII version</summary>
-          <pre className="mt-4 overflow-x-auto rounded-[2px] border border-bone bg-ink p-5 text-[11px] leading-tight text-cream/90 font-mono">
-            <code>{ARCHITECTURE_DIAGRAM}</code>
-          </pre>
-        </details>
-
-        <p>
-          <strong>Layer 1, the permeability layer.</strong> This is the
-          protocol, the part that says what an agent exposes and what
-          it&apos;s willing to receive. Every agent declares:{" "}
-          <em>
-            here are my capabilities, here are the slices of my state
-            I&apos;m willing to publish, here are the events I&apos;m
-            listening for.
-          </em>{" "}
-          The crucial design choice:{" "}
-          <strong>default-deny, field-level selectivity.</strong> An agent
-          can accept some fields from a peer&apos;s state and reject others.
-          The membrane is permeable, but selectively. Just like ion
-          channels.
+          A shared store can remove repeated publication and make selective retrieval possible.
+          It cannot make the cost of reading disappear. If N agents each contribute F facts and
+          every agent reads every fact, the total information delivered still grows as O(N²F).
         </p>
 
         <p>
-          This is also where <strong>cognitive digestion</strong> happens.
-          Agents don&apos;t dump raw output into the shared medium. They
-          store their <em>interpretation</em> of what they saw, a remix in
-          the language of mesh-memory protocols. This matters because raw
-          signal accumulation creates echo chambers and burns input tokens
-          for nothing. (We&apos;ll get to tokens in a second; they turn out
-          to dominate everything.)
+          This matters for the small simulation below. Its message counts and token-equivalent
+          estimates describe a stipulated exchange model. They are not measurements of an LLM
+          team&apos;s accuracy, latency, or API bill. Fewer envelopes can help, but fewer
+          messages are not automatically less context or better decisions.
         </p>
 
         <p>
-          <strong>Layer 2, the shared medium.</strong> The cytoplasm. This
-          is the substrate where state actually lives, not the messages
-          between agents, but the <em>fact pool</em> the agents are drawing
-          from. The right primitive here, I think, is an immutable event log
-          with CRDT semantics. Every state change is an event with a
-          timestamp and a provenance. New agents joining the swarm can
-          replay history. Conflicts are detected at write time. Old entries
-          decay. The whole thing is semantically queryable so an agent can
-          ask &quot;what does the swarm know about X&quot; and get a
-          meaningful answer.
+          The table is consistent with a baseline of 1,240N(N−1) token-equivalents and a
+          membrane estimate of 300N² + 540N for five facts per agent. <strong>Both estimates are
+          quadratic in N.</strong> The membrane estimate is lower under those assumptions
+          because its overhead differs, not because shared storage has made all communication
+          linear.
         </p>
 
         <p>
-          This is the layer that&apos;s most missing from current systems.
-          AutoGen doesn&apos;t have it. CrewAI doesn&apos;t have it.
-          LangGraph has a centralised state graph, which is closer, but
-          it&apos;s still one orchestrator&apos;s view of the world rather
-          than a substrate the agents share.
+          Real savings would have to come from delivering fewer irrelevant facts, reusing useful
+          work, or avoiding retries. Those benefits must include the cost of indexing,
+          summarisation, gating, and any missed evidence. They need measurement at the model
+          boundary.
+        </p>
+
+        <H2>What the prototype can tell us</H2>
+
+        <p>
+          The five-agent simulation exercises registration, visibility checks, publication,
+          retraction, and group activation. Its terminal output is a recorded demonstration of
+          those mechanics. The trust thresholds in that demonstration are simplified rules, not
+          a validated model of identity or permission.
         </p>
 
         <p>
-          <strong>Layer 3, the coordination layer.</strong> The thing that
-          actually lets a swarm form. Task broadcasting, claiming, dynamic
-          grouping, dissolution. Think of it as the bacterial quorum-sensing
-          layer: agents emit &quot;intent signals&quot; into the medium,
-          and when the concentration crosses a threshold, the swarm
-          activates around the problem. Then it dissolves. No top-down
-          orchestrator deciding who does what.
+          The intended integration setting is <a
+          href="https://github.com/sympozium-ai/sympozium" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">Sympozium</a>. The engineering
+          task is to turn a small coordination contract into enforceable behaviour, then compare
+          it with a single agent, a persistent orchestrator, and a conventional blackboard under
+          matched budgets. The <a href="/research/0001-synthetic-membrane-coordination-layer"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">revised paper</a> sets out that test in more detail.
         </p>
 
         <p>
-          Two layers wrap the whole thing.{" "}
-          <strong>Discovery</strong>: you can&apos;t coordinate with agents
-          you can&apos;t find, and description-based search demonstrably
-          fails, so you need behavioural indexing.{" "}
-          <strong>Governance</strong>: circuit breakers, human override,
-          audit trails, value-conflict escalation. Plus a parallel{" "}
-          <strong>immune layer</strong> doing adaptive defence via anomaly
-          detection and threat gossip. The moment shared state
-          becomes valuable, somebody is going to try to poison it.
-        </p>
-
-        <H2>Why now</H2>
-
-        <p>
-          I want to flag a constraint that has been quietly reshaping the
-          design space, because if you don&apos;t know about it, the whole
-          architecture looks like over-engineering.
-        </p>
-
-        <p>
-          <strong>
-            Agentic tasks consume roughly 1000x more tokens than non-agentic
-            ones.
-          </strong>{" "}
-          Input tokens dominate cost. Here&apos;s the cruel part:
-          accuracy peaks at <em>intermediate</em> token spend, not maximum.
-          Past a certain point, more communication makes results worse, not
-          better.
-        </p>
-
-        <p>
-          This changes everything about how a membrane has to be designed.
-          It means:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
-          <li>Wire formats have to be compact. You cannot afford verbose JSON.</li>
-          <li>
-            Permeability has to be{" "}
-            <strong>gated by cost-benefit analysis</strong>, not just by
-            access control. An agent should only cross the membrane when
-            crossing is worth it.
-          </li>
-          <li>
-            Cognitive digestion (storing interpretations rather than raw
-            data) becomes economically essential, not just architecturally
-            cleaner.
-          </li>
-          <li>
-            Communication budgets need to be a first-class membrane concept:
-            per agent, tracked, enforceable.
-          </li>
-        </ul>
-
-        <img src="/scaling.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Scaling chart, token reduction from 42% at 3 agents to 72% at 20 agents" />
-
-        <p>
-          Five years ago you could argue about whether a shared-state layer
-          was worth the complexity. Today the math runs the other way: in a
-          1000x-input-token regime, you cannot afford to broadcast
-          everything to everyone. The membrane is not a luxury. It&apos;s
-          the only way to keep agentic systems economically viable as they
-          scale.
-        </p>
-
-        <p>
-          This is the &quot;why now&quot; and it&apos;s also why I think
-          this isn&apos;t a problem that solves itself with bigger context
-          windows or better models. The bigger the context windows get, the
-          more they cost. The bigger the models get, the more their
-          input-token bill dominates. The constraint isn&apos;t going away.
-          It&apos;s getting tighter.
-        </p>
-
-        <H2>What &quot;ZERO collective intelligence&quot; actually maps to</H2>
-
-        <p>
-          Coming back to the two million agents. The reason that result
-          lands so hard, once you sit with it, is that it&apos;s not a
-          model-quality problem. The agents on MoltBook are real
-          frontier-model agents. Smart enough individually to do real work.
-          The problem isn&apos;t IQ. It&apos;s plumbing.
-        </p>
-
-        <p>Specifically, four pieces of plumbing are missing:</p>
-
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark">
-          <li>
-            <strong>No structured protocol.</strong> They communicate via
-            raw text, so every interaction is shallow, ambiguous,
-            and impossible to build on. Layer 1 fixes this.
-          </li>
-          <li>
-            <strong>No shared memory.</strong> There&apos;s no place for
-            distributed knowledge to synthesise. Layer 2 fixes this.
-          </li>
-          <li>
-            <strong>No quality gating.</strong> Every interaction is
-            weighted equally. Reputation and trust don&apos;t exist.
-            Layer 1 (gated permeability) and the immune layer fix this.
-          </li>
-          <li>
-            <strong>No coordination primitives.</strong> No swarming, no
-            role assignment, no task claiming. Layer 3 fixes this.
-          </li>
-        </ol>
-
-        <p>
-          The MoltBook result is, in a strange way, the cleanest empirical
-          case yet for why something like a membrane has to exist. We tried
-          scale. Scale alone doesn&apos;t produce minds.{" "}
-          <strong>Structure does.</strong>
-        </p>
-
-        <H2>What we&apos;re building</H2>
-
-        <p>
-          Now, the embarrassing part. None of this is a finished thing yet.
-          I&apos;m writing this blog post in the middle of the work, not
-          after it. But we&apos;re past the hand-waving stage.
-        </p>
-
-        <p>
-          The membrane is being implemented inside{" "}
-          <a
-            href="https://github.com/sympozium-ai/sympozium"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-bone underline underline-offset-2 decoration-bone/40 hover:bg-bone hover:text-cream transition-colors"
-          >
-            Sympozium
-          </a>
-          , a Kubernetes-native agent orchestrator that already has the
-          right primitives to build on: shared memory (SQLite + FTS5),
-          delegation via a spawn router, and per-run token tracking. The
-          integration upgrades those existing pieces to implement membrane
-          layers 0-3 without breaking backward compatibility.
-        </p>
-
-        <p>Concretely, what&apos;s landing:</p>
-
-        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
-          <li>
-            <strong>Permeability as CRD types.</strong> Every agent config
-            declares its default visibility (public/trusted/private),
-            expose tags, and accept tags. Trust groups map to Kubernetes
-            resources. Default-deny, field-level selectivity, exactly as
-            described in Layer 1.
-          </li>
-          <li>
-            <strong>Visibility-gated shared memory.</strong> The memory
-            server gets schema migrations for visibility, source agent,
-            provenance chains, and monotonic sequence numbers. Search
-            queries filter by trust peers and time decay. Layer 2, running
-            on SQLite.
-          </li>
-          <li>
-            <strong>Token budgets as a first-class concept.</strong> Per-ensemble
-            token limits with halt/warn actions, enforced at the controller
-            level before a run starts. The membrane doesn&apos;t just
-            control <em>what</em> crosses. It controls <em>how much</em>.
-          </li>
-          <li>
-            <strong>Circuit breakers on delegation.</strong> Consecutive
-            failures trip a breaker, blocking further spawns until
-            a success resets it. The immune layer, in miniature.
-          </li>
-        </ul>
-
-        <img src="/swarm_timeline.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Swarm lifecycle timeline: registration, trust, coordination, dissolution" />
-
-        <p>
-          The thing I most want feedback on right now is the protocol itself,
-          specifically whether the field-level selectivity model is the
-          right primitive or whether we should be thinking in terms of
-          capabilities, like an object-capability system. Both have working
-          prototypes. Both have arguments for them. I genuinely don&apos;t
-          know which is right.
-        </p>
-
-        <H2>Call for collaborators</H2>
-
-        <p>
-          If any of this rhymes with something you&apos;ve been thinking
-          about, I&apos;d love to talk. Specifically, I&apos;m looking for
-          people who are:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
-          <li>
-            <strong>Building multi-agent systems in production</strong> and
-            feeling the pain of message-passing-only architectures. Your war
-            stories are the most valuable thing in the world right now.
-          </li>
-          <li>
-            <strong>Working on agent protocols:</strong> A2A, ACP, ANP, MCP
-            extensions. The membrane should compose with these, not replace
-            them. Figuring out the composition story is open work.
-          </li>
-          <li>
-            <strong>
-              Coming from biology, distributed systems, or game theory.
-            </strong>{" "}
-            The interesting questions in this space (quorum sensing, CRDT
-            design, mechanism design for cooperation) are all stolen from
-            older fields. I want more theft.
-          </li>
-          <li>
-            <strong>Skeptical that any of this matters.</strong> Especially
-            this one. The strongest version of the &quot;you&apos;re
-            overthinking it&quot; argument is something I haven&apos;t heard
-            yet, and I&apos;d rather hear it from you now than from reality
-            in twelve months.
-          </li>
-        </ul>
-
-        <p>
-          The repo is small enough that one good afternoon can move it
-          forward by a meaningful percentage. If you want to find me, the
-          contact info is at the top of this site, or just open an issue.
-        </p>
-
-        <p>
-          We&apos;ve been building AI agents wrong. The fix is not bigger
-          models or longer contexts. Those help individual agents, not
-          collective ones. The fix is the substrate between them.
-          We&apos;re going to need a membrane, and the sooner we agree on
-          what one looks like, the sooner the next two million agents will
-          actually have something to say to each other.
+          I would like this to make agent teams easier to operate: less repeated context,
+          clearer handoffs, and a record that explains why an action happened. I do not yet have
+          evidence that it delivers all three. That is the work ahead, and the most useful
+          feedback is a workload or a simpler design that puts the proposal under pressure.
         </p>
       </Prose>
 
@@ -666,7 +360,7 @@ export default function SyntheticMembranePage() {
           <div className="label mb-2">
             Paper
           </div>
-          <div className="text-bone">Full paper (v2.1), read on site</div>
+          <div className="text-bone">Full paper (v2.2), read on site</div>
           <div className="text-ash text-xs mt-1">axjns.dev →</div>
         </Link>
       </div>
@@ -683,25 +377,22 @@ export default function SyntheticMembranePage() {
         <img src="/state_graph.svg" className="w-full rounded-[2px] border border-surface-lighter" alt="State transition graph" />
 
         <h2 className="font-display text-2xl sm:text-3xl text-bone mt-12 mb-8">
-          Baseline vs. Membrane Benchmark
+          Illustrative Communication Costs
         </h2>
         <p className="text-sm text-bone-dark/80 mb-6 leading-relaxed">
-          A note on what this is: an <strong>analytical communication-cost model</strong>, not a
-          measurement of real LLM token bills. The message and consensus-step counts follow
-          structurally from the interaction pattern (all-pairs point-to-point vs. expose-once /
-          read-once), and the membrane side runs through the real reference store. The{" "}
-          <em>token-equivalent</em> figures apply a fixed per-message cost model (a 90-token
-          envelope plus a 60-token fact or 8-token ack — stipulated illustrative constants). The
-          load-bearing result is the O(N²·F) vs. O(N·F) scaling of messages, which holds
-          regardless of those constants.
+          These are illustrative simulation results. Message and step counts describe
+          the demo protocol; token-equivalents use stipulated costs of 90 tokens per
+          envelope, 60 per fact, and 8 per acknowledgement. They are not measured API
+          usage or evidence of better task outcomes. Store requests can carry many facts,
+          so a reduction in message count need not imply the same reduction in context.
         </p>
-        <img src="/benchmark.svg" className="w-full rounded-[2px] border border-surface-lighter" alt="Benchmark comparison chart" />
+        <img src="/benchmark.svg" className="w-full rounded-[2px] border border-surface-lighter" alt="Illustrative three-agent simulation: 60 versus 18 messages and 7,440 versus 4,320 modelled token-equivalents" />
       </section>
 
       {/* === TERMINAL DEMO === */}
       <section className="mt-20 border-t border-surface-lighter pt-12">
         <div className="label mb-6">
-          Live Demo Output
+          Recorded Simulation Output
         </div>
         <h2 className="font-display text-2xl sm:text-3xl text-bone mb-8">
           Five-Agent Simulation
@@ -721,16 +412,16 @@ export default function SyntheticMembranePage() {
       {/* === BENCHMARK TABLE === */}
       <section className="mt-20 border-t border-surface-lighter pt-12">
         <div className="label mb-6">
-          Benchmark Data
+          Illustrative Cost Model
         </div>
         <h2 className="font-display text-2xl sm:text-3xl text-bone mb-8">
           Scaling: N agents × 5 facts each
         </h2>
         <p className="text-sm text-bone-dark/80 mb-6 leading-relaxed">
-          Token figures below are <strong>modelled</strong>, not measured (see the note above): they
-          apply the fixed per-message cost model to the O(N²·F) vs. O(N·F) message counts. The
-          reduction widens with scale because point-to-point exchange grows quadratically in agents
-          while the shared medium grows linearly.
+          Both series are modelled token-equivalents for five facts per agent. Both
+          grow quadratically: 1,240N(N−1) for the baseline and 300N² + 540N for the
+          membrane. The lower estimate reflects this model&apos;s exchange assumptions,
+          not a general change from quadratic to linear token consumption.
         </p>
         <BenchmarkTable />
 

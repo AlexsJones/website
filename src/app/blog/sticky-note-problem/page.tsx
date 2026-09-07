@@ -3,18 +3,18 @@ import Link from "next/link";
 export const metadata = {
   title: "The Sticky-Note Problem · axjns.dev",
   description:
-    "Why multi-agent AI is broken at the coordination layer, and what incident commanders figured out fifty years ago.",
+    "Why agent handoffs lose context, and what shared evidence, explicit ownership, and incident-management practice can improve.",
   openGraph: {
     title: "The Sticky-Note Problem",
     description:
-      "Why multi-agent AI is broken at the coordination layer, and what incident commanders figured out fifty years ago.",
+      "Why agent handoffs lose context, and what shared evidence, explicit ownership, and incident-management practice can improve.",
     type: "article" as const,
   },
   twitter: {
     card: "summary_large_image" as const,
     title: "The Sticky-Note Problem",
     description:
-      "Why multi-agent AI is broken at the coordination layer, and what incident commanders figured out fifty years ago.",
+      "Why agent handoffs lose context, and what shared evidence, explicit ownership, and incident-management practice can improve.",
   },
 };
 
@@ -30,603 +30,182 @@ export default function StickyNoteProblemPage() {
           The Sticky-Note Problem
         </h1>
         <p className="mt-3 text-base text-bone-dark/80">
-          Why Multi-Agent AI Is Broken at the Coordination Layer
+          Making Agent Handoffs Reliable
         </p>
         <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-          Alex Jones · May 2026
+          Alex Jones · May 2026 · Revised September 2026
         </div>
       </div>
 
       <Prose>
-        <H2>1. The Incident That Never Happened</H2>
+        <H2>A handoff without a shared picture</H2>
 
         <p>
-          It&apos;s 2:47 AM. A detection agent spots anomalous outbound traffic
-          from a production database server - 40 GB of encrypted data heading to
-          an unfamiliar IP in the Cayman Islands. The agent runs a threat
-          classification model, assigns the incident a severity of 9.2, and
-          generates a recommendation: isolate the server from the network.
-        </p>
-
-        <p>
-          The containment agent, meanwhile, is three minutes away from executing
-          a planned maintenance window that requires that exact server to be
-          online. It has no idea the detection agent exists. The detection agent
-          has no idea the containment agent exists. Both are receiving
-          instructions from the same orchestration graph, but the graph&apos;s
-          edges define <em>who talks to whom</em>, not{" "}
-          <em>what everyone knows</em>.
+          Imagine an incident at 2:47 AM. A detection agent flags unusual outbound traffic from
+          a production database. A forensics agent has found a scheduled export that could
+          explain it. A containment agent is preparing to isolate the server. Each has useful
+          information; none has a reliable view of the others&apos; findings or intentions.
         </p>
 
         <p>
-          The containment agent proceeds. The database goes offline during a
-          peak traffic period. The detection agent, seeing no network activity
-          on its target, downgrades the incident to false positive. The 40 GB
-          exfiltration completes while both agents are quietly moving on.
+          The risk is easy to see. Containment could interrupt a legitimate export, or the team
+          could dismiss an actual compromise without checking the explanation. This is a
+          hypothetical example, but it captures a concrete design failure: decisions depend on
+          information that exists somewhere in the system and never reaches the decision-maker.
         </p>
 
         <p>
-          This isn&apos;t a hypothetical. It&apos;s the default state of every
-          multi-agent system built today.
+          I call it the sticky-note problem. A handoff says what one participant thought was
+          worth passing on at a particular moment. It rarely tells the next participant what has
+          changed since, which assumptions remain open, or who now owns the action. Add more
+          agents and those omissions can become harder to find.
+        </p>
+
+        <H2>The missing contract</H2>
+
+        <p>
+          Messages are necessary. The question is what the system makes durable around them. In
+          an incident, an agent needs to distinguish an observation from a hypothesis, find the
+          evidence behind a recommendation, and check whether somebody else has already claimed
+          the next step.
         </p>
 
         <p>
-          You don&apos;t need to be a security expert to see what went wrong.
-          You don&apos;t need to be an LLM expert either. You just need to have
-          watched a team of humans work through an incident, however briefly, to
-          know that the <em>shared situational awareness</em> missing here is
-          not a nice-to-have - it&apos;s the entire reason incident response
-          works at all.
+          Frameworks can support this. <a
+          href="https://docs.langchain.com/oss/python/langgraph/persistence"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">LangGraph has persistent state and checkpoints</a>; a shared
+          database can carry incident records; a workflow engine can enforce transitions. <a
+          href="https://a2a-protocol.org/latest/specification/" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">A2A</a> provides agent and
+          task interactions, while <a
+          href="https://modelcontextprotocol.io/specification/2025-11-25/architecture"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">MCP</a> can expose the tools and resources used to inspect shared
+          work. The problem is not that these systems only move strings. It is that the
+          application still has to define what a finding, a handoff, or an approval means.
         </p>
 
         <p>
-          Every framework on the market - LangGraph, CrewAI, AutoGen, Google
-          A2A - gives you agents that send messages to each other. Messages.
-          Strings of tokens that one agent serialises and another deserialises,
-          with all the loss, ambiguity, and silence that implies. We are
-          building systems of increasing intelligence with the equivalent of
-          sticky notes passed between people in different rooms.
+          That contract is easy to leave implicit. A paragraph marked “done” might mean the
+          investigation is complete, the current subtask is complete, or the agent has run out
+          of useful ideas. A downstream agent should not have to infer which interpretation
+          authorises a production action.
+        </p>
+
+        <H2>What the research tells us</H2>
+
+        <p>
+          The <a href="https://arxiv.org/html/2503.13657v3" className="text-bone underline
+          underline-offset-2 decoration-bone/40 hover:text-ember">MAST study</a> gives this
+          discussion a firmer basis. It examines more than 1,600 annotated traces across seven
+          multi-agent frameworks and groups failures into system design, inter-agent
+          misalignment, and task verification. The practical lesson is that individual model
+          capability is only part of the problem.
         </p>
 
         <p>
-          There is a better way. We just haven&apos;t been looking for it in
-          the right place.
-        </p>
-
-        <H2>2. The Problem: Everything Is Messaging</H2>
-
-        <p>
-          The dominant pattern for multi-agent LLM systems is{" "}
-          <strong>orchestration</strong>. A planner decomposes a task, dispatches
-          subtasks to specialised agents, and stitches the results back together.
-          This pattern works fine until it doesn&apos;t - and &quot;until it
-          doesn&apos;t&quot; is closer than most teams want to admit.
+          A failure taxonomy does not tell us which architecture will fix it. An agent can have
+          the right evidence and still reason badly. A verifier can inspect the result and still
+          accept an error. Better shared state is a candidate intervention, not an explanation
+          for every failure in the dataset.
         </p>
 
         <p>
-          Let&apos;s be generous to the frameworks and list what each actually
-          provides:
+          There is more direct evidence from <a href="https://arxiv.org/abs/2510.01285v2"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">Salemi and colleagues&apos; blackboard experiments</a>. Agents
+          contribute through a shared board, and the authors report improved success on their
+          data-discovery benchmarks. That is a useful precedent for organising shared work. It
+          does not prove that every task should use a blackboard, or that central coordination
+          is the enemy: their design still has a central agent posting requests.
+        </p>
+
+        <H2>Incident management offers a useful pattern</H2>
+
+        <p>
+          Human incident response has a vocabulary for this problem. The <a
+          href="https://training.fema.gov/emiweb/is/icsresource/assets/ics%20review%20document.pdf"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">Incident Command System</a> makes objectives, responsibilities, and
+          transfers of command explicit. It combines shared information with a defined authority
+          structure. That is a more useful lesson than the idea that a team should somehow
+          coordinate without anyone being responsible.
         </p>
 
         <p>
-          <strong>LangGraph</strong> gives you a directed graph with conditional
-          edges over a centralised state object. You can express scatter-gather,
-          pipeline parallelism, and subgraphs. But coordination is{" "}
-          <em>top-down</em> - the graph author decides flow, and agents
-          don&apos;t sense each other. Agents are graph nodes, not autonomous
-          participants. There is no ambient sensing.
+          Google&apos;s <a href="https://sre.google/sre-book/managing-incidents/"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">SRE incident-management guidance</a> makes the pattern tangible
+          through a living incident document, clear roles, and deliberate handoffs. A
+          replacement responder can recover the state of the incident without asking every
+          participant to retell the story.
         </p>
 
         <p>
-          <strong>CrewAI</strong> gives you role-based crews under a
-          manager-worker pattern. The manager assigns tasks to roles, and roles
-          execute sequentially. Memory is static. The manager doesn&apos;t
-          actually coordinate - execution collapses to sequential task chaining,
-          producing wrong tool calls and high latency. CrewAI&apos;s own
-          postmortem on 1.7 billion workflows is frank about what&apos;s
-          happening: <em>the gap isn&apos;t intelligence, it&apos;s architecture</em>.
+          For agents, I would translate that into a small set of records: evidence with a source
+          and timestamp; hypotheses linked to that evidence; actions with an owner and an
+          approval state; and a current incident view that preserves unresolved disagreement.
+          The important property is that the next agent can inspect these records and act under
+          the same rules.
         </p>
 
         <p>
-          <strong>AutoGen</strong> (now merged into Microsoft&apos;s Agent
-          Framework) gives you async event-driven patterns: sequential,
-          concurrent, handoff, group chat, and Magentic-One. More capable than
-          its predecessor, but still fundamentally message-passing.
-          Pattern-based coordination is still explicit messaging, not ambient
-          sharing.
+          This does not require copying a human organisation chart. The right team size,
+          escalation threshold, and division of work need to be measured for the models and
+          tasks involved. Human doctrine supplies design questions, not experimentally
+          established constants for LLMs.
+        </p>
+
+        <H2>From shared records to a synthetic membrane</H2>
+
+        <p>
+          The synthetic membrane is my proposal for making that contract reusable. Its shared
+          workspace holds evidence and task state. A discovery service helps agents find
+          relevant work. Access controls determine who may see or change a record; subscriptions
+          determine which authorised changes deserve attention. Governance connects proposed
+          actions to explicit authority.
         </p>
 
         <p>
-          <strong>Google A2A</strong> (Agent-to-Agent Protocol) gives you typed
-          task delegation, capability negotiation, and status updates over
-          JSON-RPC 2.0. It&apos;s a message protocol, not a state protocol. It
-          standardises <em>how agents talk</em>, not <em>what they share</em>.
+          Those responsibilities matter together. A shared board without access controls can
+          expose sensitive evidence. A board without ownership can send two agents to execute
+          the same action. A board without retractions can keep circulating a conclusion after
+          its supporting evidence has been withdrawn.
         </p>
 
         <p>
-          <strong>Anthropic MCP</strong> (Model Context Protocol) standardises
-          agent-to-tool communication. It&apos;s foundational for tool access,
-          but orthogonal to coordination. MCP is about agents reaching{" "}
-          <em>outwards to tools</em>. Nobody has standardised how agents reach{" "}
-          <em>sideways to each other</em>.
+          The design also needs restraint. An agent should receive enough context to make its
+          decision, not every thought produced by the team. Summaries should retain links to
+          their evidence. A repeated claim should not become more credible merely because
+          several agents copied it. Permission to read a recommendation should never imply
+          permission to execute it.
+        </p>
+
+        <H2>Put the handoff to the test</H2>
+
+        <p>
+          Return to the database incident. The detection agent publishes its alert. The
+          forensics agent adds the scheduled-export evidence as a possible explanation. The
+          containment agent proposes isolation, and the authorised incident lead can inspect
+          both accounts before deciding. A restart should preserve the action owner and the
+          unresolved question, rather than forcing a new agent to guess from a transcript.
         </p>
 
         <p>
-          That last sentence is the point. Every protocol, every framework,
-          every architecture pattern solves a different problem. None solves the
-          problem of a shared medium - the place where knowledge made by one
-          agent becomes ambient knowledge for all of them.
+          That is the behaviour I want to test through Sympozium. It is also behaviour that a
+          well-designed workflow and database could provide. The comparison has to include that
+          alternative. The membrane earns its place only if making the contract reusable
+          improves completion, recovery, or operator control enough to cover its cost.
         </p>
 
         <p>
-          The result is predictable: agents maintain separate contexts,
-          governance for one agent breaks for many, and debugging grows
-          exponentially with team size.
+          The <a href="/research/0001-synthetic-membrane-coordination-layer"
+          className="text-bone underline underline-offset-2 decoration-bone/40
+          hover:text-ember">position paper</a> develops the architecture and evaluation plan.
+          The question behind it is practical: when one agent leaves and another arrives, can
+          the system preserve the evidence, uncertainty, and responsibility needed to carry on?
         </p>
-
-        <H2>3. The Evidence: The Gap Is Named and Measured</H2>
-
-        <p>
-          This isn&apos;t a feeling. It&apos;s been measured.
-        </p>
-
-        <p>
-          The <strong>MAST study</strong> (Cemri et al., arXiv:2503.13657)
-          compiled 1,600+ annotated failure traces across 7 different
-          frameworks. Three failure clusters emerged: system design,
-          inter-agent misalignment, and task verification. The inter-agent
-          cluster is where the interesting numbers live:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
-          <li>
-            <strong>13.2%</strong> of failures were reasoning-action
-            mismatches - agents reasoned about one thing and acted on another.
-          </li>
-          <li>
-            <strong>7.4%</strong> were task derailment - agents lost track of
-            what they were supposed to do.
-          </li>
-          <li>
-            <strong>6.8%</strong> were wrong-assumption failures - agents
-            assumed facts about the world that weren&apos;t true.
-          </li>
-          <li>
-            <strong>1.9%</strong> were ignoring other agents entirely.
-          </li>
-          <li>
-            <strong>0.85%</strong> were information withholding.
-          </li>
-        </ul>
-
-        <p>
-          The root cause, identified by the authors, is that agents fail at{" "}
-          <em>theory of mind</em> - they don&apos;t model what other agents
-          need to know. And the failure mode is unstructured text ambiguity: one
-          agent sends a message, the other interprets it, and something
-          essential is lost in translation.
-        </p>
-
-        <img src="/mast-failures.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="MAST study failure breakdown: 13.2% reasoning-action mismatch, 7.4% task derailment, 6.8% wrong-assumption, 1.9% ignoring agents, 0.85% information withholding" />
-
-        <p>This is the coordination gap, quantified.</p>
-
-        <p>
-          The MAST study didn&apos;t invent the observation. It measured it. And
-          the measurement is consistent with what any production team has
-          experienced: agents that are smart individually and collectively
-          broken.
-        </p>
-
-        <p>
-          The blackboard architecture papers arriving in 2025
-          (arXiv:2510.01285, arXiv:2507.01701) provide the strongest evidence
-          that the problem is solvable. These papers revived the 1980s
-          blackboard pattern for LLM multi-agent systems - instead of being
-          assigned tasks, agents <em>autonomously decide</em> whether to
-          contribute to a posted task on a shared knowledge board. The result:{" "}
-          <strong>13-57% improvement</strong> over RAG and master-slave
-          approaches on data-discovery tasks.
-        </p>
-
-        <p>
-          The blackboard papers prove that shared-medium coordination works.
-          They don&apos;t solve the full problem - the classical blackboard has
-          a monolithic scheduler that reintroduces the orchestration
-          anti-pattern - but they prove the direction is correct.
-        </p>
-
-        <H2>4. The Thesis</H2>
-
-        <blockquote className="border-l-4 border-bone pl-6 py-2 my-8 text-bone-dark italic text-base">
-          Structured, gated, persistent communication is a prerequisite, not an
-          accelerant, for collective intelligence.
-        </blockquote>
-
-        <p>Three claims unpack this:</p>
-
-        <p>
-          <strong>Structured.</strong> Free-form messages between agents leak
-          meaning at every serialisation boundary. The medium between agents
-          requires typed primitives - capability declarations, intent signals,
-          structured claims - so that semantics survive transport. When
-          you&apos;re shuffling strings of tokens between agents, every boundary
-          is a potential failure point.
-        </p>
-
-        <p>
-          <strong>Gated.</strong> Permeability must default to <em>deny</em>.
-          Uncontrolled communication degrades outcomes - the MAST study showed
-          that information withholding and ignoring other agents are real
-          failure modes, and the token economics work (agentic tasks consume
-          roughly 1000x more tokens than equivalent non-agentic tasks, with
-          input tokens dominating the bill) makes it clear that every byte
-          shipped between agents multiplies across every agent that reads it.
-          The medium must make agents justify, by cost-benefit, every traversal.
-        </p>
-
-        <p>
-          <strong>Persistent.</strong> The medium itself must outlive any single
-          agent&apos;s session. Without persistence there is no compounding;
-          without compounding there is no collective intelligence. This implies
-          an append-only, event-sourced substrate with full provenance.
-        </p>
-
-        <p>
-          The thesis reframes coordination from <em>messaging</em> to{" "}
-          <em>medium</em>. The interesting object is not the message agents send
-          each other; it is the shared field they live in.
-        </p>
-
-        <p>
-          A useful way to think about it: biology has been solving this problem
-          for 3.5 billion years. A cell doesn&apos;t send messages to its
-          neighbours. It <em>senses</em> them. It reads chemical gradients,
-          receptor states, quorum-sensing signals. It decides what to absorb and
-          what to repel. It doesn&apos;t need a conductor - it needs a membrane.
-        </p>
-
-        <H2>5. The Architecture: Six Layers</H2>
-
-        <p>
-          The solution isn&apos;t a single component. It&apos;s a layered
-          architecture - what I call the <strong>synthetic membrane</strong> -
-          six conceptual layers that together provide what biology provides
-          naturally: a shared, permeable boundary.
-        </p>
-
-        <img src="/architecture.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Six-layer synthetic membrane architecture: Governance, Discovery, Permeability, Shared Medium, Coordination, and Immune layers between agents" />
-
-        <p>Here&apos;s what each layer does, in plain terms:</p>
-
-        <p>
-          <strong>Governance (L-1)</strong> is the outermost layer - circuit
-          breakers that halt coordination when failure cascades exceed a
-          threshold, human override mechanisms, dissent surfaces that present
-          agent disagreement to humans rather than hiding it behind a consensus
-          headline, and value-conflict detection for cross-provider deployments.
-          Governance is not a constraint added on top; it&apos;s what makes
-          adoption possible.
-        </p>
-
-        <p>
-          <strong>Discovery (L0)</strong> answers the question: who can do what?
-          Description-based discovery fails - semantic similarity to a
-          self-reported capability statement doesn&apos;t predict whether an
-          agent can actually perform a task. The membrane indexes agents by
-          demonstrated behaviour: execution traces, cost profiles, success rates
-          per task class. Routing decisions consult this registry; reputation
-          updates flow back into it.
-        </p>
-
-        <p>
-          <strong>Permeability (L1)</strong> is the membrane proper - the gates
-          by which signals enter and leave each agent. It&apos;s field-level
-          selective: an agent may accept the evidence field of a peer&apos;s
-          claim while rejecting the conclusion field. It&apos;s default-deny: an
-          agent works locally until a cost-benefit analysis justifies a
-          traversal. The membrane provides the gate as a first-class service,
-          not as agent-internal logic each developer must reinvent.
-        </p>
-
-        <p>
-          <strong>Shared Medium (L2)</strong> is the cytoplasm - an immutable
-          event log layered with CRDT documents for conflict-free concurrent
-          writes. Every claim is written as an event with content-hash IDs and
-          lineage pointers. This gives full provenance for every claim,
-          mathematical convergence under concurrent writes, replayability for
-          new agents joining mid-session, and a natural surface for failure
-          attribution. The event graph <em>is</em> the causal graph.
-        </p>
-
-        <p>
-          <strong>Coordination (L3)</strong> holds the swarm primitives: task
-          broadcast and claim, quorum-sensing thresholds, dynamic group
-          formation and dissolution, and consensus computation. Coordination is
-          multi-mode - shared state, ad-hoc pairwise messaging, and broadcast
-          are all first-class options; agents choose per interaction.
-        </p>
-
-        <p>
-          <strong>Immune (cross-cutting)</strong> threads through every layer:
-          behavioural anomaly detection, cytokine-style gossip propagation
-          across the coordination layer, memory cells in the registry, and
-          proportional response via gated permeability. Static rules will be
-          routed around; defence must be adaptive.
-        </p>
-
-        <p>
-          The architecture isn&apos;t abstract. It&apos;s the direct response to
-          the failures measured by MAST, the limitations identified by framework
-          authors, and the partial solutions offered by the blackboard papers.
-        </p>
-
-        <H2>6. Cross-Domain Insight: The Incident Commanders Already Knew</H2>
-
-        <p>
-          Human incident management has been solving this exact problem for over
-          50 years. The <strong>Incident Command System (ICS)</strong> and the{" "}
-          <strong>National Incident Management System (NIMS)</strong> emerged
-          from wildfire response in the 1970s and were codified after 9/11.
-          They solved a problem that any multi-agent team faces: how do multiple
-          specialised actors coordinate under pressure without a single
-          conductor?
-        </p>
-
-        <p>
-          The answer, distilled to its essentials, maps almost one-to-one onto
-          the membrane layers:
-        </p>
-
-        <p>
-          <strong>Shared situational awareness</strong> is the ICS equivalent
-          of the Shared Medium layer. Every responder - fire, law enforcement,
-          EMS, utilities - works from the same incident command post, the same
-          situational board, the same resource list. Information isn&apos;t
-          passed between agencies; it&apos;s posted where everyone can see it.
-        </p>
-
-        <p>
-          <strong>Structured handoffs</strong> are the Permeability layer. ICS
-          defines explicit transfer-of-command procedures: a briefing, a status
-          update, a confirmation. No agency assumes the other knows what they
-          know. The membrane&apos;s field-level selectivity is the computational
-          analogue: you share what your role needs others to have, and you
-          receive what your role needs from others.
-        </p>
-
-        <p>
-          <strong>Role boundaries</strong> are Discovery and Governance. ICS
-          assigns roles based on demonstrated capability, not self-declared
-          expertise. The Incident Commander, Operations Section Chief, Planning
-          Section Chief, Logistics, Finance - each role has a defined scope, a
-          defined authority, and a defined handoff boundary. The membrane&apos;s
-          behavioural registry serves the same function: index agents by
-          demonstrated capability, not self-report.
-        </p>
-
-        <p>
-          <strong>Escalation protocols</strong> are the Governance and Immune
-          layers. When an incident exceeds the current commander&apos;s
-          authority, there&apos;s a defined escalation path. Circuit breakers
-          in the membrane serve the same function: when failure cascades exceed
-          a threshold, coordination halts and a human is notified.
-        </p>
-
-        <p>
-          <strong>Incident Action Plans</strong> are the Coordination layer. ICS
-          produces a structured plan that every responder follows, with clear
-          objectives, assignments, and timelines. The membrane&apos;s task
-          broadcast and claim mechanism serves the same function: broadcast
-          objectives, agents claim tasks based on capability, progress is
-          tracked in the shared medium.
-        </p>
-
-        <img src="/ics-membrane-map.svg" className="my-8 w-full rounded-[2px] border border-surface-lighter" alt="Mapping from ICS/NIMS concepts to Synthetic Membrane layers: Shared Situational Awareness to L2, Structured Handoffs to L1, Role Boundaries to L0/L-1, Escalation to Governance/Immune, Incident Action Plans to L3" />
-
-        <p>
-          The parallel isn&apos;t coincidental. ICS and NIMS emerged from the
-          same observation that drives the membrane thesis:{" "}
-          <em>
-            more actors do not produce better outcomes without structured
-            coordination
-          </em>
-          . The systems were designed by humans who experienced the cost of
-          unstructured coordination - the 1970s wildfires that burned because
-          fire crews from different agencies couldn&apos;t agree on who was in
-          charge.
-        </p>
-
-        <p>We&apos;re about to make the same mistake with agents.</p>
-
-        <H2>7. The Build: Sympozium</H2>
-
-        <p>
-          Theory is cheap. Implementation is where the thesis gets tested.
-        </p>
-
-        <p>
-          <strong>Sympozium</strong> is the working implementation of the
-          synthetic membrane - a coordination layer designed for production
-          multi-agent systems. It&apos;s built on Kubernetes, because the
-          infrastructure problems of multi-agent coordination (state management,
-          discovery, governance) are the same infrastructure problems that
-          Kubernetes solved for container orchestration: the hard part
-          isn&apos;t running individual components; it&apos;s making them work
-          together.
-        </p>
-
-        <p>
-          The initial focus is on operational coordination - incident response
-          scenarios where multiple agents need to follow hypotheses, share
-          evidence, and execute procedures without stepping on each other.
-          Incident management is the ideal validation case because the
-          coordination requirements are well-understood (thanks to ICS/NIMS)
-          and the failure modes are well-documented (thanks to MAST).
-        </p>
-
-        <p>
-          Sympozium implements the membrane&apos;s layered architecture as a set
-          of composable primitives:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark">
-          <li>
-            A <strong>shared medium</strong> backed by an immutable event log
-            with CRDT convergence
-          </li>
-          <li>
-            A <strong>permeability gate</strong> that evaluates whether an agent
-            should read or write a claim
-          </li>
-          <li>
-            A <strong>discovery registry</strong> that indexes agents by
-            behavioural evidence
-          </li>
-          <li>
-            <strong>Coordination primitives</strong> for task broadcast, claim,
-            and quorum sensing
-          </li>
-          <li>
-            <strong>Governance controls</strong> for circuit breakers and human
-            override
-          </li>
-          <li>
-            <strong>Immune layer</strong> for anomaly detection and failure
-            attribution
-          </li>
-        </ul>
-
-        <p>
-          The goal isn&apos;t to replace LangGraph, CrewAI, or AutoGen.
-          It&apos;s to sit beneath them - to provide the shared medium that
-          those frameworks currently lack, so that agents built on different
-          frameworks can coordinate without rewriting their internal logic.
-        </p>
-
-        <p>
-          Think of it the way Kubernetes relates to Docker. Docker gave you
-          containers. Kubernetes gave you the coordination layer that made
-          containers useful at scale. Sympozium wants to be the Kubernetes for
-          agent coordination.
-        </p>
-
-        <H2>8. The Open Problem</H2>
-
-        <p>
-          This isn&apos;t a solved problem. It&apos;s not even a
-          well-formulated one, in most communities.
-        </p>
-
-        <p>
-          The academic literature has the MAST taxonomy and the blackboard
-          revival, but no unified framework. The industry has frameworks that
-          solve different halves of the problem and leave the coordination gap
-          wide open. The incident management world solved it for humans decades
-          ago, but nobody translated those patterns to agents.
-        </p>
-
-        <p>The evidence converges from three directions:</p>
-
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark">
-          <li>
-            <strong>Empirical:</strong> MAST measures coordination failures at
-            scale - 1,600+ traces showing that inter-agent misalignment is a
-            primary failure cluster.
-          </li>
-          <li>
-            <strong>Production:</strong> Framework authors admit their
-            architectures are insufficient - CrewAI&apos;s postmortem,
-            LangGraph debugging complaints, AutoGen&apos;s merge into a new
-            framework.
-          </li>
-          <li>
-            <strong>Academic:</strong> Blackboard architectures show that
-            shared-medium coordination works, with 13-57% improvement over
-            message-passing approaches.
-          </li>
-        </ol>
-
-        <p>
-          And from a fourth direction, one that&apos;s rarely mentioned in AI
-          circles but should be:
-        </p>
-
-        <ol className="list-decimal pl-6 space-y-2 my-5 text-bone-dark" start={4}>
-          <li>
-            <strong>Operational:</strong> Human incident management
-            (ICS/NIMS/SRE) has solved this exact problem for 50+ years, and the
-            solution maps directly to a layered membrane architecture.
-          </li>
-        </ol>
-
-        <p>
-          The synthetic membrane is the hypothesis that brings these threads
-          together. It&apos;s not a rejection of any existing approach -
-          it&apos;s a recognition that messaging and orchestration are necessary
-          but insufficient, and that the medium <em>between</em> agents is the
-          substrate that needs building.
-        </p>
-
-        <p>
-          If you&apos;re building multi-agent systems, the question isn&apos;t
-          whether you need a coordination layer. The question is whether
-          you&apos;ll build one yourself, or wait until the 2:47 AM incident
-          happens and discover you needed it anyway.
-        </p>
-
-        <p className="mt-8 text-sm text-ash italic">
-          This article is the first in a series exploring the synthetic membrane
-          architecture. The position paper is available via the links below. The
-          Sympozium implementation is in early development.
-        </p>
-
-        <H2>References</H2>
-
-        <ul className="list-disc pl-6 space-y-2 my-5 text-bone-dark/80 text-xs">
-          <li>
-            Cemri et al., <em>Why Do Multi-Agent LLM Systems
-            Fail?</em>, arXiv:2503.13657 (2025)
-          </li>
-          <li>
-            Shen, <em>DOVA: Deliberation-First Multi-Agent Orchestration for
-            Autonomous Research Automation</em>, arXiv:2603.13327 (2026)
-          </li>
-          <li>
-            arXiv:2510.01285, <em>LLM-Based Multi-Agent Blackboard System</em>{" "}
-            (Oct 2025)
-          </li>
-          <li>
-            arXiv:2507.01701, <em>Exploring Advanced LLM Multi-Agent Systems
-            Based on Blackboard Architecture</em> (Jul 2025)
-          </li>
-          <li>
-            Tran et al., <em>Multi-Agent Collaboration Mechanisms: A Survey</em>,
-            arXiv:2501.06322
-          </li>
-          <li>
-            Li et al., <em>Superminds Test: Actively Evaluating Collective
-            Intelligence of Agent Society via Probing Agents</em>,
-            arXiv:2604.22452 (2026)
-          </li>
-          <li>
-            Bai et al., <em>How Do AI Agents Spend Your Money? Analyzing and
-            Predicting Token Consumption in Agentic Coding Tasks</em>,
-            arXiv:2604.22750 (2026)
-          </li>
-          <li>
-            CrewAI, <em>How to Build Agentic Systems: The Missing
-            Architecture</em> (blog postmortem)
-          </li>
-          <li>
-            Federal Emergency Management Agency, <em>National Incident
-            Management System (NIMS)</em>, 3rd Edition (2017)
-          </li>
-          <li>
-            National Interagency Fire Center, <em>Incident Command System
-            (ICS)</em> Training Materials
-          </li>
-        </ul>
       </Prose>
 
       <div className="mt-16 border-t border-surface-lighter pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
@@ -665,7 +244,7 @@ export default function StickyNoteProblemPage() {
           <div className="label mb-2">
             Paper
           </div>
-          <div className="text-bone">Full paper (v2.1), read on site</div>
+          <div className="text-bone">Full paper (v2.2), read on site</div>
           <div className="text-ash text-xs mt-1">axjns.dev &rarr;</div>
         </Link>
       </div>

@@ -10,37 +10,37 @@
     </marker>
   </defs>
   <text x="32" y="44" fill="#141414" font-size="22" font-weight="700">Synthetic Membrane — architecture</text>
-  <text x="32" y="68" fill="#4c4c4a" font-size="13">six layers between two agents · default-deny · event-sourced · quorum-coordinated</text>
+  <text x="32" y="68" fill="#4c4c4a" font-size="13">proposed responsibilities · policy-controlled shared work · observability throughout</text>
   <rect x="230" y="110" width="740" height="76"     rx="8" fill="#dfdfdd" stroke="#141414" stroke-width="1.4"/>
   <rect x="242" y="122" width="44" height="52"     rx="6" fill="#e9e9e7" stroke="#141414"/>
   <text x="264" y="153.0" fill="#141414"     font-size="14" font-weight="700" text-anchor="middle">∞</text>
   <text x="306" y="140" fill="#141414"     font-size="15" font-weight="700">Immune</text>
-  <text x="306" y="164" fill="#4c4c4a"     font-size="11">anomaly detection · threat gossip · adaptive defense</text>
+  <text x="306" y="164" fill="#4c4c4a"     font-size="11">quarantine · revoke · investigate</text>
   <rect x="230" y="192" width="740" height="76"     rx="8" fill="#dfdfdd" stroke="#2e2e2c" stroke-width="1.4"/>
   <rect x="242" y="204" width="44" height="52"     rx="6" fill="#e9e9e7" stroke="#2e2e2c"/>
   <text x="264" y="235.0" fill="#2e2e2c"     font-size="14" font-weight="700" text-anchor="middle">3</text>
   <text x="306" y="222" fill="#141414"     font-size="15" font-weight="700">Coordination</text>
-  <text x="306" y="246" fill="#4c4c4a"     font-size="11">quorum sensing · task claiming · swarm formation</text>
+  <text x="306" y="246" fill="#4c4c4a"     font-size="11">task ownership · approval · handoff</text>
   <rect x="230" y="274" width="740" height="76"     rx="8" fill="#dfdfdd" stroke="#4c4c4a" stroke-width="1.4"/>
   <rect x="242" y="286" width="44" height="52"     rx="6" fill="#e9e9e7" stroke="#4c4c4a"/>
   <text x="264" y="317.0" fill="#4c4c4a"     font-size="14" font-weight="700" text-anchor="middle">2</text>
   <text x="306" y="304" fill="#141414"     font-size="15" font-weight="700">Shared Medium</text>
-  <text x="306" y="328" fill="#4c4c4a"     font-size="11">event log · CRDTs · semantic query · provenance</text>
+  <text x="306" y="328" fill="#4c4c4a"     font-size="11">evidence · history · current views · provenance</text>
   <rect x="230" y="356" width="740" height="76"     rx="8" fill="#dfdfdd" stroke="#6a6a68" stroke-width="1.4"/>
   <rect x="242" y="368" width="44" height="52"     rx="6" fill="#e9e9e7" stroke="#6a6a68"/>
   <text x="264" y="399.0" fill="#6a6a68"     font-size="14" font-weight="700" text-anchor="middle">1</text>
   <text x="306" y="386" fill="#141414"     font-size="15" font-weight="700">Permeability</text>
-  <text x="306" y="410" fill="#4c4c4a"     font-size="11">field-level selectivity · default-deny · cost-aware</text>
+  <text x="306" y="410" fill="#4c4c4a"     font-size="11">access policy · subscriptions · context budgets</text>
   <rect x="230" y="438" width="740" height="76"     rx="8" fill="#dfdfdd" stroke="#7a7a78" stroke-width="1.4"/>
   <rect x="242" y="450" width="44" height="52"     rx="6" fill="#e9e9e7" stroke="#7a7a78"/>
   <text x="264" y="481.0" fill="#7a7a78"     font-size="14" font-weight="700" text-anchor="middle">0</text>
   <text x="306" y="468" fill="#141414"     font-size="15" font-weight="700">Discovery</text>
-  <text x="306" y="492" fill="#4c4c4a"     font-size="11">behavioural indexing · identity · reputation</text>
+  <text x="306" y="492" fill="#4c4c4a"     font-size="11">identity · capabilities · availability · history</text>
   <rect x="230" y="520" width="740" height="76"     rx="8" fill="#dfdfdd" stroke="#4c4c4a" stroke-width="1.4"/>
   <rect x="242" y="532" width="44" height="52"     rx="6" fill="#e9e9e7" stroke="#4c4c4a"/>
   <text x="264" y="563.0" fill="#4c4c4a"     font-size="14" font-weight="700" text-anchor="middle">-1</text>
   <text x="306" y="550" fill="#141414"     font-size="15" font-weight="700">Governance</text>
-  <text x="306" y="574" fill="#4c4c4a"     font-size="11">circuit breakers · human override · value conflicts</text>
+  <text x="306" y="574" fill="#4c4c4a"     font-size="11">policy · human override · escalation</text>
   <g>
     <rect x="40" y="193" width="130" height="320"       rx="10" fill="#dfdfdd" stroke="#9a9a98" stroke-width="1.2"/>
     <text x="105.0" y="217" fill="#4c4c4a"       font-size="13" font-weight="700" text-anchor="middle">agent · A</text>
