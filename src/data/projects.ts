@@ -1,6 +1,7 @@
 export interface Project {
   name: string;
   repo: string; // owner/name on GitHub
+  website?: string; // project homepage, shown alongside the repo link
   description: string;
   language: string;
   stars: number; // fallback if the live fetch fails
@@ -35,6 +36,7 @@ export const PROJECTS: Project[] = [
   {
     name: "k8sgpt",
     repo: "k8sgpt-ai/k8sgpt",
+    website: "https://k8sgpt.ai",
     description:
       "Giving Kubernetes superpowers to everyone — AI-powered cluster analysis and troubleshooting.",
     language: "Go",
@@ -46,6 +48,7 @@ export const PROJECTS: Project[] = [
   {
     name: "sympozium",
     repo: "sympozium-ai/sympozium",
+    website: "https://sympozium.ai",
     description:
       "The coordination layer for multi-agent AI — a Kubernetes-native synthetic membrane giving agents discovery, shared state, and governance as first-class primitives.",
     language: "Go",
