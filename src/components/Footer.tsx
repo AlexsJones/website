@@ -25,6 +25,14 @@ export default function Footer() {
               GitHub &#8599;
             </a>
             <a
+              href="https://huggingface.co/axjns"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bone-dark hover:text-ember transition-colors"
+            >
+              Hugging Face &#8599;
+            </a>
+            <a
               href="https://www.linkedin.com/in/jonesax/"
               target="_blank"
               rel="noopener noreferrer"

@@ -4,6 +4,7 @@ import ProjectsShowcase from "../components/ProjectsShowcase";
 import Reveal from "../components/Reveal";
 import { ARTICLES } from "./research/articles";
 import { speakingEvents } from "./speaking/events";
+import { DATASETS } from "../data/datasets";
 
 /** Refresh star counts daily; fall back to checked-in numbers on failure. */
 async function getProjects(): Promise<Project[]> {
@@ -62,6 +63,14 @@ export default async function Home() {
                   >
                     github.com/AlexsJones
                   </a>
+                  <a
+                    href="https://huggingface.co/axjns"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-[11px] uppercase tracking-[0.12em] font-medium px-5 py-3 border-2 border-bone text-bone hover:bg-bone hover:text-surface transition-colors rounded-[2px]"
+                  >
+                    huggingface.co/axjns
+                  </a>
                 </div>
               </Reveal>
             </div>
@@ -118,6 +127,78 @@ export default async function Home() {
             </div>
           </Reveal>
           <ProjectsShowcase projects={projects} />
+        </div>
+      </section>
+
+      {/* ── Open data ────────────────────────────────────── */}
+      <section
+        data-label="open data"
+        className="section-industrial section-cream grid-lines-dark"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+          <Reveal>
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between mb-10">
+              <div>
+                <div className="label mb-4">Hugging Face · Open data</div>
+                <h2 className="font-display text-4xl sm:text-6xl text-ink">
+                  Benchmarks you can <span className="italic text-ember">use.</span>
+                </h2>
+              </div>
+              <a
+                href="https://huggingface.co/axjns"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[10px] uppercase tracking-[0.18em] text-ember hover:text-ink transition-colors shrink-0"
+              >
+                Follow @axjns on Hugging Face &#8599;
+              </a>
+            </div>
+          </Reveal>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {DATASETS.map((dataset, i) => (
+              <Reveal key={dataset.slug} delay={i * 100}>
+                <a
+                  href={`https://huggingface.co/datasets/axjns/${dataset.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-full flex-col justify-between border border-ink/15 bg-white p-7 rounded-[2px] hover:border-ember transition-colors"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-5 font-mono text-[9px] uppercase tracking-[0.15em]">
+                      <span className="text-white bg-ink px-1.5 py-0.5 rounded-[2px]">
+                        Dataset
+                      </span>
+                      <span className="text-[#8a8880]">
+                        {dataset.format} · {dataset.size}
+                      </span>
+                    </div>
+                    <h3 className="font-display normal-case tracking-normal text-3xl text-ink group-hover:text-ember transition-colors mb-3">
+                      {dataset.name}
+                    </h3>
+                    <p className="text-xs text-[#5a5a54] leading-relaxed">
+                      {dataset.description}
+                    </p>
+                  </div>
+                  <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-wrap gap-2">
+                      {dataset.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#5a5a54] border border-ink/15 px-2 py-1 rounded-[2px]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ember">
+                      Explore data &#8599;
+                    </span>
+                  </div>
+                </a>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
