@@ -5,6 +5,7 @@ import Reveal from "../components/Reveal";
 import { ARTICLES } from "./research/articles";
 import { speakingEvents } from "./speaking/events";
 import { DATASETS } from "../data/datasets";
+import { SITES, Site } from "../data/sites";
 
 /** Refresh star counts daily; fall back to checked-in numbers on failure. */
 async function getProjects(): Promise<Project[]> {
@@ -24,8 +25,26 @@ async function getProjects(): Promise<Project[]> {
   );
 }
 
+/** Ping each hosted site hourly so the card can show whether it's up. */
+async function getSites(): Promise<(Site & { online: boolean | null })[]> {
+  return Promise.all(
+    SITES.map(async (s) => {
+      try {
+        const res = await fetch(s.url, {
+          method: "HEAD",
+          next: { revalidate: 3600 },
+          signal: AbortSignal.timeout(5000),
+        });
+        return { ...s, online: res.ok };
+      } catch {
+        return { ...s, online: null };
+      }
+    })
+  );
+}
+
 export default async function Home() {
-  const projects = await getProjects();
+  const [projects, sites] = await Promise.all([getProjects(), getSites()]);
   const totalStars = projects.reduce((sum, p) => sum + p.stars, 0);
 
   return (
@@ -127,6 +146,94 @@ export default async function Home() {
             </div>
           </Reveal>
           <ProjectsShowcase projects={projects} />
+        </div>
+      </section>
+
+      {/* ── Live products ───────────────────────────────── */}
+      <section
+        id="live"
+        data-label="live"
+        className="section-industrial grid-lines scroll-mt-24"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 corner-ticks">
+          <Reveal>
+            <div className="label mb-4">Live products</div>
+            <h2 className="font-display text-4xl sm:text-6xl text-bone mb-3">
+              Shipped, <span className="italic text-ember">not just open.</span>
+            </h2>
+            <p className="font-mono text-xs text-ash mb-12">
+              Hosted tools you can use in the browser right now.
+            </p>
+          </Reveal>
+
+          {sites.map((site) => (
+            <Reveal key={site.url}>
+              <a
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group grid lg:grid-cols-[1fr_1.15fr] border border-surface-lighter bg-surface-light/60 rounded-[2px] hover:border-ember transition-colors overflow-hidden"
+              >
+                <div className="flex flex-col justify-between p-7 sm:p-9">
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-6 font-mono text-[9px] uppercase tracking-[0.15em]">
+                      <span className="flex items-center gap-2 text-white bg-ember px-1.5 py-0.5 rounded-[2px]">
+                        {site.online !== false && (
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-white blink" />
+                        )}
+                        {site.online === false ? "Offline" : "Live"}
+                      </span>
+                      <span className="text-ash">{site.domain}</span>
+                    </div>
+                    <h3 className="font-display text-4xl sm:text-5xl text-bone group-hover:text-ember transition-colors mb-3">
+                      {site.name}
+                    </h3>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-bone mb-4">
+                      {site.tagline}
+                    </p>
+                    <p className="text-xs text-bone-dark/80 leading-relaxed mb-7 max-w-md">
+                      {site.description}
+                    </p>
+                    <dl className="border-t border-surface-lighter">
+                      {site.modes.map((m) => (
+                        <div
+                          key={m.k}
+                          className="flex items-baseline gap-4 border-b border-surface-lighter py-2.5"
+                        >
+                          <dt className="label w-20 shrink-0">{m.k}</dt>
+                          <dd className="font-mono text-[11px] text-bone-dark">
+                            {m.v}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                  <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-wrap gap-2">
+                      {site.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="font-mono text-[9px] uppercase tracking-[0.1em] text-ash border border-surface-lighter px-2 py-1 rounded-[2px]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ember">
+                      Open {site.name} &#8599;
+                    </span>
+                  </div>
+                </div>
+                <div className="relative min-h-[240px] border-t lg:border-t-0 lg:border-l border-surface-lighter overflow-hidden bg-surface">
+                  <img
+                    src={site.image}
+                    alt={`${site.name} at ${site.domain}`}
+                    className="absolute inset-0 h-full w-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-500"
+                  />
+                </div>
+              </a>
+            </Reveal>
+          ))}
         </div>
       </section>
 
