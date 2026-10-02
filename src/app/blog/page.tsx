@@ -55,8 +55,11 @@ export default function BlogPage() {
         </nav>
 
         <section id="field-notes" className="scroll-mt-24">
-        <h2 className="font-display text-2xl text-bone mb-2">Field notes</h2>
-        <p className="text-xs text-ash mb-8">Notes from work in progress, written when there is something useful to say.</p>
+        <div className="mb-8 border-l-2 border-ember pl-5">
+          <div className="label mb-2">01 · Dispatches</div>
+          <h2 className="font-display text-3xl sm:text-4xl text-bone mb-2">Field notes</h2>
+          <p className="text-xs text-ash">Notes from work in progress, written when there is something useful to say.</p>
+        </div>
 
         <div>
           {POSTS.map((post, i) => {
@@ -89,17 +92,31 @@ export default function BlogPage() {
         </section>
 
         <Reveal>
-          <section id="research" className="mt-20 scroll-mt-24 border-t border-bone/30 pt-10">
-            <h2 className="font-display text-2xl text-bone mb-2">Research papers</h2>
-            <p className="text-xs text-ash mb-8">Longer technical work. Papers may be revised as the implementation develops.</p>
+          <section
+            id="research"
+            className="relative mt-24 scroll-mt-24 border-l-4 border-ember bg-[#e8e4da] px-6 py-8 sm:px-10 sm:py-10"
+          >
+            <div className="absolute -top-3 right-5 bg-ink px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-bone">
+              Formal work
+            </div>
+            <div className="mb-8">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-ember mb-2">
+                02 · Research
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl text-ink mb-2">Research papers</h2>
+              <p className="text-xs text-[#5a5a54]">Longer technical work with explicit versions, methodology, and citations. Papers may be revised as the implementation develops.</p>
+            </div>
             <div className="space-y-2">
               {ARTICLES.filter((article) => article.status !== "superseded").map((article) => (
-                <Link key={article.slug} href={`/research/${article.slug}`} className="group block border-t border-bone/30 py-6">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ash mb-2">
+                <Link key={article.slug} href={`/research/${article.slug}`} className="group block border-t border-ink/20 py-6">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#6f6d66] mb-2">
                     {article.type} · {article.version} · {article.date}
                   </div>
-                  <h3 className="font-display normal-case text-2xl text-bone group-hover:text-ember transition-colors">{article.title}</h3>
-                  <p className="mt-2 max-w-2xl text-xs leading-relaxed text-bone-dark/70">{article.description}</p>
+                  <h3 className="font-display normal-case text-2xl text-ink group-hover:text-ember transition-colors">{article.title}</h3>
+                  <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[#5a5a54]">{article.description}</p>
+                  <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-ember row-arrow">
+                    Read paper &#8599;
+                  </div>
                 </Link>
               ))}
             </div>
