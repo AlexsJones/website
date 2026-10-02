@@ -45,7 +45,7 @@ function Card({
   project: Project;
   large?: boolean;
 }) {
-  const ref = useRef<HTMLAnchorElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const onMouseMove = (e: React.MouseEvent) => {
     const el = ref.current;
@@ -56,17 +56,23 @@ function Card({
   };
 
   return (
-    <a
+    <div
       ref={ref}
-      href={`https://github.com/${project.repo}`}
-      target="_blank"
-      rel="noopener noreferrer"
       onMouseMove={onMouseMove}
       className={`spotlight-card group relative flex h-full flex-col justify-between border border-surface-lighter bg-surface-light/60 rounded-[2px] transition-colors duration-300 hover:border-ember ${
         large ? "p-7 sm:p-9 min-h-[280px]" : "p-6 min-h-[220px]"
       }`}
     >
-      <div className="relative z-10">
+      {/* Whole card links to the repo; content sits above it but lets
+          clicks through, except the website link, which is its own target. */}
+      <a
+        href={`https://github.com/${project.repo}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${project.name} on GitHub`}
+        className="absolute inset-0 z-0 rounded-[2px]"
+      />
+      <div className="relative z-10 pointer-events-none">
         <div className="flex items-start justify-between mb-4">
           <span className="font-mono text-[10px] text-ash">{project.language}</span>
           <div className="flex items-center gap-2">
@@ -97,7 +103,7 @@ function Card({
         </p>
       </div>
 
-      <div className="relative z-10 mt-6 flex items-center justify-between">
+      <div className="relative z-10 pointer-events-none mt-6 flex items-center justify-between">
         <div className="flex items-center gap-4 font-mono text-[11px] text-ash">
           <span className="flex items-center gap-1.5">
             <span
@@ -120,11 +126,23 @@ function Card({
             <StarCount value={project.stars} />
           </span>
         </div>
-        <span className="row-arrow font-mono text-[10px] uppercase tracking-[0.2em] text-ember">
-          open &#8599;
-        </span>
+        <div className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.2em]">
+          {project.website && (
+            <a
+              href={project.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pointer-events-auto text-bone border-b border-bone/40 hover:text-ember hover:border-ember transition-colors"
+            >
+              {new URL(project.website).host} &#8599;
+            </a>
+          )}
+          <span className="row-arrow text-ember">
+            {project.website ? "repo" : "open"} &#8599;
+          </span>
+        </div>
       </div>
-    </a>
+    </div>
   );
 }
 
