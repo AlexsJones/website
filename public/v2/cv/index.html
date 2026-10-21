@@ -48,6 +48,7 @@ header nav a:hover,header button:hover{text-decoration:underline;text-underline-
 header .hire{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;font-size:11px;letter-spacing:.02em;text-transform:none;font-family:var(--display);font-weight:400}
 header .hire a{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:860px){header{grid-template-columns:auto 1fr auto}header .hire{display:none}header nav{gap:14px}header>*{padding:0 12px}}
+@media (max-width:520px){header{grid-template-columns:auto minmax(0,1fr) auto}header nav{gap:12px;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}header nav::-webkit-scrollbar{display:none}header nav a{flex:none}header .logo{font-size:15px}header>*{padding:0 10px}}
 
 /* section headers: teleprinter-style line with real data */
 .hdr{display:flex;gap:0 1.4em;font-size:9px;line-height:1;color:var(--ink);padding:9px var(--gutter);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);overflow:hidden;white-space:nowrap;user-select:none;letter-spacing:.12em;text-transform:uppercase}
