@@ -47,6 +47,7 @@ header nav a:hover,header button:hover{text-decoration:underline;text-underline-
 header .hire{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;font-size:11px;letter-spacing:.02em;text-transform:none;font-family:var(--display);font-weight:400}
 header .hire a{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:860px){header{grid-template-columns:auto 1fr auto}header .hire{display:none}header nav{gap:14px}header>*{padding:0 12px}}
+@media (max-width:520px){header{grid-template-columns:auto minmax(0,1fr) auto}header nav{gap:12px;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}header nav::-webkit-scrollbar{display:none}header nav a{flex:none}header .logo{font-size:15px}header>*{padding:0 10px}}
 
 /* section headers: teleprinter-style line with real data */
 .hdr{display:flex;gap:0 1.4em;font-size:9px;line-height:1;color:var(--ink);padding:9px var(--gutter);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);overflow:hidden;white-space:nowrap;user-select:none;letter-spacing:.12em;text-transform:uppercase}
@@ -114,6 +115,7 @@ header .hire a{text-decoration:underline;text-underline-offset:3px}
 .work .ro{position:absolute;left:var(--gutter);top:66px;color:var(--stock);font-size:10px;letter-spacing:.16em;text-transform:uppercase;display:grid;grid-template-columns:auto auto;gap:4px 16px;pointer-events:none}
 .work .ro b{font-weight:400;color:var(--shadow)}
 .work .ro .big{font-family:var(--display);font-weight:900;font-size:28px;letter-spacing:-.03em;grid-column:span 2;line-height:1;font-stretch:75%}
+.work .ro2 .t{display:none}
 .work .ro2{position:absolute;right:max(20px,env(safe-area-inset-right,0px));top:66px;color:var(--shadow);font-size:10px;letter-spacing:.16em;text-transform:uppercase;text-align:right;pointer-events:none}
 .work .log{display:flex;flex-direction:column;border-top:1px solid var(--shadow);min-width:0}
 .work .row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--shadow);text-decoration:none;color:var(--stock);position:relative;transition:background .15s}
@@ -130,7 +132,7 @@ header .hire a{text-decoration:underline;text-underline-offset:3px}
 .work .row.on::before{opacity:1}
 .work .row.on p,.work .row.on .n,.work .row.on h3 small{color:var(--stock)}
 .work .row:focus-visible{outline:1px solid var(--stock);outline-offset:-1px}
-@media (max-width:860px){.work{grid-template-columns:1fr;gap:30px;padding-top:150px}.work .board{max-width:min(70vw,360px)}.work .row{grid-template-columns:40px minmax(0,1fr) auto}.work .row p{display:none}}
+@media (max-width:860px){.work .ro2 .h{display:none}.work .ro2 .t{display:inline}.work{grid-template-columns:1fr;gap:30px;padding-top:150px}.work .board{max-width:min(70vw,360px)}.work .row{grid-template-columns:40px minmax(0,1fr) auto}.work .row p{display:none}}
 
 /* figure viewer */
 .viewer{position:fixed;inset:0;z-index:50;background:rgba(20,20,20,.72);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-left,0px));opacity:0;pointer-events:none;transition:opacity .25s}
@@ -198,7 +200,7 @@ header .hire a{text-decoration:underline;text-underline-offset:3px}
 .ledger .figs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .ledger .figs button{font:inherit;font-size:9px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);background:none;color:var(--ink);padding:4px 8px;cursor:pointer}
 .ledger .figs button:hover{background:var(--ink);color:var(--stock)}
-@media (max-width:760px){.research .cur{grid-template-columns:1fr}.research .cur .v{border-right:0;border-bottom:1px solid var(--ink);flex-direction:row;align-items:baseline;gap:16px}.ledger .row{grid-template-columns:70px 1fr}.ledger .row .st{grid-column:2}}
+@media (max-width:760px){.research .cur{grid-template-columns:1fr}.research .cur .v{border-right:0;border-bottom:1px solid var(--ink);flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:8px 16px;min-width:0}.ledger .row{grid-template-columns:70px 1fr}.ledger .row .st{grid-column:2}}
 
 /* talks + writing: ruled lists */
 .list{padding:80px 0}
@@ -238,6 +240,7 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
 .sb .ro{position:absolute;right:14px;top:0;color:var(--stock);font-size:9px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;writing-mode:vertical-rl;transform:translateY(0);opacity:.0;transition:opacity .2s;pointer-events:none}
 .sb:hover .ro,.sb.drag .ro{opacity:1}
 .sb.drag{cursor:grabbing}
+@media (max-width:640px){.hero .title h1{white-space:normal;grid-template-columns:1fr;gap:4px;font-size:clamp(26px,8.2vw,40px);text-align:left}.hero .title h1 .ln:last-child{text-align:left}.hero .title h1 svg{display:none}.hero .scale span:not(.c){display:none}.hero .scale span.c{font-size:8px}.hero .mon{top:84px;right:12px}.hero .decode{bottom:calc(100% + 44px);right:var(--gutter);max-width:none}}
 @media (prefers-reduced-motion:reduce){.hero .title h1 svg{animation:none}}
 </style>
 </head>
@@ -306,7 +309,7 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
 
   <section class="work" id="work">
     <div class="ro" id="ro"><span class="big">Work</span><b>bearing</b><span class="num" id="roBrg">000°</span><b>fix</b><span class="num" id="roFix">-- / 10</span><b>strength</b><span id="roStr">·····</span></div>
-    <div class="ro2">open source · ten fixes<br>hover a line to take a bearing</div>
+    <div class="ro2">open source · ten fixes<br><span class="h">hover a line to take a bearing</span><span class="t">tap a line to take a bearing</span></div>
     <div class="board" id="board"><canvas id="df" aria-hidden="true"></canvas></div>
     <div class="log" id="tiles"></div>
   </section>
