@@ -1,3 +1,23 @@
 [build]
   command = "npm run build"
   publish = ".next" 
+# The v2 site is static HTML in public/v2. These edge rewrites take over the
+# home, research index and CV paths before the Next.js function sees them.
+# (next.config.ts carries the same rewrites for local dev.)
+[[redirects]]
+  from = "/"
+  to = "/v2/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/research"
+  to = "/v2/research/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/cv"
+  to = "/v2/cv/index.html"
+  status = 200
+  force = true
