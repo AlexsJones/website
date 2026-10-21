@@ -65,9 +65,15 @@ header .hire a{text-decoration:underline;text-underline-offset:3px}
 .hero{touch-action:pan-y}
 .hero:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
 .hero .scale span.c{opacity:0;transition:opacity .4s}.hero .scale span.c.found{opacity:1}
-.hero .mon{position:absolute;top:50px;right:max(20px,env(safe-area-inset-right,0px));z-index:2;font:inherit;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:var(--stock);color:var(--ink);border:1px solid var(--ink);padding:3px 8px;cursor:pointer}
-.hero .mon[aria-pressed="true"]{background:var(--ink);color:var(--stock)}
-.hero .decode{position:absolute;left:var(--gutter);bottom:calc(100% + 14px);z-index:2;max-width:min(560px,calc(100% - 2*var(--gutter)));background:var(--ink);color:var(--stock);padding:10px 12px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;font-size:11px;line-height:1.45;box-shadow:var(--depth) var(--depth) 0 var(--shadow)}
+.hero .mon{position:absolute;right:var(--gutter);bottom:calc(100% + 16px);z-index:3;display:flex;align-items:center;gap:10px;font:inherit;font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--ink);color:var(--stock);border:1px solid var(--stock);padding:10px 14px;cursor:pointer;box-shadow:var(--depth) var(--depth) 0 var(--shadow);transition:transform .15s}
+.hero .mon:hover{transform:translate(-2px,-2px)}
+.hero .mon .w{font-family:var(--display);font-weight:900;font-size:16px;letter-spacing:-.02em;text-transform:none;line-height:1}
+.hero .mon .s{color:var(--shadow);font-size:9px}
+.hero .mon .lamp{width:8px;height:8px;border-radius:50%;background:var(--stock);opacity:.35}
+.hero .mon[aria-pressed="true"]{background:var(--cream);color:var(--ink);border-color:var(--ink)}
+.hero .mon[aria-pressed="true"] .s{color:var(--ash)}
+.hero .mon[aria-pressed="true"] .lamp{background:var(--ink);opacity:1;animation:blink 1.1s steps(2) infinite}
+.hero .decode{position:absolute;left:var(--gutter);bottom:calc(100% + 14px);z-index:2;max-width:min(560px,calc(100% - 2*var(--gutter) - 220px));background:var(--ink);color:var(--stock);padding:10px 12px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;font-size:11px;line-height:1.45;box-shadow:var(--depth) var(--depth) 0 var(--shadow)}
 .hero .decode[hidden]{display:none}
 .hero .decode .k{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--shadow);white-space:nowrap}
 .hero .decode .t{flex:1 1 260px;min-width:0}
@@ -240,7 +246,7 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
 .sb .ro{position:absolute;right:14px;top:0;color:var(--stock);font-size:9px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;writing-mode:vertical-rl;transform:translateY(0);opacity:.0;transition:opacity .2s;pointer-events:none}
 .sb:hover .ro,.sb.drag .ro{opacity:1}
 .sb.drag{cursor:grabbing}
-@media (max-width:640px){.hero .title h1{white-space:normal;grid-template-columns:1fr;gap:4px;font-size:clamp(26px,8.2vw,40px);text-align:left}.hero .title h1 .ln:last-child{text-align:left}.hero .title h1 svg{display:none}.hero .scale span:not(.c){display:none}.hero .scale span.c{font-size:8px}.hero .mon{top:84px;right:12px}.hero .decode{bottom:calc(100% + 44px);right:var(--gutter);max-width:none}}
+@media (max-width:640px){.hero .title h1{white-space:normal;grid-template-columns:1fr;gap:4px;font-size:clamp(26px,8.2vw,40px);text-align:left}.hero .title h1 .ln:last-child{text-align:left}.hero .title h1 svg{display:none}.hero .scale span:not(.c){display:none}.hero .scale span.c{font-size:8px}.hero .mon{bottom:calc(100% + 12px);right:12px;padding:8px 12px}.hero .decode{bottom:calc(100% + 64px);right:var(--gutter);max-width:none}}
 @media (prefers-reduced-motion:reduce){.hero .title h1 svg{animation:none}}
 </style>
 </head>
@@ -272,8 +278,8 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
     <canvas id="fall" aria-hidden="true"></canvas>
     <div class="scale" id="scale" aria-hidden="true"></div>
     <div class="tune" id="tune" aria-hidden="true"><b id="tuneLbl"></b></div>
-    <button class="mon" id="mon" type="button" aria-pressed="false">monitor · off</button>
     <div class="title">
+      <button class="mon" id="mon" type="button" aria-pressed="false"><i class="lamp"></i><span class="w">listen</span><span class="s">audio monitor · off</span></button>
       <div class="decode" id="decode" hidden><span class="k" id="decK"></span><span class="t" id="decT"></span><a class="go" id="decGo" href="#" target="_blank" rel="noopener">open ↗</a></div>
       <h1 class="cond"><span class="ln"><i>Alex Jones</i></span><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0 L58 42 L100 50 L58 58 L50 100 L42 58 L0 50 L42 42 Z" fill="currentColor"/></svg><span class="ln"><i>finds signal in the noise</i></span></h1>
     </div>
@@ -500,21 +506,37 @@ document.getElementById('night').onclick = () => { root.classList.toggle('night'
     if (d < .006 && c.found){ dwell += dt; away = 0; if (dwell > 450) lockOn(c); } else { dwell = 0; if (d > .012){ away += dt; if (away > 300) unlock(); } }
   }
   // audio monitor: off until asked for; noise on empty band, a tone on a carrier
-  let ac = null, nz = null, tone = null, noiseG = null, toneG = null;
+  let ac = null, nz = null, tone = null, tone2 = null, noiseG = null, toneG = null, tone2G = null;
   mon.addEventListener('click', async () => {
-    if (ac){ await ac.suspend(); ac = null; mon.setAttribute('aria-pressed','false'); mon.textContent = 'monitor · off'; return; }
+    if (ac){ await ac.suspend(); ac = null; mon.setAttribute('aria-pressed','false'); mon.querySelector('.s').textContent = 'audio monitor · off'; mon.querySelector('.w').textContent = 'listen'; return; }
     try { ac = new (window.AudioContext || window.webkitAudioContext)(); await ac.resume(); } catch { ac = null; return; }
     const len = ac.sampleRate*2, buf = ac.createBuffer(1, len, ac.sampleRate), ch0 = buf.getChannelData(0); for (let i=0;i<len;i++) ch0[i] = Math.random()*2-1;
     nz = ac.createBufferSource(); nz.buffer = buf; nz.loop = true; const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = .6;
     noiseG = ac.createGain(); noiseG.gain.value = .03; nz.connect(bp); bp.connect(noiseG); noiseG.connect(ac.destination); nz.start();
     tone = ac.createOscillator(); tone.type = 'sine'; tone.frequency.value = 620; toneG = ac.createGain(); toneG.gain.value = 0; tone.connect(toneG); toneG.connect(ac.destination); tone.start();
-    mon.setAttribute('aria-pressed','true'); mon.textContent = 'monitor · on';
+    tone2 = ac.createOscillator(); tone2.type = 'triangle'; tone2.frequency.value = 930; tone2G = ac.createGain(); tone2G.gain.value = 0; tone2.connect(tone2G); tone2G.connect(ac.destination); tone2.start();
+    mon.setAttribute('aria-pressed','true'); mon.querySelector('.s').textContent = 'audio monitor · on'; mon.querySelector('.w').textContent = 'listening';
   });
+  // each carrier has its own voice: kflow warbles as it drifts, llmfit is a two-tone teletype shift,
+  // sympozium is a detuned chord (several agents, one line), k8sgpt comes in packet bursts, celln keys the callsign
+  const hash = n => { let x = Math.sin(n*127.1)*43758.5453; return x - Math.floor(x); };
+  function voice(c, t){
+    switch (c.n){
+      case 'kflow': return {f: 540 + 28*Math.sin(t*.006) + 6*Math.sin(t*.031), g:1, f2:0, g2:0};
+      case 'llmfit': { const bit = hash(Math.floor(t/22)) > .5; return {f: bit ? 700 : 870, g:1, f2:0, g2:0}; }
+      case 'sympozium': return {f: 600, g:.8, f2: 900 + 3*Math.sin(t*.0017), g2:.5};
+      case 'k8sgpt': { const ph = (t % 2400)/2400; const on = ph < .55 && hash(Math.floor(t/90)) > .3; return {f: on ? 1100 + 120*(hash(Math.floor(t/45)) > .5) : 1100, g: on ? 1 : .04, f2:0, g2:0}; }
+      default: return {f:620, g:.15 + .85*keyed(t), f2:0, g2:0};
+    }
+  }
   function audio(t){ if (!ac) return; const now = ac.currentTime;
-    if (m.x < 0 || !running){ toneG.gain.setTargetAtTime(0, now, .05); noiseG.gain.setTargetAtTime(.012, now, .1); return; }
-    const f = F0 + m.sx*(F1-F0); const c = nearest(f); const d = Math.abs(c.f - f); const g = c.found ? c.w * Math.exp(-(d*d)/(2*.004*.004)) * (c.morse ? .15 + .85*keyed(t) : 1) : 0;
-    tone.frequency.setTargetAtTime(500 + CARRIERS.indexOf(c)*90 + (f - c.f)*8000, now, .02);
-    toneG.gain.setTargetAtTime(Math.min(.09, g*.09) * (1 - squelch), now, .03); noiseG.gain.setTargetAtTime(.035*(1 - g*.8) + squelch*.02, now, .05); }
+    if (m.x < 0 || !running){ toneG.gain.setTargetAtTime(0, now, .05); tone2G.gain.setTargetAtTime(0, now, .05); noiseG.gain.setTargetAtTime(.012, now, .1); return; }
+    const f = F0 + m.sx*(F1-F0); const c = nearest(f); const d = Math.abs(c.f - f); const prox = c.found ? c.w * Math.exp(-(d*d)/(2*.004*.004)) : 0;
+    const v = voice(c, t); const det = (f - c.f)*8000;   // off-tune pulls the pitch like a BFO
+    tone.frequency.setTargetAtTime(v.f + det, now, .015); tone2.frequency.setTargetAtTime((v.f2 || v.f*1.5) + det, now, .015);
+    const g = Math.min(.09, prox*.09) * (1 - squelch);
+    toneG.gain.setTargetAtTime(g*v.g, now, .025); tone2G.gain.setTargetAtTime(g*v.g2, now, .025);
+    noiseG.gain.setTargetAtTime(.035*(1 - prox*.8) + squelch*.02, now, .05); }
   function draw(t){
     requestAnimationFrame(draw); if (!running) return; if (reduce && last) return;
     if (t0 < 0) t0 = t; const dt = Math.min(50, t - last); last = t;
