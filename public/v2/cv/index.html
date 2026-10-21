@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alex Jones — CV</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+
+/* Layout: a long editorial scroll, one instrument per section. Stencil palette: grey stock, ink, cream paper. Signals theme carried by instruments, not slogans: a waterfall spectrogram in the hero, a direction-finding plot behind the work reel, an antenna ring behind the collected material, an oscilloscope trace and a Morse key at the end. */
+:root{
+  --stock:#b4b4b2;   /* page */
+  --ink:#141414;     /* type, bars, dark panels */
+  --cream:#e9e9e7;   /* paper objects */
+  --ash:#4c4c4a;     /* secondary text */
+  --shadow:#8f8f8d;  /* object sides */
+  --line:rgba(20,20,20,.55);
+  --display:"Archivo",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Fira Code",ui-monospace,monospace;
+  --gutter:max(20px,env(safe-area-inset-left,0px));
+  --depth:14px;
+  --frame:14px;
+  color-scheme:light;
+}
+/* night watch: warm dark, slightly red-shifted, for reading in the dark */
+:root.night{--stock:#171412;--ink:#d8c9b4;--cream:#221d19;--ash:#8f8373;--shadow:#000;--line:rgba(216,201,180,.4);color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ink);color:var(--ink);font-family:var(--mono);font-size:15px;line-height:1.5}
+body{overflow-x:hidden}
+::selection{background:var(--ink);color:var(--stock)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.88;margin:0;text-wrap:balance}
+.page{background:var(--stock);margin:var(--frame);position:relative}
+.wrap{padding-left:var(--gutter);padding-right:max(20px,env(safe-area-inset-right,0px));max-width:1500px;margin:0 auto}
+.label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+.cond{font-stretch:62%;letter-spacing:-.01em}
+.ext{text-shadow:1px 1px 0 var(--shadow),2px 2px 0 var(--shadow),3px 3px 0 var(--shadow),4px 4px 0 var(--shadow),5px 5px 0 var(--shadow),6px 6px 0 var(--shadow)}
+.num{font-variant-numeric:tabular-nums}
+
+/* header: boxed cells */
+header{position:fixed;top:var(--frame);left:var(--frame);right:var(--frame);z-index:30;display:grid;grid-template-columns:auto 1fr auto auto;border-bottom:1px solid var(--ink);background:var(--stock);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+header>*{display:flex;align-items:center;padding:0 18px;height:46px;border-right:1px solid var(--ink)}
+header>*:last-child{border-right:0}
+header .logo{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:-.03em;text-transform:none;text-decoration:none}
+header nav{gap:26px;justify-content:center}
+header a,header button{color:inherit;text-decoration:none;background:none;border:0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:0}
+header nav a:hover,header button:hover{text-decoration:underline;text-underline-offset:4px}
+header .hire{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;font-size:11px;letter-spacing:.02em;text-transform:none;font-family:var(--display);font-weight:400}
+header .hire a{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:860px){header{grid-template-columns:auto 1fr auto}header .hire{display:none}header nav{gap:14px}header>*{padding:0 12px}}
+
+/* section headers: teleprinter-style line with real data */
+.hdr{display:flex;gap:0 1.4em;font-size:9px;line-height:1;color:var(--ink);padding:9px var(--gutter);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);overflow:hidden;white-space:nowrap;user-select:none;letter-spacing:.12em;text-transform:uppercase}
+.hdr i{font-style:normal}.hdr b{font-weight:400;letter-spacing:-.08em;opacity:.45}
+
+
+/* cv */
+.cv{display:grid;grid-template-columns:280px minmax(0,1fr);gap:48px;padding:60px 0 90px}
+.cv .side{position:sticky;top:90px;align-self:start;display:flex;flex-direction:column;gap:22px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.cv .side .photo{background:var(--cream);box-shadow:var(--depth) var(--depth) 0 var(--shadow),0 0 0 1px var(--ink);padding:12px 12px 10px;width:200px}
+.cv .side .photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.cv .side .photo span{display:block;padding-top:8px;font-size:9px;letter-spacing:.14em;color:var(--ash)}
+.cv .side dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 14px;border-top:1px solid var(--ink);padding-top:14px}.cv .side dt{color:var(--ash)}.cv .side dd{margin:0;color:var(--ink)}
+.cv .side .ch{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--ink);padding-top:14px}.cv .side .ch a{text-decoration:none;color:var(--ink);text-transform:none;letter-spacing:.04em;font-size:11px}.cv .side .ch a:hover{text-decoration:underline;text-underline-offset:3px}
+.cv h1{font-size:clamp(40px,6vw,96px);font-stretch:75%;margin-bottom:10px}
+.cv .sum{font-family:var(--display);font-weight:400;font-size:clamp(17px,1.8vw,22px);line-height:1.45;letter-spacing:-.01em;max-width:62ch;margin:0 0 36px}
+.chart{position:relative;border:1px solid var(--ink);background:var(--cream);margin:0 0 40px;padding:14px 14px 10px}
+.chart canvas{display:block;width:100%;height:auto}
+.chart .k{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);margin-bottom:10px}
+.chart .leg{display:flex;gap:16px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin-top:8px}
+.chart .leg i{display:inline-block;width:14px;height:6px;background:var(--ink);vertical-align:middle;margin-right:6px}.chart .leg i.o{opacity:.4}
+.sec{margin:46px 0 0}
+.sec .h{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px}
+.sec h2{font-size:clamp(26px,3.2vw,44px);font-stretch:75%}
+.rows{border-top:1px solid var(--ink)}
+.row{display:grid;grid-template-columns:36px 170px 1fr auto;gap:18px;padding:14px 0;border-bottom:1px solid var(--ink);align-items:baseline;font-size:12px}
+.row .n{font-size:9px;letter-spacing:.14em;color:var(--ash)}
+.row .org{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:-.02em;font-stretch:75%;line-height:1.05}
+.row .role{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:-.01em}
+.row .d{display:block;color:var(--ash);font-size:11px;margin-top:4px;line-height:1.5;max-width:60ch}
+.row .span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);white-space:nowrap;text-align:right}
+.row .span b{display:block;font-weight:400;color:var(--ink)}
+.row .code{display:inline-block;font-size:9px;letter-spacing:.14em;border:1px solid var(--ink);padding:2px 6px;margin-left:8px;vertical-align:middle}
+.row.now .org::after{content:"";display:inline-block;width:7px;height:7px;background:var(--ink);border-radius:50%;margin-left:8px;vertical-align:middle;animation:blink 1.6s steps(2) infinite}
+@keyframes blink{to{opacity:.2}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ink);padding:6px 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.two ul{margin:0;padding:0;list-style:none;font-size:12px}.two li{padding:8px 0;border-top:1px solid var(--ink)}.two li:last-child{border-bottom:1px solid var(--ink)}
+@media (max-width:860px){.cv{grid-template-columns:1fr;gap:28px}.cv .side{position:static}.row{grid-template-columns:36px 1fr}.row .span{grid-column:2;text-align:left}.two{grid-template-columns:1fr}}
+@media print{header,.sb,.hdr{display:none}.page{margin:0}.cv{padding:0}.cv .side{position:static}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">axjns.dev</a>
+  <nav><a href="/#about">About</a><a href="/#work">Work</a><a href="/#findings">Findings</a><a href="/#contact">Contact</a></nav>
+  <div><button id="night" type="button" aria-label="Toggle night watch">◐ Night</button></div>
+  <div class="hire"><span>Curriculum vitae · service record</span><span>Jones, A. · London · <a href="mailto:alexsimonjones@gmail.com">alexsimonjones@gmail.com</a></span></div>
+</header>
+
+<div class="page" style="padding-top:46px">
+  <div class="hdr" data-hdr="cv" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="cv">
+      <aside class="side">
+        <div class="photo"><img src="/cv-portrait.jpg" alt="Portrait"><span>photo substituted · Arkady, Foundation</span></div>
+        <dl><dt>name</dt><dd>Jones, A.</dd><dt>file opened</dt><dd>Jul 2010</dd><dt>station</dt><dd>London, UK</dd><dt>assignment</dt><dd>Principal Engineer · creator of K8sGPT</dd><dt>status</dt><dd>operational</dd><dt>education</dt><dd>Kingston University · first-class BSc (Hons) Computer Science · 2007–2010</dd></dl>
+        <div class="ch"><a href="mailto:alexsimonjones@gmail.com">alexsimonjones@gmail.com</a><a href="https://github.com/AlexsJones" target="_blank" rel="noopener">github.com/AlexsJones</a><a href="https://www.linkedin.com/in/jonesax/" target="_blank" rel="noopener">linkedin.com/in/jonesax</a><a href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">sessionize.com/jonesax</a></div>
+      </aside>
+      <article>
+        <h1>Alex Jones</h1>
+        <p class="sum">Individual contributor. My work is mysterious and important. Outside of work I contribute to open source. The things I know about: distributed systems, Kubernetes (exotic compute), systems design, and applications of artificial intelligence in cloud environments.</p>
+
+        <div class="chart" aria-label="Timeline of roles, 2010 to present">
+          <div class="k"><span>service timeline · 2010 → present</span><span id="now"></span></div>
+          <canvas id="tl"></canvas>
+          <div class="leg"><span><i></i>paid employment</span><span><i class="o"></i>open source · governance · advisory</span></div>
+        </div>
+
+        <section class="sec"><div class="h"><h2>Employment</h2><span class="label">01 · primary record</span></div><div class="rows" id="emp"></div></section>
+        <section class="sec"><div class="h"><h2>Community</h2><span class="label">02 · concurrent service</span></div><div class="rows" id="com"></div></section>
+        <section class="sec"><div class="h"><h2>Skills</h2><span class="label">03</span></div><div class="chips" id="skills"></div></section>
+        <section class="sec two">
+          <div><div class="h"><h2>Stages</h2><span class="label">04</span></div><ul><li>KubeCon + CloudNativeCon NA — 2021, 2022</li><li>KubeCon + CloudNativeCon EU — 2023, 2025</li><li>PlatformCon — 2023</li><li>KubeHuddle, Edinburgh — 2022</li></ul></div>
+          <div><div class="h"><h2>Education</h2><span class="label">05</span></div><ul><li>Kingston University — first-class BSc (Hons), Computer Science, 2007 — 2010</li></ul></div>
+        </section>
+      </article>
+    </div>
+  </div>
+  <footer>
+    <span>© 2026 Alex Jones</span>
+    <span class="chk" aria-hidden="true"></span>
+    <nav><a href="/">Home</a><a href="/research">Research</a><a href="https://github.com/AlexsJones" target="_blank" rel="noopener">GitHub</a></nav>
+    <span>Open source // field tested // made in the U.K.</span>
+  </footer>
+</div>
+
+<script>
+const EMPLOYMENT = [["Amazon Web Services", "Principal Engineer", "Aug 2023 \u2014 present", "London", ""], ["Canonical", "Engineering Director, Kubernetes", "Jan 2022 \u2014 Aug 2023", "", "Led the Kubernetes organisation: product and engineering vision, new MicroK8s capabilities, community ecosystem growth."], ["Civo", "Principal SRE", "May 2021 \u2014 Jan 2022", "", "Built super-cluster capabilities, observability, recovery, backup and security systems."], ["JPMorgan Chase & Co.", "VP, Site Reliability Engineering", "Dec 2020 \u2014 May 2021", "London", ""], ["American Express", "Engineering Director, SRE", "May 2019 \u2014 Dec 2020", "London", ""], ["Beamery", "Head of Platform & Infrastructure", "May 2017 \u2014 May 2019", "London", ""], ["Sky", "Lead DevOps Engineer", "Apr 2016 \u2014 May 2017", "London", ""], ["Casewise", "Lead Technical Architect", "Apr 2015 \u2014 Apr 2016", "Mayfair", ""], ["Microsoft", "Senior Software Engineer", "Oct 2013 \u2014 Apr 2015", "Lionhead Studios", ""], ["BSkyB", "Technical Lead, iOS / Mobile", "Apr 2011 \u2014 Oct 2013", "Osterley", ""], ["Grapple Mobile", "Frontend Developer", "Jul 2010 \u2014 Apr 2011", "", ""]];
+const COMMUNITY = [["k8sgpt.ai", "Founder", "Mar 2023 \u2014 present", "OSS", "Open-source project, now in the CNCF."], ["OpenFeature", "Governing Committee", "Jul 2023 \u2014 Feb 2024", "GOV", ""], ["CNCF", "Tech Lead, TAG App-Delivery", "Jun 2021 \u2014 Feb 2024", "GOV", ""], ["Keptn", "Advisory Board Member", "May 2021 \u2014 Sep 2023", "ADV", ""], ["Ondat", "Advisor (until Akamai acquisition)", "Jun 2022 \u2014 Mar 2023", "ADV", ""]];
+const SKILLS = ["Distributed Systems", "Kubernetes", "Systems Design", "AI in Cloud", "AWS", "Observability", "DevOps", "Platform Engineering", "Go", "Rust", "Linux", "Open Source", "Long-term Vision", "Communication"];
+(() => {
+  const root = document.documentElement;
+  try { if (localStorage.getItem('v2-night') === '1') root.classList.add('night'); } catch {}
+  document.getElementById('night').onclick = () => { root.classList.toggle('night'); try { localStorage.setItem('v2-night', root.classList.contains('night') ? '1' : '0'); } catch {} draw(); };
+  const pad = (n,w=2) => String(n).padStart(w,'0');
+  const d = new Date(); const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const dtg = `${pad(d.getUTCDate())}${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}Z ${MON[d.getUTCMonth()]} ${String(d.getUTCFullYear()).slice(2)}`;
+  document.querySelectorAll('[data-hdr]').forEach(el => { const seg = [`<i>NR 000</i>`, `<i>${dtg}</i>`, `<i>${el.dataset.hdr}</i>`, `<i>DE AXJNS</i>`]; const hatch = () => `<b>${'/'.repeat(18 + (Math.random()*26|0))}</b>`; el.innerHTML = Array.from({length:4}, () => seg.map(s => s + hatch()).join('')).join(''); });
+  document.getElementById('now').textContent = `as of ${MON[d.getMonth()]} ${d.getFullYear()}`;
+
+  // rows
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const spanHtml = s => { const [a,b] = s.split(' — '); return `<span class="span"><b>${esc(a)}</b>${esc(b)}</span>`; };
+  document.getElementById('emp').innerHTML = EMPLOYMENT.map(([org,role,span,loc,detail],i) => `<div class="row${/present/.test(span)?' now':''}"><span class="n">${pad(i+1)}</span><span class="org">${esc(org)}</span><span><span class="role">${esc(role)}${loc ? ` · ${esc(loc)}` : ''}</span>${detail ? `<span class="d">${esc(detail)}</span>` : ''}</span>${spanHtml(span)}</div>`).join('');
+  document.getElementById('com').innerHTML = COMMUNITY.map(([org,role,span,code,detail],i) => `<div class="row${/present/.test(span)?' now':''}"><span class="n">${pad(i+1)}</span><span class="org">${esc(org)}</span><span><span class="role">${esc(role)}<span class="code">${code}</span></span>${detail ? `<span class="d">${esc(detail)}</span>` : ''}</span>${spanHtml(span)}</div>`).join('');
+  document.getElementById('skills').innerHTML = SKILLS.map(s => `<span>${esc(s)}</span>`).join('');
+
+  // timeline chart: each role a band on a strip chart, employment on the top lane, community below
+  const cv = document.getElementById('tl'), ctx = cv.getContext('2d'); const dpr = Math.min(devicePixelRatio||1, 2);
+  const parse = s => { const m = s.match(/([A-Z][a-z]{2}) (\d{4})/); return m ? m[2]*1 + MON.indexOf(m[1].toUpperCase())/12 : null; };
+  const range = s => { const [a,b] = s.split(' — '); return [parse(a), /present/.test(b) ? d.getFullYear() + d.getMonth()/12 + 1/12 : parse(b)]; };
+  function draw(){
+    const W = cv.clientWidth, laneH = 18, gap = 4, top = 26, lanesE = EMPLOYMENT.length ? 2 : 0; // two lanes for employment to avoid overlaps, three for community
+    const H = top + 2*(laneH+gap) + 10 + 3*(laneH+gap) + 24; cv.width = W*dpr; cv.height = H*dpr; cv.style.height = H + 'px'; ctx.setTransform(dpr,0,0,dpr,0,0);
+    const css = v => getComputedStyle(root).getPropertyValue(v).trim(); const ink = css('--ink'), ash = css('--ash');
+    const Y0 = 2010.5, Y1 = d.getFullYear() + 1; const x = y => (y - Y0)/(Y1 - Y0) * W;
+    ctx.clearRect(0,0,W,H); ctx.font = '9px "JetBrains Mono", monospace'; ctx.textAlign = 'center'; ctx.fillStyle = ash; ctx.strokeStyle = ink;
+    for (let y = 2011; y <= Y1; y++){ const X = x(y); ctx.globalAlpha = .25; ctx.beginPath(); ctx.moveTo(X, top-6); ctx.lineTo(X, H-16); ctx.stroke(); ctx.globalAlpha = 1; if (y % 2 === 1) ctx.fillText(String(y), X, 10); }
+    const band = (lane, a, b, alpha, label) => { const X1 = x(a), X2 = x(b); ctx.globalAlpha = alpha; ctx.fillStyle = ink; ctx.fillRect(X1, lane, Math.max(2, X2-X1), laneH); ctx.globalAlpha = 1;
+      if (X2 - X1 > 56){ ctx.fillStyle = css('--stock'); ctx.textAlign = 'left'; ctx.fillText(label.toUpperCase().slice(0, Math.floor((X2-X1-10)/6)), X1+5, lane+laneH/2+3); ctx.textAlign = 'center'; } };
+    EMPLOYMENT.forEach(([org,,span],i) => { const [a,b] = range(span); band(top + (i%2)*(laneH+gap), a, b, 1, org); });
+    const cTop = top + 2*(laneH+gap) + 10;
+    COMMUNITY.forEach(([org,,span],i) => { const [a,b] = range(span); band(cTop + (i%3)*(laneH+gap), a, b, .4, org); });
+    // now marker
+    const nx = x(d.getFullYear() + d.getMonth()/12); ctx.strokeStyle = ink; ctx.globalAlpha = 1; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(nx, top-10); ctx.lineTo(nx, H-14); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = ash; ctx.fillText('NOW', nx, H-3);
+  }
+  addEventListener('resize', draw); document.fonts ? document.fonts.ready.then(draw) : draw(); draw();
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return {
+      // The v2 site is static HTML in public/v2. beforeFiles lets it take over
+      // the home, research index and CV paths from the old app routes.
+      beforeFiles: [
+        { source: "/", destination: "/v2/index.html" },
+        { source: "/research", destination: "/v2/research/index.html" },
+        { source: "/cv", destination: "/v2/cv/index.html" },
+        { source: "/v2", destination: "/v2/index.html" },
+        { source: "/v2/research", destination: "/v2/research/index.html" },
+        { source: "/v2/cv", destination: "/v2/cv/index.html" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   async redirects() {
     return [
       {

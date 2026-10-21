@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alex Jones — finds signal in the noise</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: a long editorial scroll, one instrument per section. Stencil palette: grey stock, ink, cream paper. Signals theme carried by instruments, not slogans: a waterfall spectrogram in the hero, a direction-finding plot behind the work reel, an antenna ring behind the findings, an oscilloscope trace and a Morse key at the end. */
+:root{
+  --stock:#b4b4b2;   /* page */
+  --ink:#141414;     /* type, bars, dark panels */
+  --cream:#e9e9e7;   /* paper objects */
+  --ash:#4c4c4a;     /* secondary text */
+  --shadow:#8f8f8d;  /* object sides */
+  --line:rgba(20,20,20,.55);
+  --display:"Archivo",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Fira Code",ui-monospace,monospace;
+  --gutter:max(20px,env(safe-area-inset-left,0px));
+  --depth:14px;
+  --frame:14px;
+  color-scheme:light;
+}
+/* night watch: warm dark, slightly red-shifted, for reading in the dark */
+:root.night{--stock:#171412;--ink:#d8c9b4;--cream:#221d19;--ash:#8f8373;--shadow:#000;--line:rgba(216,201,180,.4);color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ink);color:var(--ink);font-family:var(--mono);font-size:15px;line-height:1.5}
+body{overflow-x:hidden}
+::selection{background:var(--ink);color:var(--stock)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.88;margin:0;text-wrap:balance}
+.page{background:var(--stock);margin:var(--frame);position:relative}
+.wrap{padding-left:var(--gutter);padding-right:max(20px,env(safe-area-inset-right,0px));max-width:1500px;margin:0 auto}
+.label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+.cond{font-stretch:62%;letter-spacing:-.01em}
+.ext{text-shadow:1px 1px 0 var(--shadow),2px 2px 0 var(--shadow),3px 3px 0 var(--shadow),4px 4px 0 var(--shadow),5px 5px 0 var(--shadow),6px 6px 0 var(--shadow)}
+.num{font-variant-numeric:tabular-nums}
+
+/* header: boxed cells */
+header{position:fixed;top:var(--frame);left:var(--frame);right:var(--frame);z-index:30;display:grid;grid-template-columns:auto 1fr auto auto;border-bottom:1px solid var(--ink);background:var(--stock);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+header>*{display:flex;align-items:center;padding:0 18px;height:46px;border-right:1px solid var(--ink)}
+header>*:last-child{border-right:0}
+header .logo{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:-.03em;text-transform:none;text-decoration:none}
+header nav{gap:26px;justify-content:center}
+header a,header button{color:inherit;text-decoration:none;background:none;border:0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:0}
+header nav a:hover,header button:hover{text-decoration:underline;text-underline-offset:4px}
+header .hire{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;font-size:11px;letter-spacing:.02em;text-transform:none;font-family:var(--display);font-weight:400}
+header .hire a{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:860px){header{grid-template-columns:auto 1fr auto}header .hire{display:none}header nav{gap:14px}header>*{padding:0 12px}}
+
+/* section headers: teleprinter-style line with real data */
+.hdr{display:flex;gap:0 1.4em;font-size:9px;line-height:1;color:var(--ink);padding:9px var(--gutter);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);overflow:hidden;white-space:nowrap;user-select:none;letter-spacing:.12em;text-transform:uppercase}
+.hdr i{font-style:normal}.hdr b{font-weight:400;letter-spacing:-.08em;opacity:.45}
+
+/* hero: waterfall */
+.hero{position:relative;height:min(92vh,980px);min-height:560px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;border-bottom:1px solid var(--ink);cursor:crosshair}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero .scale{position:absolute;top:46px;left:0;right:0;height:26px;border-bottom:1px solid var(--ink);display:flex;align-items:flex-end;font-size:9px;letter-spacing:.14em;text-transform:uppercase;pointer-events:none;background:var(--stock)}
+.hero .scale span{position:absolute;bottom:4px;transform:translateX(-50%);color:var(--ash);white-space:nowrap}
+.hero .scale span::after{content:"";position:absolute;left:50%;bottom:-5px;width:1px;height:5px;background:var(--ink)}
+.hero .scale span.c{color:var(--ink);font-weight:700}
+.hero .tune{position:absolute;top:72px;bottom:0;width:1px;background:var(--ink);pointer-events:none;opacity:0;transition:opacity .2s}
+.hero .tune b{position:absolute;top:8px;left:8px;font-weight:400;font-size:9px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;background:var(--stock);padding:3px 6px;border:1px solid var(--ink)}
+.hero{touch-action:pan-y}
+.hero:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.hero .scale span.c{opacity:0;transition:opacity .4s}.hero .scale span.c.found{opacity:1}
+.hero .mon{position:absolute;top:50px;right:max(20px,env(safe-area-inset-right,0px));z-index:2;font:inherit;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:var(--stock);color:var(--ink);border:1px solid var(--ink);padding:3px 8px;cursor:pointer}
+.hero .mon[aria-pressed="true"]{background:var(--ink);color:var(--stock)}
+.hero .decode{position:absolute;left:var(--gutter);bottom:calc(100% + 14px);z-index:2;max-width:min(560px,calc(100% - 2*var(--gutter)));background:var(--ink);color:var(--stock);padding:10px 12px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;font-size:11px;line-height:1.45;box-shadow:var(--depth) var(--depth) 0 var(--shadow)}
+.hero .decode[hidden]{display:none}
+.hero .decode .k{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--shadow);white-space:nowrap}
+.hero .decode .t{flex:1 1 260px;min-width:0}
+.hero .decode .t::after{content:"▮";animation:blink 1s steps(2) infinite;margin-left:2px}
+.hero .decode .go{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--stock);text-decoration:none;border:1px solid var(--stock);padding:3px 7px;white-space:nowrap}
+.hero .decode .go:hover{background:var(--stock);color:var(--ink)}
+@keyframes blink{to{opacity:0}}
+.hero .title{position:relative;z-index:1;background:var(--stock);border-top:1px solid var(--ink);padding:16px var(--gutter) 18px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.hero .title h1{font-size:clamp(22px,4.1vw,84px);line-height:.95;white-space:nowrap;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.25em;width:100%}
+.hero .title h1 .ln:last-child{text-align:right}
+.hero .title h1 svg{width:.32em;height:.32em;justify-self:center;animation:spin 9s linear infinite}
+.hero .title .ln{display:inline-block;overflow:hidden}
+.hero .title .ln i{display:inline-block;font-style:normal}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* about: corridor + column */
+.about{position:relative;padding:0;overflow:hidden}
+.about canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.about .col{position:relative;z-index:1;width:min(640px,calc(100% - 2*var(--gutter)));margin:0 auto;background:var(--stock);border-left:1px solid var(--ink);border-right:1px solid var(--ink)}
+.about .bar{background:var(--ink);color:var(--stock);text-align:center;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:7px}
+.about .txt{padding:48px 56px 40px;font-family:var(--display);font-weight:400;font-size:clamp(20px,2.4vw,28px);line-height:1.3;letter-spacing:-.015em}
+.about .txt p{margin:0 0 1em}.about .txt p:last-child{margin:0}
+.about .txt a{text-decoration:none;border-bottom:2px solid var(--ink)}.about .txt a:hover{background:var(--ink);color:var(--stock)}
+.about .txt .mark{background:var(--ink);color:var(--stock);padding:0 .12em}
+.redact{background:var(--ink);color:var(--ink);padding:0 .12em;transition:color .25s;cursor:help}
+.redact:hover{color:var(--stock)}
+.patch{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(110px,auto);border-top:1px solid var(--ink)}
+.patch>div{border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px 14px;position:relative;font-family:var(--display);font-weight:400;font-size:clamp(16px,1.8vw,22px);line-height:1.15;letter-spacing:-.01em}
+.patch>div:nth-child(4n){border-right:0}
+.patch .ink{background:var(--ink);color:var(--stock)}
+.patch .hatch{background:repeating-linear-gradient(135deg,var(--ink) 0 1px,transparent 1px 9px)}
+.patch .big{font-weight:900;font-size:clamp(34px,5vw,64px);line-height:.9;letter-spacing:-.04em;font-stretch:75%;font-variant-numeric:tabular-nums}
+.patch .sub{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;opacity:.8}
+.patch .c2{grid-column:span 2}.patch .c3{grid-column:span 3}.patch .r2{grid-row:span 2}
+.patch .tick{position:absolute;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ash);top:6px;left:8px}
+.patch .meter{position:absolute;right:10px;bottom:8px;display:flex;gap:2px}
+.patch .meter i{width:4px;height:10px;background:var(--ink);opacity:.25}.patch .meter i.on{opacity:1}
+.patch .ink .meter i{background:var(--stock)}
+@media (max-width:640px){.about .txt{padding:34px 24px 28px}.patch{grid-template-columns:repeat(2,1fr)}.patch .c3{grid-column:span 2}.patch>div:nth-child(4n){border-right:1px solid var(--ink)}.patch>div:nth-child(2n){border-right:0}}
+
+/* work: direction-finding board */
+.work{position:relative;min-height:100vh;background:var(--ink);color:var(--stock);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:0 40px;align-items:center;padding:120px var(--gutter) 70px}
+.work .board{position:relative;aspect-ratio:1;width:100%;max-width:min(62vh,640px);justify-self:center}
+.work .board canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.work .ro{position:absolute;left:var(--gutter);top:66px;color:var(--stock);font-size:10px;letter-spacing:.16em;text-transform:uppercase;display:grid;grid-template-columns:auto auto;gap:4px 16px;pointer-events:none}
+.work .ro b{font-weight:400;color:var(--shadow)}
+.work .ro .big{font-family:var(--display);font-weight:900;font-size:28px;letter-spacing:-.03em;grid-column:span 2;line-height:1;font-stretch:75%}
+.work .ro2{position:absolute;right:max(20px,env(safe-area-inset-right,0px));top:66px;color:var(--shadow);font-size:10px;letter-spacing:.16em;text-transform:uppercase;text-align:right;pointer-events:none}
+.work .log{display:flex;flex-direction:column;border-top:1px solid var(--shadow);min-width:0}
+.work .row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--shadow);text-decoration:none;color:var(--stock);position:relative;transition:background .15s}
+.work .row .n{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--shadow);display:flex;flex-direction:column;gap:4px}
+.work .row h3{font-size:clamp(20px,2.3vw,32px);font-stretch:75%;line-height:.95;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.work .row h3 small{font-family:var(--mono);font-weight:400;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--shadow)}
+.work .row p{margin:4px 0 0;font-size:11px;line-height:1.45;color:var(--shadow);max-width:52ch}
+.work .row .m{font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-align:right;white-space:nowrap;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.work .row .m b{font-family:var(--display);font-weight:900;font-size:20px;letter-spacing:-.03em;line-height:1}
+.work .row .str{display:inline-flex;gap:2px;vertical-align:middle}
+.work .row .str i{width:5px;height:9px;background:var(--stock);opacity:.25}.work .row .str i.on{opacity:1}
+.work .row::before{content:"";position:absolute;left:-14px;top:50%;width:6px;height:6px;margin-top:-3px;background:var(--stock);border-radius:50%;opacity:0;transition:opacity .15s}
+.work .row.on{background:rgba(180,180,178,.08)}
+.work .row.on::before{opacity:1}
+.work .row.on p,.work .row.on .n,.work .row.on h3 small{color:var(--stock)}
+.work .row:focus-visible{outline:1px solid var(--stock);outline-offset:-1px}
+@media (max-width:860px){.work{grid-template-columns:1fr;gap:30px;padding-top:150px}.work .board{max-width:min(70vw,360px)}.work .row{grid-template-columns:40px minmax(0,1fr) auto}.work .row p{display:none}}
+
+/* figure viewer */
+.viewer{position:fixed;inset:0;z-index:50;background:rgba(20,20,20,.72);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-left,0px));opacity:0;pointer-events:none;transition:opacity .25s}
+.viewer.on{opacity:1;pointer-events:auto}
+.viewer .obj{position:relative;width:min(960px,100%);max-height:calc(100vh - 60px);display:grid;grid-template-columns:1.4fr 1fr;background:var(--cream);box-shadow:var(--depth) var(--depth) 0 var(--shadow),0 0 0 1px var(--ink);transform:translateY(16px) scale(.98);transition:transform .25s}
+.viewer.on .obj{transform:none}
+.viewer .pic{background:var(--ink);padding:22px;display:grid;place-items:center;min-height:300px;overflow:hidden}
+.viewer .pic img{max-width:100%;max-height:calc(100vh - 110px);height:auto;filter:grayscale(1) contrast(1.05)}
+.viewer .txt{padding:26px 28px;display:flex;flex-direction:column;gap:14px;overflow:auto}
+.viewer .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);display:flex;justify-content:space-between;gap:12px}
+.viewer h3{font-size:clamp(26px,3vw,40px);font-stretch:75%;line-height:.95}
+.viewer p{margin:0;font-size:13px;line-height:1.6;color:var(--ash)}
+.viewer .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.viewer .links a{font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1px solid var(--ink);padding:8px 12px;color:var(--ink)}
+.viewer .links a:hover{background:var(--ink);color:var(--stock)}
+.viewer .x{position:absolute;top:0;right:0;width:44px;height:44px;border:0;background:var(--ink);color:var(--stock);font:inherit;font-size:18px;cursor:pointer}
+.viewer .nav{position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:0;background:var(--ink);color:var(--stock);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.viewer .nav[hidden]{display:none}
+.viewer .nav button{all:unset;cursor:pointer;width:44px;height:40px;display:grid;place-items:center;font-size:16px}
+.viewer .nav button:hover{background:var(--stock);color:var(--ink)}
+.viewer .nav span{padding:0 10px;font-variant-numeric:tabular-nums}
+.viewer .x:focus-visible{outline:2px solid var(--stock);outline-offset:-4px}
+@media (max-width:760px){.viewer .obj{grid-template-columns:1fr;max-height:calc(100vh - 40px);overflow:auto}.viewer .pic{min-height:0}.viewer .pic img{max-height:40vh}}
+
+/* research: revision ledger */
+.research{padding:80px 0;position:relative;overflow:hidden}
+.research #ring{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.28;pointer-events:none}
+.research .wrap{position:relative;z-index:1}
+.research .lede{font-family:var(--display);font-weight:400;font-size:clamp(17px,1.6vw,22px);line-height:1.45;color:var(--ash);max-width:62ch;margin:-10px 0 36px}
+.research .lede b{font-weight:900;font-stretch:75%;color:var(--ink);letter-spacing:-.01em}
+.research .sheet-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--ink);padding-top:10px;margin-bottom:14px}
+.research .sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:48px}
+@media (min-width:900px){.research .sheet{grid-template-columns:repeat(4,1fr)}}
+.research .tile{all:unset;display:block;cursor:pointer;background:var(--ink);padding:12px 12px 0;box-shadow:0 0 0 var(--shadow);transition:transform .18s,box-shadow .18s}
+.research .tile.note{background:var(--cream);box-shadow:0 0 0 1px var(--ink)}
+.research .tile:hover,.research .tile:focus-visible{transform:translate(-3px,-3px);box-shadow:var(--depth) var(--depth) 0 var(--shadow),0 0 0 1px var(--ink)}
+.research .tile .pic{aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}
+.research .tile img{max-width:100%;max-height:100%;filter:grayscale(1) contrast(1.05);pointer-events:none}
+.research .tile .cap{display:flex;justify-content:space-between;gap:8px;padding:10px 0;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--stock)}
+.research .tile.note .cap{color:var(--ash)}
+.research .tile .cap b{font-weight:400;color:var(--shadow)}
+.research .tile.note .cap b{color:var(--ink)}
+.research .sec-sub{border-top:1px solid var(--ink);padding-top:10px;margin-bottom:6px}
+.research .sec-head{display:flex;align-items:baseline;gap:30px;margin-bottom:36px;flex-wrap:wrap}
+.research .sec-head h2{font-size:clamp(44px,8vw,130px);font-stretch:62%}
+.research .cur{display:grid;grid-template-columns:auto 1fr;gap:0;background:var(--cream);box-shadow:var(--depth) var(--depth) 0 var(--shadow),0 0 0 1px var(--ink);margin-bottom:40px}
+.research .cur .v{padding:26px 28px;border-right:1px solid var(--ink);display:flex;flex-direction:column;gap:10px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);min-width:160px}
+.research .cur .v b{font-family:var(--display);font-weight:900;font-size:64px;letter-spacing:-.04em;line-height:.9;color:var(--ink);font-stretch:75%}
+.research .cur .t{padding:26px 28px;display:flex;flex-direction:column;gap:14px}
+.research .cur h3{font-size:clamp(24px,2.8vw,40px);font-stretch:75%;line-height:.95}
+.research .cur p{margin:0;font-family:var(--display);font-weight:400;font-size:16px;line-height:1.55;color:var(--ash);max-width:70ch}
+.research .claims{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 18px;font-size:12px;color:var(--ink);padding:0;margin:4px 0 0;list-style:none}
+.research .claims li{border-top:1px solid var(--ink);padding-top:8px}
+.research .claims li b{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);font-weight:400;margin-bottom:4px}
+.research .cur .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.research .cur .links a{font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1px solid var(--ink);padding:8px 12px;color:var(--ink)}
+.research .cur .links a.solid,.research .cur .links a:hover{background:var(--ink);color:var(--stock)}
+.ledger{border-top:0}
+.ledger .row{display:grid;grid-template-columns:120px 1fr auto;gap:20px;padding:16px 0;border-bottom:1px solid var(--ink);align-items:baseline;font-size:12px}
+.ledger .row .v{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:-.03em;font-stretch:75%;display:flex;align-items:center;gap:10px}
+.ledger .row .st{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);white-space:nowrap}
+.ledger .row ul{margin:6px 0 0;padding-left:1.1em;color:var(--ash)}
+.ledger .meter{display:inline-flex;gap:2px}.ledger .meter i{width:4px;height:10px;background:var(--ink);opacity:.25}.ledger .meter i.on{opacity:1}
+.ledger .row.gone .v{color:var(--ash)}
+.ledger .figs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ledger .figs button{font:inherit;font-size:9px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);background:none;color:var(--ink);padding:4px 8px;cursor:pointer}
+.ledger .figs button:hover{background:var(--ink);color:var(--stock)}
+@media (max-width:760px){.research .cur{grid-template-columns:1fr}.research .cur .v{border-right:0;border-bottom:1px solid var(--ink);flex-direction:row;align-items:baseline;gap:16px}.ledger .row{grid-template-columns:70px 1fr}.ledger .row .st{grid-column:2}}
+
+/* talks + writing: ruled lists */
+.list{padding:80px 0}
+.list .sec-head{display:flex;align-items:baseline;gap:30px;margin-bottom:36px;flex-wrap:wrap}
+.list .sec-head h2{font-size:clamp(44px,8vw,130px);font-stretch:62%}
+.list ol{list-style:none;margin:0;padding:0}
+.list li{display:grid;grid-template-columns:110px 1fr auto;gap:24px;align-items:baseline;padding:18px 0;border-top:1px solid var(--ink)}
+.list li:last-child{border-bottom:1px solid var(--ink)}
+.list .yr{font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:-.03em;line-height:1;font-stretch:75%}
+.list .t{font-size:clamp(16px,1.8vw,22px);font-family:var(--display);font-weight:400;letter-spacing:-.01em;text-decoration:none}
+a.t:hover{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+.list .ev{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);display:block;margin-top:4px}
+.list .loc{font-size:10px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+@media (max-width:640px){.list li{grid-template-columns:64px 1fr}.list .loc{grid-column:2}}
+
+/* contact: oscilloscope + Morse key */
+.cta{position:relative;height:100vh;min-height:680px;overflow:hidden;background:var(--stock)}
+.cta canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cta .in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;text-align:center;pointer-events:none}
+.cta .huge{font-size:clamp(70px,16vw,260px);display:flex;flex-wrap:wrap;justify-content:center;gap:0 .28em;font-stretch:62%}
+.cta .ch{display:inline-block;overflow:hidden;line-height:.9;padding-bottom:.04em}
+.cta .ch span{display:inline-block}
+.key{pointer-events:auto;display:flex;align-items:center;gap:18px;background:var(--ink);color:var(--stock);padding:14px 22px 14px 16px;border:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.key .lamp{width:12px;height:12px;border-radius:50%;background:var(--shadow);box-shadow:inset 0 0 0 2px var(--ink);transition:background .05s}
+.key .lamp.on{background:var(--cream)}
+.key:active{transform:translateY(1px)}
+.key:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.cta .code{pointer-events:none;font-size:11px;letter-spacing:.3em;color:var(--ash);min-height:1.5em}
+.cta .mail{pointer-events:auto;font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;border-bottom:2px solid var(--ink)}
+footer{padding:22px var(--gutter);border-top:1px solid var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+footer .chk{width:72px;height:12px;background:repeating-conic-gradient(var(--ink) 0 25%,transparent 0 50%) 0 0/12px 12px}
+footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* scrollbar in the frame, with a section readout */
+.sb{position:fixed;right:2px;top:var(--frame);bottom:var(--frame);width:10px;z-index:40;cursor:grab}
+.sb .th{position:absolute;left:2px;width:6px;background:var(--stock);top:0;height:60px;min-height:30px}
+.sb .ro{position:absolute;right:14px;top:0;color:var(--stock);font-size:9px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;writing-mode:vertical-rl;transform:translateY(0);opacity:.0;transition:opacity .2s;pointer-events:none}
+.sb:hover .ro,.sb.drag .ro{opacity:1}
+.sb.drag{cursor:grabbing}
+@media (prefers-reduced-motion:reduce){.hero .title h1 svg{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#top">axjns.dev</a>
+  <nav><a href="#about">About</a><a href="#work">Work</a><a href="#findings">Findings</a><a href="#talks">Talks</a><a href="#contact">Contact</a></nav>
+  <div><button id="night" type="button" aria-label="Toggle night watch">◐ Night</button></div>
+  <div class="hire"><span>Building open source from the U.K.</span><span>Open to interesting problems → <a href="#contact">Get in touch</a></span></div>
+</header>
+
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="vTitle" hidden>
+    <div class="obj">
+      <div class="pic"><img id="vImg" src="" alt=""></div>
+      <div class="txt">
+        <div class="k"><span id="vKind"></span><span id="vItem"></span></div>
+        <h3 id="vTitle"></h3>
+        <p id="vDesc"></p>
+        <div class="links" id="vLinks"></div>
+      </div>
+      <button class="x" id="vClose" type="button" aria-label="Close">×</button>
+      <div class="nav" id="vNav"><button type="button" id="vPrev" aria-label="Previous figure">←</button><span id="vPos"></span><button type="button" id="vNext" aria-label="Next figure">→</button></div>
+    </div>
+  </div>
+<div class="sb" id="sb" aria-hidden="true"><div class="th" id="th"></div><div class="ro" id="sbro">top</div></div>
+
+<div class="page" id="top">
+  <section class="hero" id="hero" style="padding-top:46px" tabindex="0" aria-label="Band scope: move to tune, arrow keys step between projects">
+    <canvas id="fall" aria-hidden="true"></canvas>
+    <div class="scale" id="scale" aria-hidden="true"></div>
+    <div class="tune" id="tune" aria-hidden="true"><b id="tuneLbl"></b></div>
+    <button class="mon" id="mon" type="button" aria-pressed="false">monitor · off</button>
+    <div class="title">
+      <div class="decode" id="decode" hidden><span class="k" id="decK"></span><span class="t" id="decT"></span><a class="go" id="decGo" href="#" target="_blank" rel="noopener">open ↗</a></div>
+      <h1 class="cond"><span class="ln"><i>Alex Jones</i></span><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0 L58 42 L100 50 L58 58 L50 100 L42 58 L0 50 L42 42 Z" fill="currentColor"/></svg><span class="ln"><i>finds signal in the noise</i></span></h1>
+    </div>
+  </section>
+  <div class="hdr" data-hdr="about" aria-hidden="true"></div>
+
+  <section class="about" id="about">
+    <canvas id="corridor" aria-hidden="true"></canvas>
+    <div class="col">
+      <div class="bar">About</div>
+      <div class="txt">
+        <p>I build the tooling people run when the cluster is on fire, and the layers agents need so they don't set it on fire again.</p>
+        <p>I started with a terminal, worked on MicroK8s at Canonical, <span class="redact" title="hover to read">led platform teams you have used without knowing</span>, founded <a href="https://k8sgpt.ai" target="_blank" rel="noopener">K8sGPT</a> and took it into the CNCF, shipped Rust command-line tools like <a href="https://github.com/AlexsJones/llmfit" target="_blank" rel="noopener">llmfit</a>, talked at <span class="mark">KubeCon</span> on both sides of the Atlantic, wrote a position paper on <a href="/research" target="_blank" rel="noopener">the synthetic membrane</a>, and keep on shipping.</p>
+      </div>
+      <div class="bar">Field record</div>
+      <div class="patch">
+        <div class="c2 ink"><span class="tick">01</span><span class="big num" data-count="39337">0</span><span class="sub">GitHub stars · all repos</span><span class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+        <div class="hatch"></div>
+        <div><span class="tick">02</span><span class="big">CNCF</span><span class="sub">K8sGPT · founder</span></div>
+        <div class="c2"><span class="tick">03</span>KubeCon + CloudNativeCon<br>North America 2023</div>
+        <div class="c2 ink"><span class="tick">04</span><span class="big num" data-count="10">0</span><span class="sub">projects maintained</span><span class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+        <div class="hatch r2"></div>
+        <div class="c3"><span class="tick">05</span>Synthetic Membrane paper<br>v2.2 · September 2026<span class="meter"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div>
+        <div class="c2"><span class="tick">06</span><span class="big">Rust</span><span class="sub">operators for Kubernetes · PlatformCon</span></div>
+        <div class="ink"><span class="tick">07</span><span class="big">UK</span><span class="sub">made in</span></div>
+        <div class="hatch"></div>
+        <div class="c2"><span class="tick">08</span>Blueprint · systemsdesign.site<br>live product</div>
+        <div class="c2 ink"><span class="tick">09</span>Rust · Go · Python<br>field tested</div>
+      </div>
+    </div>
+  </section>
+  <div class="hdr" data-hdr="work" aria-hidden="true"></div>
+
+  <section class="work" id="work">
+    <div class="ro" id="ro"><span class="big">Work</span><b>bearing</b><span class="num" id="roBrg">000°</span><b>fix</b><span class="num" id="roFix">-- / 10</span><b>strength</b><span id="roStr">·····</span></div>
+    <div class="ro2">open source · ten fixes<br>hover a line to take a bearing</div>
+    <div class="board" id="board"><canvas id="df" aria-hidden="true"></canvas></div>
+    <div class="log" id="tiles"></div>
+  </section>
+  <div class="hdr" data-hdr="findings" aria-hidden="true"></div>
+
+  <section class="research" id="findings">
+    <canvas id="ring" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="sec-head"><h2 class="ext">Findings</h2><span class="label">what I have been thinking about · what came out of it</span></div>
+      <p class="lede">One question, worked on in the open: <b>how should AI agents share what they know, and who gets to act on it?</b> The paper is the current answer. The figures are the evidence it rests on. The ledger is how it got here.</p>
+      <div class="cur">
+        <div class="v"><b>v2.2</b><span>current revision</span><span>September 2026</span><span>position paper</span></div>
+        <div class="t">
+          <h3>The Synthetic Membrane: a coordination layer for multi-agent AI systems</h3>
+          <p>A coordination contract for shared evidence, selective access and action ownership between agents, with explicit limits and an evaluation plan. The claim is bounded: if a controlled blackboard matches the membrane with lower overhead, the separate abstraction has not earned its place.</p>
+          <ul class="claims">
+            <li><b>hypothesis</b>Bounded, with a prior-art comparison against protocols, frameworks and the blackboard.</li>
+            <li><b>contract</b>Authority and consistency rules for who may read, contest and act on shared state.</li>
+            <li><b>worked example</b>A suspected ransomware incident, run through the contract with its limits stated.</li>
+            <li><b>evaluation</b>Matched baselines, cost measured at the model boundary, and mechanism ablations.</li>
+          </ul>
+          <div class="links"><a class="solid" href="/research">read the paper</a><a href="https://github.com/AlexsJones/research" target="_blank" rel="noopener">source</a><a href="#findings" id="figsBtn">figures ↗</a></div>
+        </div>
+      </div>
+      <div class="sheet-head"><span class="label">evidence · seven figures · tap to open</span><span class="label">paper figures in ink · field notes on cream</span></div>
+      <div class="sheet" id="sheet" aria-label="Figures"></div>
+      <div class="sec-sub"><span class="label">revision ledger</span></div>
+      <div class="ledger" aria-label="Revision ledger">
+        <div class="row"><span class="v">v2.2 <span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span>Revised position paper.<ul><li>bounded hypothesis and prior-art comparison</li><li>authority and consistency contract</li><li>worked incident scenario with explicit limits</li><li>matched baselines and mechanism ablations</li></ul><div class="figs" data-figs="2,3,7,8"></div></span><span class="st">Sep 2026 · current</span></div>
+        <div class="row"><span class="v">v2 <span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span><span>First revision under the coordination-layer framing: the membrane as a contract rather than an architecture.</span><span class="st">Jul 2026 · superseded</span></div>
+        <div class="row gone"><span class="v">v1 <span class="meter" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span></span><span>Original position paper proposing a six-layer membrane architecture. Withdrawn from the site. The companion note, <a href="https://axjns.dev/blog/synthetic-membrane" target="_blank" rel="noopener">agents need somewhere to share their work</a>, still stands.<div class="figs" data-figs="4,5,6"></div></span><span class="st">Apr 2026 · withdrawn</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="hdr" data-hdr="talks" aria-hidden="true"></div>
+
+  <section class="list" id="talks">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="ext">Talks</h2><span class="label">on stage</span></div>
+      <ol>
+        <li><span class="yr">2024</span><span><a class="t" href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">Beyond the Clouds: charting the course for AI in the CloudNative world</a><span class="ev">CNCF co-located events Europe</span></span><span class="loc">Paris</span></li>
+        <li><span class="yr">2023</span><span><a class="t" href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">K8sGPT: balancing AI's productivity boost with ethical considerations</a><span class="ev">KubeCon + CloudNativeCon North America</span></span><span class="loc">Chicago</span></li>
+        <li><span class="yr">2023</span><span><a class="t" href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">Rust operators for Kubernetes</a><span class="ev">PlatformCon</span></span><span class="loc">Online</span></li>
+        <li><span class="yr">2022</span><span><a class="t" href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">Crowdsourcing a Kubernetes distribution: what we learnt with MicroK8s</a><span class="ev">KubeHuddle</span></span><span class="loc">Edinburgh</span></li>
+        <li><span class="yr">2022</span><span><a class="t" href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">SLOs don't matter: a nihilist's guide to reliability</a><span class="ev">WTF is SRE?</span></span><span class="loc">Online</span></li>
+      </ol>
+    </div>
+  </section>
+  <div class="hdr" data-hdr="writing" aria-hidden="true"></div>
+
+  <section class="list" id="writing">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="ext">Writing</h2><span class="label">field notes · research</span></div>
+      <ol>
+        <li><span class="yr">v2.2</span><span><a class="t" href="/research" target="_blank" rel="noopener">The Synthetic Membrane: a coordination layer for multi-agent AI</a><span class="ev">position paper · September 2026</span></span><span class="loc">paper</span></li>
+        <li><span class="yr">Aug</span><span><a class="t" href="https://axjns.dev/blog/celln-deepseek-benchmark" target="_blank" rel="noopener">Testing Celln's boundary</a><span class="ev">2026</span></span><span class="loc">note</span></li>
+        <li><span class="yr">Aug</span><span><a class="t" href="https://axjns.dev/blog/celln-execution-plane" target="_blank" rel="noopener">The agent environment should be a lease</a><span class="ev">2026</span></span><span class="loc">note</span></li>
+        <li><span class="yr">Jul</span><span><a class="t" href="https://axjns.dev/blog/post-kubernetes-genai" target="_blank" rel="noopener">Post-Kubernetes infrastructure for GenAI workloads</a><span class="ev">2026</span></span><span class="loc">note</span></li>
+        <li><span class="yr">May</span><span><a class="t" href="https://axjns.dev/blog/sticky-note-problem" target="_blank" rel="noopener">The sticky-note problem</a><span class="ev">2026</span></span><span class="loc">note</span></li>
+        <li><span class="yr">Apr</span><span><a class="t" href="https://axjns.dev/blog/synthetic-membrane" target="_blank" rel="noopener">Agents need somewhere to share their work</a><span class="ev">2026</span></span><span class="loc">note</span></li>
+      </ol>
+    </div>
+  </section>
+  <div class="hdr" data-hdr="contact" aria-hidden="true"></div>
+
+  <section class="cta" id="contact">
+    <canvas id="scope" aria-hidden="true"></canvas>
+    <div class="in">
+      <div class="huge ext" id="huge" aria-label="Let's build"></div>
+      <button class="key" id="key" type="button"><span class="lamp" id="lamp"></span>Send a signal</button>
+      <div class="code" id="code" aria-live="polite"></div>
+      <a class="mail" href="https://www.linkedin.com/in/jonesax" target="_blank" rel="noopener">or just say hello on LinkedIn</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Alex Jones</span>
+    <span class="chk" aria-hidden="true"></span>
+    <nav><a href="https://github.com/AlexsJones" target="_blank" rel="noopener">GitHub</a><a href="https://huggingface.co/axjns" target="_blank" rel="noopener">Hugging Face</a><a href="https://x.com/AlexJonesax" target="_blank" rel="noopener">X</a><a href="https://sessionize.com/jonesax/" target="_blank" rel="noopener">Sessionize</a><a href="/cv" target="_blank" rel="noopener">CV</a></nav>
+    <span>Open source // field tested // made in the U.K.</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+gsap.registerPlugin(ScrollTrigger);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const root = document.documentElement;
+const css = v => getComputedStyle(root).getPropertyValue(v).trim();
+const ink = () => css('--ink'), stock = () => css('--stock');
+const dpr = Math.min(devicePixelRatio || 1, 1.5);
+const pad = (n,w=2) => String(n).padStart(w,'0');
+
+// ---------- night watch ----------
+try { if (localStorage.getItem('v2-night') === '1') root.classList.add('night'); } catch {}
+document.getElementById('night').onclick = () => { root.classList.toggle('night'); try { localStorage.setItem('v2-night', root.classList.contains('night') ? '1' : '0'); } catch {} };
+
+// ---------- section headers: a serial, a date-time group, the section, the sender ----------
+(() => {
+  const d = new Date(); const dtg = `${pad(d.getUTCDate())}${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}Z ${['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getUTCMonth()]} ${String(d.getUTCFullYear()).slice(2)}`;
+  document.querySelectorAll('[data-hdr]').forEach((el,i) => {
+    const seg = [`<i>NR ${pad(i+1,3)}</i>`, `<i>${dtg}</i>`, `<i>${el.dataset.hdr}</i>`, `<i>DE AXJNS</i>`];
+    const hatch = () => `<b>${'/'.repeat(18 + (Math.random()*26|0))}</b>`;
+    el.innerHTML = Array.from({length:4}, () => seg.map(s => s + hatch()).join('')).join('');
+  });
+})();
+
+// ---------- hero: waterfall spectrogram, cursor is the tuner, carriers are the work ----------
+(() => {
+  const cv = document.getElementById('fall'), hero = document.getElementById('hero'), ctx = cv.getContext('2d');
+  const scale = document.getElementById('scale'), tune = document.getElementById('tune'), tuneLbl = document.getElementById('tuneLbl');
+  const dec = document.getElementById('decode'), decK = document.getElementById('decK'), decT = document.getElementById('decT'), decGo = document.getElementById('decGo'), mon = document.getElementById('mon');
+  // the band: 14.000–14.350 MHz, with the work as steady carriers
+  const F0 = 14.000, F1 = 14.350;
+  const CARRIERS = [
+    {f:14.040,n:'kflow',w:.5,drift:true,d:'Like top for Kubernetes networking. A terminal view of who is talking to whom inside the cluster.',href:'https://github.com/AlexsJones/kflow'},
+    {f:14.074,n:'llmfit',w:1.2,d:'Hundreds of models and providers. One command to find what runs on your hardware.',href:'https://github.com/AlexsJones/llmfit'},
+    {f:14.130,n:'sympozium',w:.8,d:'The coordination layer for multi-agent AI: a Kubernetes-native synthetic membrane.',href:'https://sympozium.ai'},
+    {f:14.210,n:'k8sgpt',w:1.0,d:'Giving Kubernetes superpowers to everyone. AI-powered cluster analysis, now a CNCF project.',href:'https://k8sgpt.ai'},
+    {f:14.300,n:'celln',w:.7,morse:true,d:'An execution plane for agents: sealed cells borrow verified tools instead of rebuilding Linux environments.',href:'https://github.com/sympozium-ai/celln'},
+  ];
+  CARRIERS.forEach(c => { c.f0 = c.f; c.found = reduce; });
+  const U = c => (c.f-F0)/(F1-F0);
+  // the celln carrier keys the callsign in Morse, on a loop
+  const MORSE = {A:'.-',X:'-..-',J:'.---',N:'-.',S:'...'}; const unit = 120;
+  const key = []; for (const ch of 'AXJNS'){ for (const sym of MORSE[ch]){ key.push(...Array(sym === '.' ? 1 : 3).fill(1), 0); } key.push(0,0); } key.push(...Array(14).fill(0));
+  const keyed = t => key[((Math.floor(t/unit) % key.length) + key.length) % key.length];
+  let W=0,H=0,cw=0,ch=0, off, octx; const RES = .5;
+  const m = {x:-1,y:-1,down:false,sx:-1,touch:false};
+  function size(){ const r = hero.getBoundingClientRect(); W = r.width; H = r.height; cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cw = Math.max(64, Math.round(W*RES)); ch = Math.max(64, Math.round(H*RES));
+    off = document.createElement('canvas'); off.width = cw; off.height = ch; octx = off.getContext('2d');
+    scale.innerHTML = ''; for (let f = F0; f <= F1 + 1e-6; f += .05){ const s = document.createElement('span'); s.textContent = f.toFixed(2); s.style.left = ((f-F0)/(F1-F0)*100) + '%'; scale.appendChild(s); }
+    CARRIERS.forEach(c => { const s = document.createElement('span'); s.className = 'c' + (c.found ? ' found' : ''); s.textContent = c.n; s.style.left = (U(c)*100) + '%'; s.style.bottom = '12px'; scale.appendChild(s); c.lbl = s; }); }
+  addEventListener('resize', () => { size(); prefill(); }); size();
+  const pos = e => { const r = hero.getBoundingClientRect(); m.x = (e.clientX - r.left)/W; m.y = (e.clientY - r.top)/H; };
+  hero.addEventListener('pointermove', e => { if (m.touch && !m.down) return; pos(e); }, {passive:true});
+  hero.addEventListener('pointerdown', e => { if (e.target.closest('.decode,.mon')) return; m.down = true; m.touch = e.pointerType === 'touch'; pos(e); m.px = e.clientX; m.py = e.clientY; });
+  addEventListener('pointerup', e => { if (!m.down) return; m.down = false;
+    if (m.touch){ const f = F0 + m.sx*(F1-F0); const near = nearest(f); if (Math.abs(near.f - f) < .03) m.x = U(near); }   // snap on release
+    else if (lock && Math.hypot(e.clientX - m.px, e.clientY - m.py) < 6 && e.target === cv) window.open(lock.href, '_blank', 'noopener'); });
+  hero.addEventListener('pointerleave', e => { if (e.pointerType === 'touch') return; m.x = -1; tune.style.opacity = 0; });
+  hero.addEventListener('keydown', e => { if (e.target !== hero) return; const f = F0 + (m.x < 0 ? 0 : m.sx)*(F1-F0); let k = -1;
+    if (e.key === 'ArrowRight'){ k = CARRIERS.findIndex(c => c.f > f + .004); if (k < 0) k = 0; } else if (e.key === 'ArrowLeft'){ k = CARRIERS.map(c => c.f < f - .004).lastIndexOf(true); if (k < 0) k = CARRIERS.length-1; }
+    else if (e.key === 'Enter' && lock){ window.open(lock.href, '_blank', 'noopener'); return; } else return;
+    e.preventDefault(); m.x = U(CARRIERS[k]); m.sx = m.x; m.y = .5; lockOn(CARRIERS[k]); });
+  let running = true; new IntersectionObserver(([en]) => running = en.isIntersecting).observe(hero);
+  // squelch: leaving the hero raises the floor and sinks the carriers
+  let squelch = 0; addEventListener('scroll', () => { squelch = Math.max(0, Math.min(1, scrollY / (H*.8))); }, {passive:true});
+  // scripted band events: an occasional sweeper, short bursts, one carrier that wanders
+  const ev = {sweep:{t0:-1e9,dur:5200,next:9000}, bursts:[], nextBurst:3000};
+  function events(t){
+    if (t > ev.sweep.next){ ev.sweep.t0 = t; ev.sweep.next = t + 32000 + Math.random()*30000; }
+    if (t > ev.nextBurst){ ev.bursts.push({u:Math.random(), t0:t, dur:600 + Math.random()*2200, w:.5 + Math.random()*.6, bw:60 + Math.random()*160}); ev.nextBurst = t + 2500 + Math.random()*7000; }
+    ev.bursts = ev.bursts.filter(b => t - b.t0 < b.dur);
+    CARRIERS.forEach(c => { if (c.drift) c.f = c.f0 + .004*Math.sin(t*.00025) + .0015*Math.sin(t*.0011); });
+  }
+  let rowImg = null, last = 0, acc = 0, t0 = -1;
+  const parse = h => { const n = parseInt(h.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255]; };
+  // opening sweep: the band is acquired left to right, carriers appear as the line crosses them
+  const ACQ = reduce ? 0 : 2400; let acq = reduce ? 1 : 0;
+  function pushRow(t){
+    if (!rowImg || rowImg.width !== cw) rowImg = octx.createImageData(cw, 1);
+    const [r,g,b] = parse(ink()), [sr,sg,sb] = parse(stock()); const d = rowImg.data;
+    m.sx += ((m.x < 0 ? m.sx : m.x) - m.sx) * .25;
+    const sq = squelch, floor = .08 + sq*.22, k8 = keyed(t);
+    const sw = t - ev.sweep.t0 < ev.sweep.dur ? (t - ev.sweep.t0)/ev.sweep.dur : -1;
+    for (let i=0;i<cw;i++){ const u = i/cw;
+      let v = floor + .05*Math.sin(u*40 + t*.0007) * Math.sin(u*7 - t*.0004) + .03*Math.sin(u*160 + t*.003) + Math.random()*Math.random()*(.32 + sq*.25);
+      for (const c of CARRIERS){ if (!c.found) continue; const du = (u - U(c)) * 300; let a = c.w * Math.exp(-du*du) * (.75 + .25*Math.sin(t*.002 + c.f*50)); if (c.morse) a *= .15 + .85*k8; v += a * (1 - sq); }
+      if (sw >= 0){ const du = (u - sw) * 400; v += .9 * Math.exp(-du*du); }
+      for (const bb of ev.bursts){ const du = (u - bb.u) * bb.bw; const life = (t - bb.t0)/bb.dur; v += bb.w * Math.exp(-du*du) * Math.sin(life*Math.PI); }
+      if (acq < 1){ const du = (u - acq) * 500; v += Math.exp(-du*du); }
+      if (m.x >= 0){ const du = (u - m.sx) * (m.down ? 40 : 90); v += (m.down ? 1.2 : .8) * Math.exp(-du*du) * (1 - m.y*.5); }
+      v = Math.min(1, v); const k = i*4; d[k] = sr + (r-sr)*v; d[k+1] = sg + (g-sg)*v; d[k+2] = sb + (b-sb)*v; d[k+3] = 255; }
+    octx.drawImage(off, 0, 1); octx.putImageData(rowImg, 0, 0);
+  }
+  // lock: rest on a carrier and it decodes
+  let lock = null, dwell = 0, away = 0, typing = null;
+  const nearest = f => CARRIERS.reduce((a,c) => Math.abs(c.f-f) < Math.abs(a.f-f) ? c : a);
+  function lockOn(c){ if (lock === c) return; lock = c; dec.hidden = false; decK.textContent = `locked · ${c.n} · ${c.f.toFixed(3)} MHz`; decGo.href = c.href; decT.textContent = '';
+    if (typing) clearInterval(typing); let n = 0; typing = setInterval(() => { n++; decT.textContent = c.d.slice(0, n); if (n >= c.d.length){ clearInterval(typing); typing = null; } }, reduce ? 0 : 18); }
+  function unlock(){ if (!lock) return; lock = null; dec.hidden = true; if (typing){ clearInterval(typing); typing = null; } }
+  function track(dt){
+    if (m.x < 0){ away += dt; if (away > 1200) unlock(); return; }
+    const f = F0 + m.sx*(F1-F0); const c = nearest(f); const d = Math.abs(c.f - f);
+    if (d < .006 && c.found){ dwell += dt; away = 0; if (dwell > 450) lockOn(c); } else { dwell = 0; if (d > .012){ away += dt; if (away > 300) unlock(); } }
+  }
+  // audio monitor: off until asked for; noise on empty band, a tone on a carrier
+  let ac = null, nz = null, tone = null, noiseG = null, toneG = null;
+  mon.addEventListener('click', async () => {
+    if (ac){ await ac.suspend(); ac = null; mon.setAttribute('aria-pressed','false'); mon.textContent = 'monitor · off'; return; }
+    try { ac = new (window.AudioContext || window.webkitAudioContext)(); await ac.resume(); } catch { ac = null; return; }
+    const len = ac.sampleRate*2, buf = ac.createBuffer(1, len, ac.sampleRate), ch0 = buf.getChannelData(0); for (let i=0;i<len;i++) ch0[i] = Math.random()*2-1;
+    nz = ac.createBufferSource(); nz.buffer = buf; nz.loop = true; const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = .6;
+    noiseG = ac.createGain(); noiseG.gain.value = .03; nz.connect(bp); bp.connect(noiseG); noiseG.connect(ac.destination); nz.start();
+    tone = ac.createOscillator(); tone.type = 'sine'; tone.frequency.value = 620; toneG = ac.createGain(); toneG.gain.value = 0; tone.connect(toneG); toneG.connect(ac.destination); tone.start();
+    mon.setAttribute('aria-pressed','true'); mon.textContent = 'monitor · on';
+  });
+  function audio(t){ if (!ac) return; const now = ac.currentTime;
+    if (m.x < 0 || !running){ toneG.gain.setTargetAtTime(0, now, .05); noiseG.gain.setTargetAtTime(.012, now, .1); return; }
+    const f = F0 + m.sx*(F1-F0); const c = nearest(f); const d = Math.abs(c.f - f); const g = c.found ? c.w * Math.exp(-(d*d)/(2*.004*.004)) * (c.morse ? .15 + .85*keyed(t) : 1) : 0;
+    tone.frequency.setTargetAtTime(500 + CARRIERS.indexOf(c)*90 + (f - c.f)*8000, now, .02);
+    toneG.gain.setTargetAtTime(Math.min(.09, g*.09) * (1 - squelch), now, .03); noiseG.gain.setTargetAtTime(.035*(1 - g*.8) + squelch*.02, now, .05); }
+  function draw(t){
+    requestAnimationFrame(draw); if (!running) return; if (reduce && last) return;
+    if (t0 < 0) t0 = t; const dt = Math.min(50, t - last); last = t;
+    if (acq < 1){ acq = Math.min(1, (t - t0)/ACQ); CARRIERS.forEach(c => { if (!c.found && U(c) <= acq){ c.found = true; c.lbl.classList.add('found'); } }); }
+    events(t); track(dt); audio(t);
+    acc += dt; if (acc < 22) return; acc = 0;
+    pushRow(t);
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.imageSmoothingEnabled = true; ctx.drawImage(off, 0, 0, W, H);
+    if (m.x >= 0){ const f = F0 + m.sx*(F1-F0); const near = nearest(f); tune.style.opacity = 1; tune.style.left = (m.sx*W) + 'px';
+      tuneLbl.textContent = squelch > .6 ? 'no signal' : `${f.toFixed(3)} MHz${Math.abs(near.f-f) < .006 && near.found ? ' · ' + near.n + (lock ? ' · locked' : '') : ''}`; }
+  }
+  function prefill(){ for (let k = ch; k > 0; k--) pushRow(-k*22); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.drawImage(off, 0, 0, W, H); }
+  prefill(); requestAnimationFrame(draw);
+  if (!reduce) gsap.from('.hero .ln i', {yPercent:110, duration:1, ease:'power4.out', stagger:.15, delay:ACQ/1000 - .4});
+})();
+
+// ---------- about: corridor drawn behind the column, advancing with scroll ----------
+(() => {
+  const cv = document.getElementById('corridor'), sec = document.getElementById('about'), ctx = cv.getContext('2d');
+  let W=0,H=0; function size(){ const r = sec.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W*dpr; cv.height = H*dpr; draw(); }
+  function draw(){
+    const r = sec.getBoundingClientRect(); const prog = -r.top / Math.max(1, r.height - innerHeight);
+    const vx = W/2, vy = Math.max(0, Math.min(H, innerHeight*.5 - r.top));
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); ctx.strokeStyle = ink(); ctx.globalAlpha = .55; ctx.lineWidth = .8;
+    const colW = Math.min(640, W - 40); const L = vx - colW/2, Rr = vx + colW/2;
+    ctx.beginPath();
+    [[0,0,L],[W,0,Rr],[0,H,L],[W,H,Rr]].forEach(([x,y,cx]) => { ctx.moveTo(x,y); ctx.lineTo(cx,vy); });
+    for (let i=1;i<=6;i++){ const k = Math.pow(i/7, 1.7); const xL = L*(1-k), xR = Rr + (W-Rr)*k; ctx.moveTo(xL,0); ctx.lineTo(xL,H); ctx.moveTo(xR,0); ctx.lineTo(xR,H); }
+    const n = 16, off = (prog*4) % 1;
+    for (let i=0;i<n;i++){ const k = (i + off)/n; const d = k*k*4; const yu = vy - vy*d, yd = vy + (H-vy)*d; const xl = L*(1-Math.min(1,d)), xr = Rr + (W-Rr)*Math.min(1,d);
+      if (yu > 0){ ctx.moveTo(0,yu); ctx.lineTo(xl,yu); ctx.moveTo(xr,yu); ctx.lineTo(W,yu); }
+      if (yd < H){ ctx.moveTo(0,yd); ctx.lineTo(xl,yd); ctx.moveTo(xr,yd); ctx.lineTo(W,yd); } }
+    ctx.stroke();
+  }
+  addEventListener('resize', size); size(); addEventListener('scroll', draw, {passive:true});
+})();
+
+// ---------- counters: grouped digits ----------
+const group = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+document.querySelectorAll('[data-count]').forEach(el => {
+  const to = +el.dataset.count; const o = {v:0}; el.textContent = group(0);
+  ScrollTrigger.create({trigger: el, start:'top 90%', once:true, onEnter: () => gsap.to(o, {v:to, duration: reduce ? 0 : 1.8, ease:'power2.out', onUpdate: () => { el.textContent = group(o.v); }}) });
+});
+
+// ---------- work: direction-finding board; tiles arrive as fixes ----------
+const PROJECTS = [
+  {name:'celln', repo:'sympozium-ai/celln', d:'An execution plane for agents: sealed cells borrow verified tools instead of rebuilding Linux environments.', lang:'Rust', stars:0, role:'creator · active', brg:12},
+  {name:'llmfit', repo:'AlexsJones/llmfit', d:'Hundreds of models and providers. One command to find what runs on your hardware.', lang:'Rust', stars:29820, role:'creator', brg:47},
+  {name:'k8sgpt', repo:'k8sgpt-ai/k8sgpt', site:'https://k8sgpt.ai', d:'Giving Kubernetes superpowers to everyone. AI-powered cluster analysis and troubleshooting.', lang:'Go', stars:7998, role:'founder · CNCF', brg:83},
+  {name:'sympozium', repo:'sympozium-ai/sympozium', site:'https://sympozium.ai', d:'The coordination layer for multi-agent AI: a Kubernetes-native synthetic membrane.', lang:'Go', stars:571, role:'creator', brg:118},
+  {name:'k8sgpt-operator', repo:'k8sgpt-ai/k8sgpt-operator', d:'Automatic SRE superpowers within your Kubernetes cluster.', lang:'Go', stars:465, role:'founder', brg:151},
+  {name:'llmserve', repo:'AlexsJones/llmserve', d:'A simple TUI for serving local LLM models. Pick a model, pick a backend, serve it.', lang:'Rust', stars:314, role:'creator', brg:189},
+  {name:'kflow', repo:'AlexsJones/kflow', d:'Like top for Kubernetes networking.', lang:'Rust', stars:64, role:'creator', brg:226},
+  {name:'llama-panel', repo:'AlexsJones/llama-panel', d:'A macOS llama-server command centre.', lang:'JavaScript', stars:50, role:'creator', brg:262},
+  {name:'repo-steward', repo:'AlexsJones/repo-steward', d:'An autonomous agent for open-source repository management. Escalates only the decisions that are yours.', lang:'Python', stars:19, role:'creator', brg:297},
+  {name:'keychron-micro', repo:'AlexsJones/keychron-micro', d:'Turn a Keychron Q0 Max into a scriptable macropad on Linux.', lang:'Rust', stars:7, role:'creator', brg:334},
+];
+(() => {
+  const sec = document.getElementById('work'), board = document.getElementById('board'), cv = document.getElementById('df'), ctx = cv.getContext('2d'), logEl = document.getElementById('tiles');
+  const roBrg = document.getElementById('roBrg'), roFix = document.getElementById('roFix'), roStr = document.getElementById('roStr');
+  const fmt = n => n >= 1000 ? (n/1000).toFixed(1) + 'k' : String(n);
+  const strength = s => Math.max(1, Math.min(5, Math.ceil(Math.log10((s||1)+1))));
+  logEl.innerHTML = PROJECTS.map((p,i) => { const st = strength(p.stars);
+    return `<a class="row" href="${p.site || 'https://github.com/' + p.repo}" target="_blank" rel="noopener" data-i="${i}"><span class="n"><span>fix ${pad(i+1)}</span><span>${pad(p.brg,3)}°</span></span><span><h3>${p.name}<small>${p.role} · ${p.lang}</small></h3><p>${p.d}</p></span><span class="m"><b>★ ${p.stars ? fmt(p.stars) : 'new'}</b><span class="str">${[1,2,3,4,5].map(k => `<i class="${k<=st?'on':''}"></i>`).join('')}</span></span></a>`; }).join('');
+  const rows = [...logEl.children];
+  let W=0,H=0; function size(){ const r = board.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W*dpr; cv.height = H*dpr; draw(); }
+  addEventListener('resize', size);
+  const state = {brg:0, hover:-1, cur:-1, sweep:0};
+  const fixes = PROJECTS.map(q => ({brg:q.brg, str:strength(q.stars)}));
+  function draw(){
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); const cx = W/2, cy = H/2, R = Math.min(W,H)*.44; const sk = stock();
+    ctx.strokeStyle = sk; ctx.fillStyle = sk; ctx.lineWidth = .8; ctx.font = '9px "JetBrains Mono", monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.globalAlpha = .35; ctx.beginPath(); for (let k=1;k<=4;k++){ ctx.moveTo(cx + R*k/4, cy); ctx.arc(cx, cy, R*k/4, 0, Math.PI*2); } ctx.stroke();
+    ctx.beginPath(); for (let a=0;a<360;a+=5){ const t = (a-90)*Math.PI/180, l = a%30 ? (a%10 ? 4 : 8) : 14; ctx.moveTo(cx + Math.cos(t)*(R-l), cy + Math.sin(t)*(R-l)); ctx.lineTo(cx + Math.cos(t)*R, cy + Math.sin(t)*R); } ctx.stroke();
+    ctx.globalAlpha = .7; for (let a=0;a<360;a+=30){ const t = (a-90)*Math.PI/180; ctx.fillText(pad(a,3), cx + Math.cos(t)*(R+14), cy + Math.sin(t)*(R+14)); }
+    // fixes: one dot per project, closer to the centre the stronger the signal
+    fixes.forEach((f,i) => { const t = (f.brg-90)*Math.PI/180; const rr = R*(.3 + .62*(1 - f.str/5)); const on = i === state.cur; const x = cx + Math.cos(t)*rr, y = cy + Math.sin(t)*rr;
+      ctx.globalAlpha = on ? 1 : .8; ctx.beginPath(); ctx.arc(x, y, on ? 5 : 3, 0, Math.PI*2); ctx.fill();
+      if (on){ ctx.globalAlpha = .9; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, 11, 0, Math.PI*2); ctx.stroke(); ctx.textAlign = 'left'; ctx.fillText(PROJECTS[i].name, x + 16, y); ctx.textAlign = 'center'; }
+      ctx.globalAlpha = .25; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx + Math.cos(t)*R, cy + Math.sin(t)*R); ctx.stroke(); });
+    // live bearing
+    const t = (state.brg-90)*Math.PI/180; ctx.globalAlpha = 1; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx + Math.cos(t)*R, cy + Math.sin(t)*R); ctx.stroke();
+    ctx.globalAlpha = .08; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,t-.6,t); ctx.closePath(); ctx.fill();
+  }
+  function setCur(i){ if (i === state.cur) return; state.cur = i; rows.forEach((r,k) => r.classList.toggle('on', k === i));
+    roFix.textContent = i >= 0 ? `${pad(i+1)} / ${PROJECTS.length}` : `-- / ${PROJECTS.length}`; roStr.textContent = i >= 0 ? '▮'.repeat(strength(PROJECTS[i].stars)).padEnd(5,'·') : '·····'; }
+  rows.forEach((r,i) => { r.addEventListener('pointerenter', () => state.hover = i); r.addEventListener('focus', () => state.hover = i); r.addEventListener('blur', () => state.hover = -1); });
+  logEl.addEventListener('pointerleave', () => state.hover = -1);
+  let running = false; new IntersectionObserver(([en]) => running = en.isIntersecting).observe(sec);
+  let last = 0;
+  function tick(t){ requestAnimationFrame(tick); if (!running) return; const dt = Math.min(50, t - last); last = t;
+    if (state.hover >= 0){ const target = PROJECTS[state.hover].brg; const d = ((target - state.brg + 540) % 360) - 180; state.brg = (state.brg + d*.15 + 360) % 360; setCur(state.hover); }
+    else if (!reduce){ state.brg = (state.brg + dt*.012) % 360; let near = -1, best = 7; fixes.forEach((f,i) => { const d = Math.abs(((f.brg - state.brg + 540) % 360) - 180); if (d < best){ best = d; near = i; } }); if (near >= 0) setCur(near); }
+    roBrg.textContent = pad(Math.round(state.brg),3) + '°'; draw(); }
+  size(); if (reduce){ state.brg = PROJECTS[0].brg; setCur(0); draw(); }
+  requestAnimationFrame(tick);
+})();
+
+// ---------- findings: antenna ring behind the paper, figure sheet, viewer ----------
+(() => {
+  const sec = document.getElementById('findings'), cv = document.getElementById('ring'), ctx = cv.getContext('2d');
+  let W=0,H=0; function size(){ const r = sec.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W*dpr; cv.height = H*dpr; draw(0); }
+  function draw(t){
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); ctx.strokeStyle = ink(); ctx.fillStyle = ink(); ctx.lineWidth = .8;
+    const cx = W/2, cy = H*.32;
+    // a circular antenna array seen in perspective: an ellipse of masts, each a vertical tick, plus guy lines to the centre
+    const rx = W*.46, ry = H*.16, n = 72, rot = reduce ? 0 : t*.00002;
+    ctx.globalAlpha = .5; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx, cy, rx*.72, ry*.72, 0, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); for (let i=0;i<n;i++){ const a = rot + i/n*Math.PI*2; const x = cx + Math.cos(a)*rx, y = cy + Math.sin(a)*ry; const h = 26 + 22*(Math.sin(a)+1)/2; ctx.moveTo(x, y); ctx.lineTo(x, y - h); if (i%3===0){ ctx.moveTo(x, y - h); ctx.lineTo(cx, cy - 60); } }
+    ctx.globalAlpha = .35; ctx.stroke();
+    // floor grid below
+    const fy = H*.62; ctx.globalAlpha = .45; ctx.beginPath(); for (let i=0;i<=12;i++){ const x = i/12*W; ctx.moveTo(cx + (x-cx)*.12, fy); ctx.lineTo(x, H); } for (let j=0;j<=6;j++){ const k = j/6; const y = fy + (H-fy)*k*k; ctx.moveTo(0,y); ctx.lineTo(W,y); } ctx.stroke();
+  }
+  addEventListener('resize', size); size();
+  const ART = [
+    {src:'/img/sites/blueprint.png', cap:'Blueprint', kind:'live product', w:360, desc:'A system-design canvas for interview practice. Sketch an architecture, then keep it free-form or let an AI interviewer score it against a real brief. Agents can draw onto editable boards over MCP.', links:[['open blueprint','https://systemsdesign.site/']]},
+    {src:'/cv-portrait.jpg', cap:'Portrait', kind:'print', w:220, desc:'The portrait from the CV page.', links:[['cv','/cv']]},
+    {src:'/ics-membrane-map.svg', cap:'ICS to membrane mapping', kind:'figure · research', w:340, desc:'Fifty years of human incident-command doctrine mapped onto agent architecture. From the Synthetic Membrane position paper, v2.2.', links:[['read the paper','/research']]},
+    {src:'/swarm_timeline.svg', cap:'Swarm activation timeline', kind:'figure · research', w:380, desc:'A quorum-sensing swarm lifecycle plotted against the event log sequence. From the Synthetic Membrane work.', links:[['read the paper','/research']]},
+    {src:'/architecture.svg', cap:'Membrane responsibilities', kind:'figure · field note', w:360, desc:'Governance, discovery, access, shared state, coordination and cross-cutting defence: the proposed responsibilities of a shared boundary between agents.', links:[['agents need somewhere to share their work','https://axjns.dev/blog/synthetic-membrane']]},
+    {src:'/benchmark.svg', cap:'Three-agent simulation', kind:'figure · field note', w:340, desc:'An illustrative three-agent run: 60 versus 18 messages and 7,440 versus 4,320 modelled token-equivalents with and without a membrane.', links:[['read the note','https://axjns.dev/blog/synthetic-membrane']]},
+    {src:'/state_graph.svg', cap:'State transition graph', kind:'figure · field note', w:340, desc:'How a piece of shared evidence moves between states as agents read, contest and act on it.', links:[['read the note','https://axjns.dev/blog/synthetic-membrane']]},
+    {src:'/scaling.svg', cap:'Scaling sweep', kind:'figure · research', w:320, desc:'Illustrative scaling of token-equivalents against the number of agents, with five facts per agent held fixed. Both series grow; the membrane series grows slower.', links:[['read the paper','/research']]},
+    {src:'/mast-failures.svg', cap:'Inter-agent failure clusters', kind:'figure · research', w:300, desc:'Failure clusters from the MAST study: over 1,600 annotated traces across seven frameworks, grouped by cause. Used to motivate the coordination contract.', links:[['read the paper','/research']]},
+    {src:'/deco/blueprint-turbine.svg', cap:'Turbine plate', kind:'ornament', w:220, plate:true, desc:'One of the stencil-set plates drawn for axjns.dev.', links:[['axjns.dev','https://axjns.dev']]},
+    {src:'/deco/barcode-plate.svg', cap:'Specimen barcode', kind:'ornament', w:260, plate:true, desc:'Specimen plate from the site footer.', links:[['axjns.dev','https://axjns.dev']]},
+    {src:'/deco/rotor-ring.svg', cap:'Rotor ring', kind:'ornament', w:200, plate:true, desc:'Rotor plate from the stencil set.', links:[['axjns.dev','https://axjns.dev']]},
+    {src:'/deco/fan-arc.svg', cap:'Fan arc', kind:'ornament', w:300, plate:true, desc:'Fan-arc plate from the stencil set.', links:[['axjns.dev','https://axjns.dev']]},
+    {src:'/deco/crosshair.svg', cap:'Crosshair', kind:'ornament', w:180, plate:true, desc:'Crosshair plate from the stencil set.', links:[['axjns.dev','https://axjns.dev']]},
+  ];
+  // evidence sheet: the paper's figures first, then the field-note figures
+  const FIGS = [2,3,7,8,4,5,6], NOTE = [4,5,6];
+  const sheet = document.getElementById('sheet');
+  sheet.innerHTML = FIGS.map((i,k) => { const a = ART[i]; return `<button type="button" class="tile${NOTE.includes(i) ? ' note' : ''}" data-i="${i}" aria-label="Open ${a.cap}"><span class="pic"><img src="${a.src}" alt="" loading="lazy" draggable="false"></span><span class="cap"><span>${a.cap}</span><b>fig ${pad(k+1)}</b></span></button>`; }).join('');
+  sheet.addEventListener('click', e => { const b = e.target.closest('.tile'); if (b) window.openFigures(FIGS, FIGS.indexOf(+b.dataset.i)); });
+  // viewer
+  const viewer = document.getElementById('viewer'), vImg = document.getElementById('vImg'), vTitle = document.getElementById('vTitle'), vDesc = document.getElementById('vDesc'), vKind = document.getElementById('vKind'), vItem = document.getElementById('vItem'), vLinks = document.getElementById('vLinks'), vClose = document.getElementById('vClose');
+  let lastFocus = null;
+    let setIdx = null, setPos = 0;
+  const vNav = document.getElementById('vNav'), vPos = document.getElementById('vPos');
+  window.openFigures = (ids, k=0) => { setIdx = ids; setPos = k; openViewer(ids[k]); };
+  document.getElementById('vPrev').onclick = () => { if (!setIdx) return; setPos = (setPos - 1 + setIdx.length) % setIdx.length; openViewer(setIdx[setPos]); };
+  document.getElementById('vNext').onclick = () => { if (!setIdx) return; setPos = (setPos + 1) % setIdx.length; openViewer(setIdx[setPos]); };
+  function openViewer(i){ const a = ART[i]; if (setIdx && !setIdx.includes(i)) setIdx = null; vNav.hidden = !setIdx; if (setIdx) vPos.textContent = `${pad(setPos+1)} / ${pad(setIdx.length)}`; vImg.src = a.src; vImg.alt = a.cap; vTitle.textContent = a.cap; vDesc.textContent = a.desc; vKind.textContent = a.kind; vItem.textContent = FIGS.includes(i) ? `fig ${pad(FIGS.indexOf(i)+1)} / ${pad(FIGS.length)}` : `item ${pad(i+1)}`;
+    vLinks.innerHTML = a.links.map(([t,h]) => `<a href="${h}" target="_blank" rel="noopener">${t}</a>`).join(''); viewer.hidden = false; requestAnimationFrame(() => viewer.classList.add('on')); lastFocus = document.activeElement; vClose.focus(); }
+  function closeViewer(){ viewer.classList.remove('on'); setTimeout(() => { viewer.hidden = true; }, 250); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+  vClose.addEventListener('click', closeViewer); viewer.addEventListener('click', e => { if (e.target === viewer) closeViewer(); });
+  addEventListener('keydown', e => { if (viewer.hidden) return; if (e.key === 'Escape') closeViewer(); if (e.key === 'ArrowRight') document.getElementById('vNext').click(); if (e.key === 'ArrowLeft') document.getElementById('vPrev').click(); });
+  let running = false; new IntersectionObserver(([en]) => running = en.isIntersecting, {rootMargin:'10% 0px'}).observe(sec);
+  function tick(t){ requestAnimationFrame(tick); if (running && !reduce) draw(t); }
+  requestAnimationFrame(tick);
+})();
+
+// ---------- contact: oscilloscope trace driven by the cursor, Morse key sends your initials ----------
+(() => {
+  const sec = document.getElementById('contact'), cv = document.getElementById('scope'), ctx = cv.getContext('2d');
+  let W=0,H=0; const m = {x:.5,y:.5,sx:.5,sy:.5}; let keyed = 0;
+  function size(){ const r = sec.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W*dpr; cv.height = H*dpr; }
+  addEventListener('resize', size); size();
+  sec.addEventListener('pointermove', e => { const r = sec.getBoundingClientRect(); m.x = (e.clientX - r.left)/W; m.y = (e.clientY - r.top)/H; }, {passive:true});
+  let running = false; new IntersectionObserver(([en]) => running = en.isIntersecting).observe(sec);
+  function draw(t){
+    requestAnimationFrame(draw); if (!running) return;
+    m.sx += (m.x - m.sx)*.08; m.sy += (m.y - m.sy)*.08;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); ctx.strokeStyle = ink();
+    // graticule
+    ctx.globalAlpha = .18; ctx.lineWidth = .8; ctx.beginPath(); const G = 88; for (let x = (W%G)/2; x <= W; x += G){ ctx.moveTo(x,0); ctx.lineTo(x,H); } for (let y = (H%G)/2; y <= H; y += G){ ctx.moveTo(0,y); ctx.lineTo(W,y); } ctx.stroke();
+    // trace: frequency from cursor x, amplitude from cursor y, keyed carrier adds a burst
+    const freq = 2 + m.sx*14, amp = (.08 + (1-m.sy)*.3) * H, cy = H*.5, k = keyed ? 1 : 0;
+    ctx.globalAlpha = .9; ctx.lineWidth = 1.2; ctx.beginPath();
+    for (let x=0;x<=W;x+=3){ const u = x/W; const y = cy + Math.sin(u*freq*Math.PI*2 - t*.004)*amp*(.6 + .4*Math.sin(u*3 + t*.001)) + k*Math.sin(u*90 - t*.03)*H*.04 + Math.sin(u*41 + t*.002)*2; x ? ctx.lineTo(x,y) : ctx.moveTo(x,y); }
+    ctx.stroke();
+  }
+  requestAnimationFrame(draw);
+  const huge = document.getElementById('huge');
+  huge.innerHTML = ['LET’S','BUILD'].map(w => `<span class="ch"><span>${w}</span></span>`).join('');
+  if (!reduce) gsap.from('#huge .ch span', {yPercent:110, duration:1, ease:'power4.out', stagger:.12, scrollTrigger:{trigger:'#huge', start:'top 85%', once:true}});
+  // Morse key: taps out AJ, then opens the contact link
+  const key = document.getElementById('key'), lamp = document.getElementById('lamp'), code = document.getElementById('code');
+  const MORSE = {A:'.-', J:'.---'}; let ac = null, busy = false;
+  key.addEventListener('click', async () => {
+    if (busy) return; busy = true; code.textContent = '';
+    try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); await ac.resume(); } catch { ac = null; }
+    const unit = 90; const beep = ms => new Promise(r => { lamp.classList.add('on'); keyed = 1; if (ac){ const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = 620; g.gain.value = .05; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + ms/1000); } setTimeout(() => { lamp.classList.remove('on'); keyed = 0; r(); }, ms); });
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    for (const ch of 'AJ'){ for (const s of MORSE[ch]){ await beep(s === '.' ? unit : unit*3); code.textContent += s; await wait(unit); } code.textContent += ' '; await wait(unit*2); }
+    code.textContent += '· sent'; busy = false;
+    window.open('https://www.linkedin.com/in/jonesax', '_blank', 'noopener');
+  });
+})();
+
+// ---------- frame scrollbar with section readout ----------
+(() => {
+  const sb = document.getElementById('sb'), th = document.getElementById('th'), ro = document.getElementById('sbro'); let drag = null;
+  const secs = [...document.querySelectorAll('section[id]')];
+  const max = () => document.documentElement.scrollHeight - innerHeight;
+  const update = () => { const trk = sb.clientHeight; const h = Math.max(30, trk * innerHeight / document.documentElement.scrollHeight); const top = (scrollY / Math.max(1,max())) * (trk - h); th.style.height = h + 'px'; th.style.top = top + 'px'; ro.style.top = top + 'px';
+    const cur = secs.reduce((a,s) => s.getBoundingClientRect().top <= innerHeight*.5 ? s : a, secs[0]); ro.textContent = cur.id; };
+  addEventListener('scroll', update, {passive:true}); addEventListener('resize', update); update();
+  sb.addEventListener('pointerdown', e => { drag = {y:e.clientY, s:scrollY}; sb.classList.add('drag'); sb.setPointerCapture(e.pointerId); e.preventDefault(); });
+  sb.addEventListener('pointermove', e => { if (!drag) return; const trk = sb.clientHeight - th.clientHeight; scrollTo(0, drag.s + (e.clientY - drag.y)/trk * max()); });
+  const end = () => { drag = null; sb.classList.remove('drag'); }; sb.addEventListener('pointerup', end); sb.addEventListener('pointercancel', end);
+})();
+})();
+</script>
+</body>
+</html>
