@@ -261,7 +261,7 @@ export default async function K8sLocalLlmPage() {
       >
         <div className="mb-12">
           <div className="label mb-3">Guide · Kubernetes · Local AI</div>
-          <h1 className="font-display cond ext text-[clamp(38px,6.4vw,76px)] text-bone leading-[0.9]">
+          <h1 className="font-display cond text-[clamp(38px,6.4vw,76px)] text-bone leading-[0.9]">
             {TITLE}
           </h1>
           {subtitle && (

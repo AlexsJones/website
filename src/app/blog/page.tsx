@@ -9,78 +9,108 @@ export const metadata = {
 };
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = (iso: string) => MONTHS[Number(iso.split("-")[1]) - 1] ?? "";
+const kind = (slug: string) => (slug === "k8s-local-llm" ? "guide" : "note");
 
-function month(iso: string) {
-  const [, m] = iso.split("-");
-  return MONTHS[Number(m) - 1] ?? "";
-}
-
-/** A ruled sub-head, like the teleprinter lines between v2 sections. */
-function SubHead({ id, n, title, count, note }: { id: string; n: string; title: string; count: number; note: string }) {
+function Meter({ on }: { on: number }) {
   return (
-    <div id={id} className="scroll-mt-24 mb-2 mt-4 flex flex-wrap items-baseline justify-between gap-4 border-t border-ink pt-3">
-      <h2 className="font-display cond text-[clamp(28px,4vw,48px)] leading-[0.9] text-bone">
-        {title}
-      </h2>
-      <span className="label">
-        {n} &middot; {note} &middot; {count}
-      </span>
-    </div>
+    <span className="v2-meter" aria-hidden="true">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <i key={i} className={i < on ? "on" : undefined} />
+      ))}
+    </span>
   );
 }
 
+// Laid out like the v2 home page's Findings section: section head + lede,
+// the newest piece as the "current" card, then ruled ledgers.
 export default function BlogPage() {
+  const [latest, ...rest] = POSTS;
   const papers = ARTICLES.filter((a) => a.status !== "superseded");
   return (
-    <div className="px-5 sm:px-8 py-20 sm:py-24">
-      <div className="mx-auto max-w-[1500px]">
+    <section className="py-20 sm:py-24">
+      <div className="mx-auto max-w-[1500px] px-5 sm:px-8">
         <PageHeader
           index="005"
-          label="field notes · research"
+          label="field notes · research · what came out of the work"
           title="Writing"
-          intro="Field notes and research on AI agents, distributed systems, and the things that break."
+          intro={
+            <>
+              Notes from work in progress and the longer papers behind them:{" "}
+              <b>AI agents, distributed systems, and the things that break.</b>
+            </>
+          }
         />
 
-        <SubHead id="field-notes" n="01" title="Field notes" count={POSTS.length} note="dispatches" />
-        <div className="v2-list mb-20">
-          <ol>
-            {POSTS.map((post) => (
-              <li key={post.slug}>
-                <span className="yr">{month(post.isoDate)}</span>
-                <span>
-                  <Link className="t" href={`/blog/${post.slug}`}>
-                    {post.title}
-                  </Link>
-                  <span className="d">{post.description}</span>
-                  <span className="ev">{post.date}</span>
-                </span>
-                <span className="loc">{post.slug === "k8s-local-llm" ? "guide" : "note"}</span>
-              </li>
-            ))}
-          </ol>
+        <div className="v2-cur">
+          <div className="v">
+            <b>{month(latest.isoDate)}</b>
+            <span>latest {kind(latest.slug)}</span>
+            <span>{latest.date}</span>
+            <span>N&ordm; {String(POSTS.length).padStart(2, "0")}</span>
+          </div>
+          <div className="t">
+            <h3>{latest.title}</h3>
+            <p>{latest.description}</p>
+            <div className="links">
+              <Link className="solid" href={`/blog/${latest.slug}`}>
+                read the {kind(latest.slug)}
+              </Link>
+              {latest.slug === "k8s-local-llm" && (
+                <a href="https://github.com/AlexsJones/axjns-k8s-local-llm" target="_blank" rel="noopener noreferrer">
+                  source &#8599;
+                </a>
+              )}
+            </div>
+          </div>
         </div>
 
-        <SubHead id="research" n="02" title="Research papers" count={papers.length} note="formal work" />
-        <div className="v2-list">
-          <ol>
-            {papers.map((a) => (
-              <li key={a.slug}>
-                <span className="yr">{a.version ?? a.type}</span>
-                <span>
-                  <Link className="t" href={`/research/${a.slug}`}>
-                    {a.title}
-                  </Link>
-                  <span className="d">{a.description}</span>
-                  <span className="ev">
-                    {a.type} &middot; {a.date}
-                  </span>
-                </span>
-                <span className="loc">{a.type}</span>
-              </li>
-            ))}
-          </ol>
+        <div id="field-notes" className="v2-sec-sub scroll-mt-24">
+          <span className="label">field notes · dispatch ledger</span>
+          <span className="label">{POSTS.length} entries</span>
+        </div>
+        <div className="v2-ledger" aria-label="Field notes">
+          {rest.map((post, i) => (
+            <div className="row" key={post.slug}>
+              <span className="v">
+                {String(rest.length - i).padStart(2, "0")}
+              </span>
+              <span>
+                <Link className="ti" href={`/blog/${post.slug}`}>
+                  {post.title}
+                </Link>
+                <span className="ds">{post.description}</span>
+              </span>
+              <span className="st">
+                {month(post.isoDate)} {post.isoDate.slice(0, 4)} &middot; {kind(post.slug)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div id="research" className="v2-sec-sub scroll-mt-24">
+          <span className="label">research papers · revision ledger</span>
+          <span className="label">{papers.length} current</span>
+        </div>
+        <div className="v2-ledger" aria-label="Research papers">
+          {papers.map((a) => (
+            <div className="row" key={a.slug}>
+              <span className="v">
+                {a.version ?? a.type} <Meter on={5} />
+              </span>
+              <span>
+                <Link className="ti" href={`/research/${a.slug}`}>
+                  {a.title}
+                </Link>
+                <span className="ds">{a.description}</span>
+              </span>
+              <span className="st">
+                {a.date} &middot; {a.type}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
