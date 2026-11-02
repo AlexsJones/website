@@ -20,9 +20,9 @@ export default function ClientLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="v2-page">
       <Nav />
-      <main className="flex-1 pt-14">{children}</main>
+      <main className="flex-1 pt-[46px]">{children}</main>
       <Footer />
     </div>
   );

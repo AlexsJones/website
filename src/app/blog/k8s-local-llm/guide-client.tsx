@@ -1,4 +1,5 @@
 "use client";
+// Colours come from the v2 tokens (globals.css), so day and night both work.
 
 import { useEffect, useRef, useState } from "react";
 
@@ -46,7 +47,7 @@ export function HardwarePicker() {
       <div
         role="tablist"
         aria-label="Your hardware"
-        className="grid grid-cols-2 sm:grid-cols-4 border-y border-bone/30"
+        className="grid grid-cols-2 sm:grid-cols-4 border border-ink"
       >
         {HARDWARE.map((h, i) => {
           const active = h.id === hw;
@@ -65,16 +66,16 @@ export function HardwarePicker() {
                 setHw(h.id);
                 history.replaceState(null, "", `#hw=${h.id}`);
               }}
-              className={`group flex flex-col items-start gap-2 border-bone/30 px-4 py-4 text-left transition-colors ${borders} ${
-                active ? "bg-bone text-cream" : "text-bone hover:bg-surface-light/60"
+              className={`group flex flex-col items-start gap-2 border-ink px-4 py-4 text-left transition-colors ${borders} ${
+                active ? "bg-ink text-surface" : "text-bone hover:bg-surface-light"
               }`}
             >
-              <span className="font-display text-lg sm:text-xl leading-none">
+              <span className="font-display cond text-xl sm:text-2xl leading-none">
                 {h.label}
               </span>
               <span
                 className={`font-mono text-[10px] uppercase tracking-[0.15em] ${
-                  active ? "text-cream/70" : "text-ash"
+                  active ? "text-surface/70" : "text-ash"
                 }`}
               >
                 {h.status === "tested" ? "\u25CF tested" : "\u00A0"}
@@ -114,18 +115,18 @@ export function CopyPre({
         aria-label="Copy to clipboard"
         className={`absolute right-2 top-2 rounded-[2px] border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.15em] transition-colors ${
           ink
-            ? "border-cream/30 bg-ink text-cream/70 hover:bg-cream hover:text-ink"
-            : "border-bone/30 bg-surface-light text-ash hover:bg-bone hover:text-cream"
+            ? "border-surface/40 bg-ink text-surface/75 hover:bg-surface hover:text-ink"
+            : "border-ink/40 bg-cream text-ash hover:bg-ink hover:text-surface"
         }`}
       >
         {copied ? "copied" : "copy"}
       </button>
       <pre
         ref={ref}
-        className={`overflow-x-auto rounded-[2px] border p-5 pr-20 font-mono text-[12px] leading-relaxed ${
+        className={`overflow-x-auto border p-5 pr-20 font-mono text-[12px] leading-relaxed ${
           ink
-            ? "border-bone bg-ink text-cream/90"
-            : "border-bone/30 bg-surface-light/70 text-bone-dark"
+            ? "border-ink bg-ink text-surface shadow-[6px_6px_0_var(--shadow)]"
+            : "border-ink/40 bg-cream text-bone-dark"
         }`}
       >
         {children}

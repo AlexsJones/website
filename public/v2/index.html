@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>/* theme before first paint: saved choice wins, else prefers-color-scheme */(function(){try{var s=localStorage.getItem('v2-night');var n=s==='1'||(s===null&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('night',!!n)}catch(e){}})();</script>
 <title>Alex Jones — finds signal in the noise</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900&family=JetBrains+Mono:wght@400;700&display=swap">
 <style>
@@ -267,7 +268,7 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
 <body>
 <header>
   <a class="logo" href="#top">axjns.dev</a>
-  <nav><a href="#about">About</a><a href="#work">Work</a><a href="#findings">Findings</a><a href="#talks">Talks</a><a href="#contact">Contact</a></nav>
+  <nav><a href="#about">About</a><a href="#work">Work</a><a href="#findings">Findings</a><a href="#talks">Talks</a><a href="/blog">Writing</a><a href="#contact">Contact</a></nav>
   <div><button id="night" type="button" aria-label="Toggle night watch">◐ Night</button></div>
   <div class="hire"><span>Building open source from the U.K.</span><span>Open to interesting problems → <a href="#contact">Get in touch</a></span></div>
 </header>
@@ -400,12 +401,14 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
       <div class="sec-head"><h2 class="ext">Writing</h2><span class="label">field notes · research</span></div>
       <ol>
         <li><span class="yr">v2.2</span><span><a class="t" href="/research" target="_blank" rel="noopener">The Synthetic Membrane: a coordination layer for multi-agent AI</a><span class="ev">position paper · September 2026</span></span><span class="loc">paper</span></li>
+        <li><span class="yr">Nov</span><span><a class="t" href="/blog/k8s-local-llm">From zero to serving a model on Kubernetes, on your own machine</a><span class="ev">2026</span></span><span class="loc">guide</span></li>
         <li><span class="yr">Aug</span><span><a class="t" href="https://axjns.dev/blog/celln-deepseek-benchmark" target="_blank" rel="noopener">Testing Celln's boundary</a><span class="ev">2026</span></span><span class="loc">note</span></li>
         <li><span class="yr">Aug</span><span><a class="t" href="https://axjns.dev/blog/celln-execution-plane" target="_blank" rel="noopener">The agent environment should be a lease</a><span class="ev">2026</span></span><span class="loc">note</span></li>
         <li><span class="yr">Jul</span><span><a class="t" href="https://axjns.dev/blog/post-kubernetes-genai" target="_blank" rel="noopener">Post-Kubernetes infrastructure for GenAI workloads</a><span class="ev">2026</span></span><span class="loc">note</span></li>
         <li><span class="yr">May</span><span><a class="t" href="https://axjns.dev/blog/sticky-note-problem" target="_blank" rel="noopener">The sticky-note problem</a><span class="ev">2026</span></span><span class="loc">note</span></li>
         <li><span class="yr">Apr</span><span><a class="t" href="https://axjns.dev/blog/synthetic-membrane" target="_blank" rel="noopener">Agents need somewhere to share their work</a><span class="ev">2026</span></span><span class="loc">note</span></li>
       </ol>
+      <p class="label" style="margin-top:18px"><a href="/blog">All writing →</a></p>
     </div>
   </section>
   <div class="hdr" data-hdr="contact" aria-hidden="true"></div>

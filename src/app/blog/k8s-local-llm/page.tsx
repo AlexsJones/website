@@ -111,7 +111,7 @@ function components(remote: boolean): Components {
     h2: ({ children }) => (
       <h2
         id={slug(children)}
-        className="font-display text-2xl sm:text-3xl text-bone mt-12 mb-4 scroll-mt-24"
+        className="font-display cond text-3xl sm:text-4xl leading-[0.95] text-bone mt-14 mb-4 pt-4 border-t border-ink scroll-mt-24"
       >
         {children}
       </h2>
@@ -119,7 +119,7 @@ function components(remote: boolean): Components {
     h3: ({ children }) => (
       <h3
         id={slug(children)}
-        className="font-display text-lg sm:text-xl text-bone mt-10 mb-3 scroll-mt-24"
+        className="font-display cond text-xl sm:text-2xl leading-none text-bone mt-10 mb-3 scroll-mt-24"
       >
         {children}
       </h3>
@@ -154,7 +154,7 @@ function components(remote: boolean): Components {
               src={s}
               alt={alt ?? ""}
               loading="lazy"
-              className="block w-full h-auto rounded-[2px] border border-bone bg-ink"
+              className="block w-full h-auto border border-ink bg-ink shadow-[6px_6px_0_var(--shadow)]"
             />
           </a>
           {alt && (
@@ -168,7 +168,7 @@ function components(remote: boolean): Components {
     ul: ({ children }) => <ul className="list-disc pl-6 space-y-2">{children}</ul>,
     ol: ({ children }) => <ol className="list-decimal pl-6 space-y-2">{children}</ol>,
     blockquote: ({ children }) => (
-      <blockquote className="border-l-2 border-bone bg-surface-light/60 pl-5 pr-4 py-1 [&>p]:my-3">
+      <blockquote className="border-l-2 border-ink bg-surface-light pl-5 pr-4 py-1 [&>p]:my-3">
         {children}
       </blockquote>
     ),
@@ -193,7 +193,7 @@ function components(remote: boolean): Components {
       className ? (
         <code>{children}</code>
       ) : (
-        <code className="font-mono text-[13px] text-bone bg-surface-light px-1 py-0.5 rounded-[2px] break-words">
+        <code className="font-mono text-[13px] text-bone bg-cream px-1 py-0.5 break-words">
           {children}
         </code>
       ),
@@ -204,11 +204,11 @@ function components(remote: boolean): Components {
     ),
     thead: ({ children }) => <thead>{children}</thead>,
     th: ({ children }) => (
-      <th className="border-b border-surface-lighter py-2 pr-4 text-left text-ash text-xs uppercase tracking-wider">
+      <th className="border-b border-ink py-2 pr-4 text-left text-ash text-xs uppercase tracking-wider">
         {children}
       </th>
     ),
-    tr: ({ children }) => <tr className="border-b border-surface-lighter/40">{children}</tr>,
+    tr: ({ children }) => <tr className="border-b border-ink/30">{children}</tr>,
     td: ({ children }) => (
       <td className="py-2 pr-4 align-top text-bone-dark text-[13px] leading-relaxed">
         {children}
@@ -233,7 +233,7 @@ function Card({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="block rounded-[2px] border border-surface-lighter bg-surface-light/60 p-4 hover:border-ember transition-colors"
+      className="block border border-ink bg-cream p-4 transition-transform hover:-translate-x-[3px] hover:-translate-y-[3px] hover:shadow-[var(--depth)_var(--depth)_0_var(--shadow)]"
     >
       <div className="label mb-2">{label}</div>
       <div className="text-bone">{title}</div>
@@ -253,19 +253,19 @@ export default async function K8sLocalLlmPage() {
   );
 
   return (
-    <div className="grid-lines min-h-screen">
+    <div className="min-h-screen">
       <article
         id="hw-guide"
         data-active="cpu"
-        className="hw-guide max-w-3xl mx-auto px-6 py-16 font-sans"
+        className="hw-guide max-w-3xl mx-auto px-5 sm:px-6 py-16 sm:py-20 font-sans"
       >
         <div className="mb-12">
           <div className="label mb-3">Guide · Kubernetes · Local AI</div>
-          <h1 className="font-display text-4xl sm:text-5xl text-bone leading-[1.02]">
+          <h1 className="font-display cond ext text-[clamp(38px,6.4vw,76px)] text-bone leading-[0.9]">
             {TITLE}
           </h1>
           {subtitle && (
-            <p className="mt-3 text-base text-bone-dark/80">{subtitle}</p>
+            <p className="mt-5 font-[family-name:var(--font-archivo)] text-[clamp(17px,1.6vw,21px)] leading-[1.45] text-ash">{subtitle}</p>
           )}
           <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
             Alex Jones · November 2026 · Tested on real hardware
@@ -274,7 +274,7 @@ export default async function K8sLocalLlmPage() {
             href={REPO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-[2px] border border-bone px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] text-bone hover:bg-bone hover:text-cream transition-colors"
+            className="mt-5 inline-flex items-center gap-2 border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-bone hover:bg-ink hover:text-surface transition-colors"
           >
             Contribute to this guide &#8599;
           </a>
@@ -294,7 +294,7 @@ export default async function K8sLocalLlmPage() {
           )}
         </div>
 
-        <div className="mt-16 border-t border-surface-lighter pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
+        <div className="mt-16 border-t border-ink pt-8 grid sm:grid-cols-3 gap-4 font-mono text-sm">
           <Card
             href={REPO_URL}
             label="Repository"
@@ -317,7 +317,7 @@ export default async function K8sLocalLlmPage() {
 
         <footer className="mt-12 text-center text-xs font-mono text-ash">
           <Link href="/blog" className="hover:text-bone transition">
-            &larr; back to blog
+            &larr; all writing
           </Link>
         </footer>
       </article>

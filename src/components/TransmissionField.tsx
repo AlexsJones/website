@@ -9,7 +9,8 @@
  *    edge (.tx-comms-scroll)
  */
 
-const INK = "#141414";
+// currentColor so the drawing follows the day/night theme (set via text-ink)
+const INK = "currentColor";
 const W = 1600;
 
 // Sample a sine into a polyline path. Width covers one extra wavelength so a
@@ -68,7 +69,7 @@ export default function TransmissionField() {
       <svg
         viewBox={`0 0 ${W} 800`}
         preserveAspectRatio="xMidYMin slice"
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full text-ink"
       >
         {WAVES.map((w, i) => (
           <path

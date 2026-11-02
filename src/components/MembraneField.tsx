@@ -12,7 +12,8 @@ import { useEffect, useRef } from "react";
  *    prefers-reduced-motion via .membrane-pulse
  */
 
-const INK = "#141414";
+// currentColor so the drawing follows the day/night theme (set via text-ink)
+const INK = "currentColor";
 
 // Deterministic PRNG so server and client render identical geometry.
 function lcg(seed: number) {
@@ -105,7 +106,7 @@ export default function MembraneField() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="xMidYMid slice"
-        className="w-full h-full"
+        className="w-full h-full text-ink"
       >
         {/* far layer: connective mesh, draws in on scroll, slow drift */}
         <g
