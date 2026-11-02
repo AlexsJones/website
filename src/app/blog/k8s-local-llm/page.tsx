@@ -268,7 +268,7 @@ export default async function K8sLocalLlmPage() {
             <p className="mt-3 text-base text-bone-dark/80">{subtitle}</p>
           )}
           <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-            Alex Jones · November 2026 · Tested on real hardware
+            Alex Jones · November 2026
           </div>
           <a
             href={REPO_URL}
