@@ -11,8 +11,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 SRC="${GUIDE_SRC:-../axjns-k8s-local-llm}"
-DEST_MD=content/guides/k8s-local-llm/README.md
-DEST_IMG=public/guides/k8s-local-llm/img
+DEST_MD=content/blog/k8s-local-llm/README.md
+DEST_IMG=public/blog/k8s-local-llm/img
 mkdir -p "$(dirname "$DEST_MD")" "$DEST_IMG"
 cp "$SRC/README.md" "$DEST_MD"
 rm -f "$DEST_IMG"/*.png
