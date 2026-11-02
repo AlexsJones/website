@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "prebuild": "node scripts/sync-home-writing.mjs",
+    "prebuild": "node scripts/sync-github-stars.mjs && node scripts/sync-home-writing.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

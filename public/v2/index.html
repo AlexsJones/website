@@ -338,7 +338,7 @@ footer nav{display:flex;gap:18px}footer a{text-decoration:none}footer a:hover{te
       </div>
       <div class="bar">Field record</div>
       <div class="patch">
-        <div class="c2 ink"><span class="tick">01</span><span class="big num" data-count="39337">0</span><span class="sub">GitHub stars · all repos</span><span class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+        <div class="c2 ink"><span class="tick">01</span><span class="big num" data-count="49187">0</span><span class="sub">GitHub stars · all repos</span><span class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
         <div class="hatch"></div>
         <div><span class="tick">02</span><span class="big">CNCF</span><span class="sub">K8sGPT · founder</span></div>
         <div class="c2"><span class="tick">03</span>KubeCon + CloudNativeCon<br>North America 2023</div>
@@ -641,16 +641,16 @@ document.querySelectorAll('[data-count]').forEach(el => {
 
 // ---------- work: direction-finding board; tiles arrive as fixes ----------
 const PROJECTS = [
-  {name:'celln', repo:'sympozium-ai/celln', d:'An execution plane for agents: sealed cells borrow verified tools instead of rebuilding Linux environments.', lang:'Rust', stars:0, role:'creator · active', brg:12},
-  {name:'llmfit', repo:'AlexsJones/llmfit', d:'Hundreds of models and providers. One command to find what runs on your hardware.', lang:'Rust', stars:29820, role:'creator', brg:47},
-  {name:'k8sgpt', repo:'k8sgpt-ai/k8sgpt', site:'https://k8sgpt.ai', d:'Giving Kubernetes superpowers to everyone. AI-powered cluster analysis and troubleshooting.', lang:'Go', stars:7998, role:'founder · CNCF', brg:83},
-  {name:'sympozium', repo:'sympozium-ai/sympozium', site:'https://sympozium.ai', d:'The coordination layer for multi-agent AI: a Kubernetes-native synthetic membrane.', lang:'Go', stars:571, role:'creator', brg:118},
-  {name:'k8sgpt-operator', repo:'k8sgpt-ai/k8sgpt-operator', d:'Automatic SRE superpowers within your Kubernetes cluster.', lang:'Go', stars:465, role:'founder', brg:151},
-  {name:'llmserve', repo:'AlexsJones/llmserve', d:'A simple TUI for serving local LLM models. Pick a model, pick a backend, serve it.', lang:'Rust', stars:314, role:'creator', brg:189},
-  {name:'kflow', repo:'AlexsJones/kflow', d:'Like top for Kubernetes networking.', lang:'Rust', stars:64, role:'creator', brg:226},
-  {name:'llama-panel', repo:'AlexsJones/llama-panel', d:'A macOS llama-server command centre.', lang:'JavaScript', stars:50, role:'creator', brg:262},
-  {name:'repo-steward', repo:'AlexsJones/repo-steward', d:'An autonomous agent for open-source repository management. Escalates only the decisions that are yours.', lang:'Python', stars:19, role:'creator', brg:297},
-  {name:'keychron-micro', repo:'AlexsJones/keychron-micro', d:'Turn a Keychron Q0 Max into a scriptable macropad on Linux.', lang:'Rust', stars:7, role:'creator', brg:334},
+  {name:'celln', repo:'sympozium-ai/celln', d:'An execution plane for agents: sealed cells borrow verified tools instead of rebuilding Linux environments.', lang:'Rust', stars:62, role:'creator · active', brg:12},
+  {name:'llmfit', repo:'AlexsJones/llmfit', d:'Hundreds of models and providers. One command to find what runs on your hardware.', lang:'Rust', stars:38570, role:'creator', brg:47},
+  {name:'k8sgpt', repo:'k8sgpt-ai/k8sgpt', site:'https://k8sgpt.ai', d:'Giving Kubernetes superpowers to everyone. AI-powered cluster analysis and troubleshooting.', lang:'Go', stars:8289, role:'founder · CNCF', brg:83},
+  {name:'sympozium', repo:'sympozium-ai/sympozium', site:'https://sympozium.ai', d:'The coordination layer for multi-agent AI: a Kubernetes-native synthetic membrane.', lang:'Go', stars:667, role:'creator', brg:118},
+  {name:'k8sgpt-operator', repo:'k8sgpt-ai/k8sgpt-operator', d:'Automatic SRE superpowers within your Kubernetes cluster.', lang:'Go', stars:488, role:'founder', brg:151},
+  {name:'llmserve', repo:'AlexsJones/llmserve', d:'A simple TUI for serving local LLM models. Pick a model, pick a backend, serve it.', lang:'Rust', stars:415, role:'creator', brg:189},
+  {name:'kflow', repo:'AlexsJones/kflow', d:'Like top for Kubernetes networking.', lang:'Rust', stars:63, role:'creator', brg:226},
+  {name:'llama-panel', repo:'AlexsJones/llama-panel', d:'A macOS llama-server command centre.', lang:'JavaScript', stars:74, role:'creator', brg:262},
+  {name:'repo-steward', repo:'AlexsJones/repo-steward', d:'An autonomous agent for open-source repository management. Escalates only the decisions that are yours.', lang:'Python', stars:31, role:'creator', brg:297},
+  {name:'keychron-micro', repo:'AlexsJones/keychron-micro', d:'Turn a Keychron Q0 Max into a scriptable macropad on Linux.', lang:'Rust', stars:12, role:'creator', brg:334},
 ];
 (() => {
   const sec = document.getElementById('work'), board = document.getElementById('board'), cv = document.getElementById('df'), ctx = cv.getContext('2d'), logEl = document.getElementById('tiles');

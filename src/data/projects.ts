@@ -17,7 +17,7 @@ export const PROJECTS: Project[] = [
     description:
       "An execution plane for agents: sealed cells borrow verified tools instead of rebuilding Linux environments.",
     language: "Rust",
-    stars: 0,
+    stars: 62,
     role: "creator · active",
     featured: true,
     tags: ["agents", "security", "execution"],
@@ -28,7 +28,7 @@ export const PROJECTS: Project[] = [
     description:
       "Hundreds of models & providers. One command to find what runs on your hardware.",
     language: "Rust",
-    stars: 29820,
+    stars: 38570,
     role: "creator",
     featured: true,
     tags: ["LLM", "CLI", "hardware"],
@@ -40,7 +40,7 @@ export const PROJECTS: Project[] = [
     description:
       "Giving Kubernetes superpowers to everyone — AI-powered cluster analysis and troubleshooting.",
     language: "Go",
-    stars: 7998,
+    stars: 8289,
     role: "founder",
     featured: true,
     tags: ["Kubernetes", "AI", "CNCF"],
@@ -52,7 +52,7 @@ export const PROJECTS: Project[] = [
     description:
       "The coordination layer for multi-agent AI — a Kubernetes-native synthetic membrane giving agents discovery, shared state, and governance as first-class primitives.",
     language: "Go",
-    stars: 571,
+    stars: 667,
     role: "creator",
     featured: true,
     tags: ["agents", "Kubernetes", "AI"],
@@ -63,7 +63,7 @@ export const PROJECTS: Project[] = [
     description:
       "A simple TUI for serving local LLM models. Pick a model, pick a backend, serve it.",
     language: "Rust",
-    stars: 314,
+    stars: 415,
     tags: ["LLM", "TUI"],
   },
   {
@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     repo: "AlexsJones/kflow",
     description: "Like top for Kubernetes networking.",
     language: "Rust",
-    stars: 64,
+    stars: 63,
     tags: ["Kubernetes", "networking"],
   },
   {
@@ -79,7 +79,7 @@ export const PROJECTS: Project[] = [
     repo: "AlexsJones/llama-panel",
     description: "A macOS llama-server command centre.",
     language: "JavaScript",
-    stars: 50,
+    stars: 74,
     tags: ["LLM", "macOS"],
   },
   {
@@ -88,7 +88,7 @@ export const PROJECTS: Project[] = [
     description:
       "An autonomous agent for open-source repository management — triages issues, reviews PRs, escalates only the decisions that are yours.",
     language: "Python",
-    stars: 19,
+    stars: 31,
     tags: ["agents", "automation"],
   },
   {
@@ -97,7 +97,7 @@ export const PROJECTS: Project[] = [
     description:
       "Automatic SRE superpowers within your Kubernetes cluster — the operator for K8sGPT.",
     language: "Go",
-    stars: 465,
+    stars: 488,
     role: "founder",
     tags: ["Kubernetes", "AI", "operator"],
   },
@@ -107,7 +107,7 @@ export const PROJECTS: Project[] = [
     description:
       "Turn a Keychron Q0 Max into a scriptable macropad on Linux. Keys run scripts; the board lights up with what they are doing.",
     language: "Rust",
-    stars: 7,
+    stars: 12,
     tags: ["Linux", "hardware"],
   },
 ];
