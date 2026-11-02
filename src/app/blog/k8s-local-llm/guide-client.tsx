@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 export const HARDWARE = [
   { id: "cpu", label: "CPU only", status: "tested" },
   { id: "intel", label: "Intel Arc", status: "tested" },
-  { id: "nvidia", label: "NVIDIA", status: "best effort" },
+  { id: "nvidia", label: "NVIDIA", status: null },
   { id: "amd", label: "AMD", status: "tested" },
 ] as const;
 
@@ -77,7 +77,7 @@ export function HardwarePicker() {
                   active ? "text-cream/70" : "text-ash"
                 }`}
               >
-                {h.status === "tested" ? "\u25CF tested" : "\u25CC best effort"}
+                {h.status === "tested" ? "\u25CF tested" : "\u00A0"}
               </span>
             </button>
           );
