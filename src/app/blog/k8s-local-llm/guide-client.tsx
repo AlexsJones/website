@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 export const HARDWARE = [
   { id: "cpu", label: "CPU only", status: "tested" },
   { id: "intel", label: "Intel Arc", status: "tested" },
-  { id: "nvidia", label: "NVIDIA", status: null },
+  { id: "nvidia", label: "NVIDIA", status: "tested" },
   { id: "amd", label: "AMD", status: "tested" },
 ] as const;
 

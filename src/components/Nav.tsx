@@ -7,12 +7,12 @@ import { THEME_KEY } from "../lib/theme";
 // Same cells as the v2 header in public/v2: logo, section links, night watch
 // toggle, and the "get in touch" cell. Home-page sections are plain anchors
 // because / is the static v2 page, not a Next route.
-const LINKS = [
+const LINKS: { href: string; label: string; route?: boolean }[] = [
   { href: "/#about", label: "About" },
   { href: "/#work", label: "Work" },
   { href: "/#findings", label: "Findings" },
   { href: "/#talks", label: "Talks" },
-  { href: "/blog", label: "Writing", route: true },
+  { href: "/#writing", label: "Writing" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -52,7 +52,13 @@ export default function Nav() {
               {l.label}
             </Link>
           ) : (
-            <a key={l.href} href={l.href}>
+            <a
+              key={l.href}
+              href={l.href}
+              aria-current={
+                l.href === "/#writing" && pathname.startsWith("/blog") ? "page" : undefined
+              }
+            >
               {l.label}
             </a>
           )
