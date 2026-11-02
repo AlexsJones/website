@@ -309,7 +309,7 @@ const components: Components = {
       return <code>{children}</code>;
     }
     return (
-      <code className="bg-bone text-cream px-1.5 py-0.5 rounded-[2px] text-[13px]">
+      <code className="ic text-[13px]">
         {children}
       </code>
     );

@@ -193,7 +193,7 @@ function components(remote: boolean): Components {
       className ? (
         <code>{children}</code>
       ) : (
-        <code className="font-mono text-[13px] text-bone bg-cream px-1 py-0.5 break-words">
+        <code className="ic text-[13px] break-words">
           {children}
         </code>
       ),

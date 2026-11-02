@@ -1077,3 +1077,16 @@ body {
   .v2-ledger .row { grid-template-columns: 70px 1fr; }
   .v2-ledger .row .st { grid-column: 2; }
 }
+
+/* Inline code (not inside pre): a faint ink tint and hairline, so it reads as
+   code without the bright paper box glaring off the page. Works day and night. */
+:where(main, article) :not(pre) > code,
+code.ic {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  padding: 0 0.3em;
+  border-radius: 2px;
+  text-shadow: none;
+}
