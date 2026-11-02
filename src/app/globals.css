@@ -948,3 +948,132 @@ body {
 .hw-guide[data-active="amd"] [data-hw]:not([data-hw~="amd"]) {
   display: none;
 }
+
+/* ── v2 "Findings" formatting (public/v2 .research), reused for Writing ── */
+.v2-sec-head { display: flex; align-items: baseline; gap: 30px; margin-bottom: 36px; flex-wrap: wrap; }
+.v2-sec-head h1,
+.v2-sec-head h2 {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.88;
+  margin: 0;
+  font-size: clamp(44px, 8vw, 130px);
+  font-stretch: 62%;
+  color: var(--ink);
+}
+.v2-lede {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(17px, 1.6vw, 22px);
+  line-height: 1.45;
+  color: var(--ash);
+  max-width: 62ch;
+  margin: -10px 0 36px;
+}
+.v2-lede b { font-weight: 900; font-stretch: 75%; color: var(--ink); letter-spacing: -0.01em; }
+.v2-cur {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  background: var(--cream);
+  box-shadow: var(--depth) var(--depth) 0 var(--shadow), 0 0 0 1px var(--ink);
+  margin-bottom: 48px;
+}
+.v2-cur .v {
+  padding: 26px 28px;
+  border-right: 1px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ash);
+  min-width: 160px;
+}
+.v2-cur .v b {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  font-size: 64px;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--ink);
+  font-stretch: 75%;
+  text-transform: uppercase;
+}
+.v2-cur .t { padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; }
+.v2-cur h3 {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  font-size: clamp(24px, 2.8vw, 40px);
+  font-stretch: 75%;
+  line-height: 0.95;
+  margin: 0;
+  color: var(--ink);
+}
+.v2-cur p {
+  margin: 0;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ash);
+  max-width: 70ch;
+}
+.v2-cur .links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.v2-cur .links a {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--ink);
+  padding: 8px 12px;
+  color: var(--ink);
+}
+.v2-cur .links a.solid,
+.v2-cur .links a:hover { background: var(--ink); color: var(--stock); }
+.v2-sec-sub { border-top: 1px solid var(--ink); padding-top: 10px; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.v2-ledger { margin-bottom: 56px; }
+.v2-ledger .row {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ink);
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--ink);
+}
+.v2-ledger .row .v {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  font-stretch: 75%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+}
+.v2-ledger .row .st { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ash); white-space: nowrap; }
+.v2-ledger .row a.ti {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: clamp(16px, 1.6vw, 20px);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  color: var(--ink);
+}
+.v2-ledger .row a.ti:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.v2-ledger .row .ds { display: block; margin-top: 6px; color: var(--ash); line-height: 1.5; max-width: 70ch; }
+.v2-meter { display: inline-flex; gap: 2px; }
+.v2-meter i { width: 4px; height: 10px; background: var(--ink); opacity: 0.25; }
+.v2-meter i.on { opacity: 1; }
+@media (max-width: 760px) {
+  .v2-cur { grid-template-columns: 1fr; }
+  .v2-cur .v { border-right: 0; border-bottom: 1px solid var(--ink); flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; min-width: 0; }
+  .v2-ledger .row { grid-template-columns: 70px 1fr; }
+  .v2-ledger .row .st { grid-column: 2; }
+}
