@@ -11,6 +11,14 @@ export interface Post {
 
 export const POSTS: Post[] = [
   {
+    slug: "k8s-local-llm",
+    title: "From Zero to Serving a Model on Kubernetes, on Your Own Machine",
+    description:
+      "A tested, hands-on guide to running an LLM on Kubernetes on the laptop or desktop you already have: kind, llmfit, Ollama, GPUs and k8sgpt.",
+    isoDate: "2026-11-02",
+    date: "November 2026",
+  },
+  {
     slug: "celln-deepseek-benchmark",
     title: "Testing Celln's Boundary",
     description:
