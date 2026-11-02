@@ -268,7 +268,7 @@ export default async function K8sLocalLlmPage() {
             <p className="mt-5 font-[family-name:var(--font-archivo)] text-[clamp(17px,1.6vw,21px)] leading-[1.45] text-ash">{subtitle}</p>
           )}
           <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
-            Alex Jones · November 2026 · Tested on real hardware
+            Alex Jones · November 2026
           </div>
           <a
             href={REPO_URL}
