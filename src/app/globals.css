@@ -751,3 +751,11 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) #0a0a0a;
 }
+
+/* /guides/k8s-local-llm: show only the tabs for the selected hardware */
+.hw-guide[data-active="cpu"] [data-hw]:not([data-hw~="cpu"]),
+.hw-guide[data-active="intel"] [data-hw]:not([data-hw~="intel"]),
+.hw-guide[data-active="nvidia"] [data-hw]:not([data-hw~="nvidia"]),
+.hw-guide[data-active="amd"] [data-hw]:not([data-hw~="amd"]) {
+  display: none;
+}
