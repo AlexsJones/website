@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
 import { CopyPre, HardwarePicker } from "./guide-client";
+import { GuideTocBar, GuideTocRail, type TocItem } from "./guide-toc";
 
 /*
  * Source of truth: README.md in github.com/AlexsJones/axjns-k8s-local-llm.
@@ -91,12 +92,46 @@ function text(node: React.ReactNode): string {
     return text((node as { props: { children?: React.ReactNode } }).props.children);
   return "";
 }
-const slug = (n: React.ReactNode) =>
-  text(n)
+const slugify = (t: string) =>
+  t
     .toLowerCase()
     .replace(/[^a-z0-9 -]/g, "")
     .trim()
     .replace(/\s+/g, "-");
+const slug = (n: React.ReactNode) => slugify(text(n));
+
+/** Inline markdown to the plain text react-markdown renders, so ids match the headings. */
+const plain = (md: string) =>
+  md
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[`*_]/g, "")
+    .trim();
+
+/**
+ * Contents for the section navigator: the h2/h3 headings outside the hardware tabs
+ * (tab headings would vanish when another tab is picked), skipping code fences.
+ * The title block is "00 Overview"; h2s are numbered 01, 02, ...
+ */
+function toc(segments: Segment[]): TocItem[] {
+  const items: TocItem[] = [{ id: "overview", text: "Overview", depth: 2, n: "00" }];
+  let n = 0;
+  for (const s of segments) {
+    if (s.kind !== "md") continue;
+    let fence = false;
+    for (const line of s.md.split("\n")) {
+      if (/^\s*(```|~~~)/.test(line)) fence = !fence;
+      if (fence) continue;
+      const m = line.match(/^(##|###)\s+(.+?)\s*#*\s*$/);
+      if (!m) continue;
+      const t = plain(m[2]);
+      if (m[1] === "##")
+        items.push({ id: slugify(t), text: t, depth: 2, n: String(++n).padStart(2, "0") });
+      else items.push({ id: slugify(t), text: t, depth: 3 });
+    }
+  }
+  return items;
+}
 
 function components(remote: boolean): Components {
   const imgSrc = (src: string) =>
@@ -111,7 +146,7 @@ function components(remote: boolean): Components {
     h2: ({ children }) => (
       <h2
         id={slug(children)}
-        className="font-display cond text-3xl sm:text-4xl leading-[0.95] text-bone mt-14 mb-4 pt-4 border-t border-ink scroll-mt-24"
+        className="font-display cond text-3xl sm:text-4xl leading-[0.95] text-bone mt-14 mb-4 pt-4 border-t border-ink scroll-mt-32 lg:scroll-mt-24"
       >
         {children}
       </h2>
@@ -119,7 +154,7 @@ function components(remote: boolean): Components {
     h3: ({ children }) => (
       <h3
         id={slug(children)}
-        className="font-display cond text-xl sm:text-2xl leading-none text-bone mt-10 mb-3 scroll-mt-24"
+        className="font-display cond text-xl sm:text-2xl leading-none text-bone mt-10 mb-3 scroll-mt-32 lg:scroll-mt-24"
       >
         {children}
       </h3>
@@ -246,6 +281,7 @@ export default async function K8sLocalLlmPage() {
   const { md, remote } = await loadGuide();
   const comps = components(remote);
   const { subtitle, segments } = splitGuide(md);
+  const contents = toc(segments);
   const render = (s: string, key: number) => (
     <ReactMarkdown key={key} remarkPlugins={[remarkGfm]} components={comps}>
       {s}
@@ -253,13 +289,18 @@ export default async function K8sLocalLlmPage() {
   );
 
   return (
-    <div className="min-h-screen">
-      <article
-        id="hw-guide"
-        data-active="cpu"
-        className="hw-guide max-w-3xl mx-auto px-5 sm:px-6 py-16 sm:py-20 font-sans"
-      >
-        <div className="mb-12">
+    <div
+      id="hw-guide"
+      data-active="cpu"
+      className="hw-guide min-h-screen mx-auto max-w-[1180px] px-5 sm:px-6 lg:grid lg:grid-cols-[210px_minmax(0,48rem)] lg:justify-center lg:gap-12 xl:gap-16"
+    >
+      <aside className="hidden lg:block pt-20">
+        <div className="sticky top-[84px] max-h-[calc(100vh-108px)] overflow-y-auto pb-6 pr-1 [scrollbar-width:thin]">
+          <GuideTocRail items={contents} />
+        </div>
+      </aside>
+      <article className="max-w-3xl w-full mx-auto lg:mx-0 py-16 sm:py-20 font-sans">
+        <div id="overview" className="mb-12 scroll-mt-32 lg:scroll-mt-24">
           <div className="label mb-3">Guide · Kubernetes · Local AI</div>
           <h1 className="font-display cond text-[clamp(38px,6.4vw,76px)] text-bone leading-[0.9]">
             {TITLE}
@@ -280,7 +321,9 @@ export default async function K8sLocalLlmPage() {
           </a>
         </div>
 
-        <div className="space-y-5 text-[15px] leading-[1.8] text-bone-dark">
+        <GuideTocBar items={contents} />
+
+        <div id="guide-body" className="space-y-5 text-[15px] leading-[1.8] text-bone-dark">
           {segments.map((s, i) =>
             s.kind === "picker" ? (
               <HardwarePicker key={i} />

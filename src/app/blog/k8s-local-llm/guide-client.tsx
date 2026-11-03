@@ -40,7 +40,7 @@ export function HardwarePicker() {
   }, [hw]);
 
   return (
-    <div className="my-12">
+    <div id="your-hardware" className="my-12 scroll-mt-32 lg:scroll-mt-24">
       <div className="label mb-3">
         Your hardware &mdash; every hardware-specific step follows this choice
       </div>
