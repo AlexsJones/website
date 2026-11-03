@@ -1090,3 +1090,29 @@ code.ic {
   border-radius: 2px;
   text-shadow: none;
 }
+
+/* "Send a signal" contact modal (src/components/ContactModal.tsx): the #tx viewer
+   from public/v2/index.html, same tokens, so it follows day and night. */
+.sig{position:fixed;inset:0;z-index:80;background:rgba(20,20,20,.72);display:grid;place-items:center;padding:16px;opacity:0;transition:opacity .25s;font-family:var(--font-mono)}
+.sig.on{opacity:1}
+.sig-obj{position:relative;width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:var(--cream);color:var(--ink);box-shadow:var(--depth) var(--depth) 0 var(--shadow),0 0 0 1px var(--ink);transform:translateY(16px) scale(.98);transition:transform .25s}
+.sig.on .sig-obj{transform:none}
+.sig-txt{padding:26px 28px;display:flex;flex-direction:column;gap:14px}
+.sig-k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);display:flex;justify-content:space-between;gap:12px;padding-right:44px}
+.sig h3{margin:0;font-family:var(--font-archivo),system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;font-size:clamp(26px,3vw,40px);font-stretch:75%;line-height:.95;color:var(--ink)}
+.sig-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.sig label{display:grid;gap:6px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+.sig input,.sig textarea{font:inherit;font-size:13px;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--stock);border:1px solid var(--ink);border-radius:0;padding:10px 12px;width:100%;box-sizing:border-box;resize:vertical}
+.sig input::placeholder,.sig textarea::placeholder{color:var(--ash);opacity:.8}
+.sig input:focus,.sig textarea:focus{outline:2px solid var(--ink);outline-offset:-2px}
+.sig-links{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:6px}
+.sig-links button{display:flex;align-items:center;gap:12px;font:inherit;font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--ink);padding:10px 16px 10px 12px;cursor:pointer;background:var(--ink);color:var(--stock)}
+.sig-links button[disabled]{opacity:.6;cursor:default}
+.sig-lamp{width:10px;height:10px;border-radius:50%;background:var(--shadow);box-shadow:inset 0 0 0 2px var(--ink)}
+.sig-lamp.on{background:var(--cream)}
+.sig-code{font-size:11px;letter-spacing:.3em;color:var(--ash)}
+.sig-code.err{color:var(--ink);letter-spacing:.05em}
+.sig.sent input,.sig.sent textarea{opacity:.5}
+.sig-x{position:absolute;top:0;right:0;width:44px;height:44px;border:0;background:var(--ink);color:var(--stock);font:inherit;font-size:18px;cursor:pointer}
+.sig-x:focus-visible{outline:2px solid var(--stock);outline-offset:-4px}
+@media (max-width:640px){.sig-txt{padding:22px 18px}}

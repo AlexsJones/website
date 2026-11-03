@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
 import { CopyPre, HardwarePicker } from "./guide-client";
 import { GuideTocBar, GuideTocRail, type TocItem } from "./guide-toc";
+import ContactModal from "@/components/ContactModal";
 
 /*
  * Source of truth: README.md in github.com/AlexsJones/axjns-k8s-local-llm.
@@ -351,10 +352,10 @@ export default async function K8sLocalLlmPage() {
             sub="open a pull request"
           />
           <Card
-            href="https://axjns.dev/#contact"
+            href="/#contact"
             label="Ran it on other hardware?"
             title="Tell me how it went"
-            sub="axjns.dev/#contact"
+            sub="send a signal"
           />
         </div>
 
@@ -364,6 +365,8 @@ export default async function K8sLocalLlmPage() {
           </Link>
         </footer>
       </article>
+      {/* Contact links in the guide (incl. the synced README's axjns.dev/#contact) open the form here. */}
+      <ContactModal scope="#hw-guide" />
     </div>
   );
 }
