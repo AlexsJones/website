@@ -41,7 +41,7 @@ export default function CellnExecutionPlanePage() {
             The Agent Environment Should Be a Lease
           </h1>
           <p className="mt-3 text-base text-bone-dark/80">
-            Why I built Celln, and where I hope it fits beneath Sympozium
+            Why I built Celln, and where I hope it fits under Sympozium
           </p>
           <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ash">
             Alex Jones · August 2026 · Revised September 2026
@@ -58,10 +58,10 @@ export default function CellnExecutionPlanePage() {
         <p>
           Prebuilt images and caches already reduce that work. I built <a
           href="https://github.com/sympozium-ai/celln" className="text-bone underline
-          underline-offset-2 decoration-bone/40 hover:text-ember">Celln</a> to explore a more
-          explicit boundary: the host lends a task the tools it is permitted to run, with
-          recorded identity and provenance, for the lifetime of the execution. The environment
-          becomes a lease on capabilities.
+          underline-offset-2 decoration-bone/40 hover:text-ember">Celln</a> to draw a clearer
+          line: the host lends a task the tools it is allowed to run, with recorded identity
+          and provenance, for the lifetime of the run. The environment becomes a lease on
+          capabilities.
         </p>
 
         <H2>What the host lends</H2>
@@ -75,18 +75,17 @@ export default function CellnExecutionPlanePage() {
         </p>
 
         <p>
-          Isolation, immutable filesystems, and copy on write are established ideas.
-          Celln&apos;s design question is how to make the permitted executable and its
-          dependencies the unit an operator can inspect, lend, and withdraw. A path is
-          convenient for finding a program; the content and policy behind it determine what the
-          host is authorising.
+          Isolation, immutable filesystems, and copy on write are not new.
+          The question Celln asks is how to make the allowed executable and its dependencies
+          the unit an operator can inspect, lend, and take back. A path is handy for finding a
+          program; the content and policy behind it decide what the host is authorising.
         </p>
 
         <p>
-          That boundary should make the common case easier to explain: this task received these
-          tools, could write here, had these external permissions, and produced this result. It
-          also creates obligations. The host must verify the supplied bytes, enforce the
-          execution policy, and make failures visible.
+          That line should make the common case easier to explain: this task got these tools,
+          could write here, had these external permissions, and produced this result. It also
+          means the host has to do its job. Verify the bytes, enforce the policy, and make
+          failures visible.
         </p>
 
         <H2>Reproducible does not mean trusted</H2>
@@ -114,37 +113,36 @@ export default function CellnExecutionPlanePage() {
           adversarial code and implementation defects, not just cooperative examples.
         </p>
 
-        <H2>The seam beneath Sympozium</H2>
+        <H2>Where this sits under Sympozium</H2>
 
         <p>
           <a href="https://github.com/sympozium-ai/sympozium" className="text-bone underline
           underline-offset-2 decoration-bone/40 hover:text-ember">Sympozium</a> is where I am
           exploring coordination: how agents share evidence, hand off work, and act under
-          policy. Kubernetes provides useful control-plane machinery for that work. Its
-          desired-state model and reconciliation loops are valuable independently of the
-          execution unit beneath them.
+          policy. Kubernetes gives useful control-plane machinery for that. Desired state and
+          reconciliation are useful whether or not the thing underneath is a pod.
         </p>
 
         <p>
           A pod remains a reasonable choice for many workloads, including services and jobs. It
-          can also use a read-only root filesystem; mutability is not an unavoidable property of
-          Kubernetes. My concern is narrower: for bursts of small, generated tasks, creating and
-          managing a separate pod may be more machinery than the execution needs.
+          can also use a read-only root filesystem; a pod does not have to be mutable. My
+          concern is narrower: for bursts of small, generated tasks, creating and managing a
+          separate pod may be more machinery than the run needs.
         </p>
 
         <p>
-          The proposed integration is a small contract. Sympozium submits an authorised
-          execution request with a capability set, limits, and an output destination. Celln runs
-          it and returns the outcome, provenance, and enforcement verdict. Sympozium owns the
-          workflow; the executor validates the authority it is given and enforces it locally.
+          The integration I want is a small contract. Sympozium submits an authorised run with a
+          capability set, limits, and an output destination. Celln runs it and returns the
+          outcome, provenance, and enforcement verdict. Sympozium owns the workflow; the
+          executor checks the authority it is given and enforces it locally.
         </p>
 
         <p>
-          That split would let the coordination system remain durable while execution is
-          short-lived. It is the same direction I discuss in the <a
+          That way coordination can stick around while execution stays short-lived. Same direction
+          I discuss in the <a
           href="/blog/post-kubernetes-genai" className="text-bone underline underline-offset-2
-          decoration-bone/40 hover:text-ember">post-Kubernetes field notes</a>, with Celln as an
-          implementation to test rather than an assumption that every workload should move.
+          decoration-bone/40 hover:text-ember">post-Kubernetes field notes</a>, with Celln as
+          something to try rather than a claim that every workload should move.
         </p>
 
         <H2>Where the lease gets difficult</H2>
@@ -166,10 +164,9 @@ export default function CellnExecutionPlanePage() {
         </p>
 
         <p>
-          Long-lived services stretch the idea further. They need stable identity, state,
-          upgrades, and an availability model. A short-lived cell is a natural place to begin;
-          supporting a persistent API requires an explicit lifecycle rather than simply
-          extending a timeout.
+          Long-lived services push the idea harder. They need stable identity, state, upgrades,
+          and an availability model. A short-lived cell is a natural place to start; a
+          persistent API needs a real lifecycle, not just a longer timeout.
         </p>
 
         <p>
@@ -178,7 +175,7 @@ export default function CellnExecutionPlanePage() {
           receipt and an idempotency contract are as important as a fast start.
         </p>
 
-        <H2>What would make this worthwhile</H2>
+        <H2>What has to be true for this to matter</H2>
 
         <p>
           I want the user experience to stay small: request work through the agent interface,
@@ -196,8 +193,8 @@ export default function CellnExecutionPlanePage() {
 
         <p>
           My bet is that short agent tasks benefit from borrowing a defined capability set.
-          Celln is the attempt to make that lease concrete, and to find out where it is simpler
-          and more efficient than handing each task a general environment.
+          Celln is the attempt to make that lease real, and to find out where it is simpler and
+          cheaper than handing each task a general environment.
         </p>
       </Prose>
 
